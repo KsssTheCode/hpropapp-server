@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+console.log(process.env.NODE_ENV);
+
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -22,8 +26,6 @@ import reservationStatusRoutes from './routes/reservationStatusRouter.js';
 import floorRoutes from './routes/floorRouter.js';
 import db from './models/index.js';
 import cookieParser from 'cookie-parser';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const app = express();
 const port = 3302;

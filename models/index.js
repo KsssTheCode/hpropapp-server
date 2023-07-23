@@ -19,6 +19,9 @@ import { CleanStatus } from './cleanStatus.js';
 import { ReservationStatus } from './reservationStatus.js';
 import { DailyRate } from './dailyRate.js';
 import { Config } from '../config/config.js';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const env = process.env.NODE_ENV || 'development';
 const config = Config[env];
 
