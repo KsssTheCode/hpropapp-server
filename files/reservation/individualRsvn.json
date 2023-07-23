@@ -1,0 +1,25 @@
+{
+   "Reservations": [
+      {
+         "rsvnId": "R230411001",
+         "status": "RR",
+         "reservatorName": "최예약",
+         "reservatorTel:": "01098989898",
+         "createDate": "2023/04/10 11:11",
+         "arrivalDate": "20230505",
+         "departureDate": "20230506",
+         "realStayer": "김투숙",
+         "realStayerTel": "01012344321",
+         "capacity": 4,
+         "caution": "N",
+         "reference": null,
+         "masterRsvnId": null,
+         "createStaff": "김직원",
+         "memberId": null,
+         "roomTypeCode": "ODD",
+         "roomNumber": null,
+         "rateTypeCode": null,
+         "folioId": null
+      }
+   ]
+}

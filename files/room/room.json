@@ -1,0 +1,24 @@
+{
+   "Rooms": [
+      { "roomNumber": 501, "roomTypeCode": "ODD" },
+      { "roomNumber": 502, "roomTypeCode": "ODD" },
+      { "roomNumber": 503, "roomTypeCode": "ODD" },
+      { "roomNumber": 504, "roomTypeCode": "ODD" },
+      { "roomNumber": 505, "roomTypeCode": "ODD" },
+      { "roomNumber": 1001, "roomTypeCode": "OFT" },
+      { "roomNumber": 1002, "roomTypeCode": "OFT" },
+      { "roomNumber": 1003, "roomTypeCode": "OFT" },
+      { "roomNumber": 1004, "roomTypeCode": "OFT" },
+      { "roomNumber": 1005, "roomTypeCode": "OFT" },
+      { "roomNumber": 2001, "roomTypeCode": "ODP" },
+      { "roomNumber": 2002, "roomTypeCode": "ODP" },
+      { "roomNumber": 2003, "roomTypeCode": "ODP" },
+      { "roomNumber": 2004, "roomTypeCode": "ODP" },
+      { "roomNumber": 9009, "roomTypeCode": null },
+      { "roomNumber": 3, "roomTypeCode": "RPV" },
+      { "roomNumber": 5, "roomTypeCode": "RPV" },
+      { "roomNumber": 99, "roomTypeCode": "ODD" },
+      { "roomNumber": 88, "roomTypeCode": "ODD" },
+      { "roomNumber": 77, "roomTypeCode": "ODD" }
+   ]
+}

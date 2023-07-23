@@ -1,0 +1,17 @@
+{
+   "Staffs": [
+      {
+         "staffId": 230410002,
+         "name": "홍길동",
+         "gender": "M",
+         "birth": "19990101",
+         "tel": "01091118888",
+         "address": "우리집",
+         "adminYN": "Y",
+         "enrollDate": 20230101,
+         "leaveDate": null,
+         "deptCode": "NO",
+         "password": "$2b$10$7eZjb3uc.NIfedQmXzSFnedZ3a.hP/7UKMoefXZBxVygUjfhLH70m"
+      }
+   ]
+}
