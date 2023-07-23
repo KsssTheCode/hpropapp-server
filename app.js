@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
 
 async function syncDataBase(sequelize) {
-   await sequelize.sync({ alter: process.env.DEPLOY_ENV !== 'production' });
+   await sequelize.sync({ alter: process.env.NODE_ENV !== 'production' });
 }
 
 syncDataBase(sequelize);

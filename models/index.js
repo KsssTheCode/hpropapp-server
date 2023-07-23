@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize';
-import { DataTypes } from 'Sequelize';
+import { DataTypes } from 'sequelize';
 import { Floor } from './floor.js';
 import { Department } from './department.js';
 import { RoomRate } from './roomRate.js';
-import { RoomType } from './roomType.js';
+import { RoomType } from './roomtype.js';
 import { Room } from './room.js';
 import { RoomStatus } from './roomStatus.js';
 import { RateType } from './rateType.js';
