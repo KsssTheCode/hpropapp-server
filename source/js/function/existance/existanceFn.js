@@ -236,12 +236,6 @@ export const checkExistingTel = async (tel) => {
    return isExistingTel;
 };
 
-export const checkAvailablePage = async (page, itemsInOnePage) => {
-   const memberCounts = await countRecords('Member');
-   if (+memberCounts / +itemsInOnePage > +page)
-      throw createError(400, '존재하지 않는 페이지');
-};
-
 export const checkExistingDailyRate = async (id) => {
    const isExistingDailyRate = await db.DailyRate.findByPk(id, {
       returning: true,

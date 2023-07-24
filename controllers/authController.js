@@ -2,9 +2,8 @@ import db from '../models/index.js';
 import * as authFn from '../source/js/function/authFn.js';
 import {
    createError,
-   currentDateFormat,
+   // currentDateFormat,
    createId,
-   getOffset,
 } from '../source/js/function/commonFn.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -13,16 +12,8 @@ const Staff = db.Staff;
 
 export const createStaff = async (req, res, next) => {
    try {
-      const {
-         name,
-         gender,
-         birth,
-         tel,
-         address,
-         adminYN,
-         enrollDate,
-         deptCode,
-      } = req.body;
+      const { name, gender, birth, tel, address, enrollDate, deptCode } =
+         req.body;
 
       //사번생성
       let staffId = await createId('staff');
@@ -39,6 +30,7 @@ export const createStaff = async (req, res, next) => {
          address,
          adminYN,
          enrollDate,
+         role: 'MANAGER',
          deptCode,
       }).catch(() => {
          throw createError(500, '직원생성 중 DB에서 오류발생');
@@ -80,7 +72,7 @@ export const getAllStaffs = async (req, res, next) => {
       const staffsData = await Staff.findAll(
          { attributes: attributesArr },
          {
-            where: { leaveDate: null, deletedAt: null },
+            where: { leaveDate: null },
             include: {
                model: db.Department,
                attributes: ['deptName'],
@@ -96,164 +88,161 @@ export const getAllStaffs = async (req, res, next) => {
    }
 };
 
-export const getStaffInOptions = async (req, res, next) => {
-   try {
-      const {
-         page,
-         itemsInOnePage,
-         startDate,
-         endDate,
-         keyword,
-         deptCodes,
-         leaveYN,
-      } = req.body;
-      const offset = getOffset(page, itemsInOnePage);
+// export const getStaffInOptions = async (req, res, next) => {
+//    try {
+//       const {
+//          page,
+//          itemsInOnePage,
+//          startDate,
+//          endDate,
+//          keyword,
+//          deptCodes,
+//          leaveYN,
+//       } = req.body;
+//       const offset = getOffset(page, itemsInOnePage);
 
-      const staffDatas = await Staff.findAll({
-         where: {
-            createdAt: { [Op.between]: [startDate, endDate] },
-            name: { [Op.like]: `%${keyword}%` },
-            address: { [Op.like]: `%${keyword}%` },
-            tel: { [Op.like]: `%${keyword}%` },
-            staffId: { [Op.like]: `%${keyword}%` },
-            deptCode: { [Op.in]: deptCodes },
-            leaveDate: leaveYN,
-         },
-         order: [['createdAt', 'desc']],
-         offset: offset,
-         limit: itemsInOnePage,
-      }).catch(() => {
-         throw createError(500, '단체 검색 중 DB에서 오류발생');
-      });
+//       const staffDatas = await Staff.findAll({
+//          where: {
+//             createdAt: { [Op.between]: [startDate, endDate] },
+//             name: { [Op.like]: `%${keyword}%` },
+//             address: { [Op.like]: `%${keyword}%` },
+//             tel: { [Op.like]: `%${keyword}%` },
+//             staffId: { [Op.like]: `%${keyword}%` },
+//             deptCode: { [Op.in]: deptCodes },
+//             leaveDate: leaveYN,
+//          },
+//          order: [['createdAt', 'desc']],
+//          offset: offset,
+//          limit: itemsInOnePage,
+//       }).catch(() => {
+//          throw createError(500, '단체 검색 중 DB에서 오류발생');
+//       });
 
-      res.status(200).json(staffDatas);
-   } catch (err) {
-      next(err);
-   }
-};
+//       res.status(200).json(staffDatas);
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
-export const getSelectedStaff = async (req, res, next) => {
-   try {
-      const { staffId } = req.body;
-      const staffData = await Staff.findOne({
-         where: { staffId: staffId },
-      }).catch(() => {
-         throw createError(500, '단체 검색 중 DB에서 오류발생');
-      });
+// export const getSelectedStaff = async (req, res, next) => {
+//    try {
+//       const { staffId } = req.body;
+//       const staffData = await Staff.findOne({
+//          where: { staffId: staffId },
+//       }).catch(() => {
+//          throw createError(500, '단체 검색 중 DB에서 오류발생');
+//       });
 
-      res.status(200).json(staffData);
-   } catch (err) {
-      next(err);
-   }
-};
+//       res.status(200).json(staffData);
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
-export const editStaff = async (req, res, next) => {
-   try {
-      const {
-         staffId,
-         newName,
-         newGender,
-         newTel,
-         newBirth,
-         adminYN,
-         newLeaveDate,
-         newEnrollDate,
-         newDeptCode,
-         newAddress,
-      } = req.body;
+// export const editStaff = async (req, res, next) => {
+//    try {
+//       const {
+//          staffId,
+//          name,
+//          gender,
+//          birth,
+//          tel,
+//          enrollDate,
+//          leaveDate,
+//          deptCode,
+//       } = req.body;
 
-      const newHistory = getChangeHistoryMessage(group, req.body);
+//       const newHistory = getChangeHistoryMessage(group, req.body);
 
-      await Staff.update(
-         {
-            name: newName,
-            gender: newGender,
-            birth: newBirth,
-            tel: newTel,
-            address: newAddress,
-            adminYN: adminYN,
-            enrollDate: newEnrollDate,
-            leaveDate: newLeaveDate,
-            deptCode: newDeptCode,
-            changeHistory: db.Sequelize.fn(
-               'JSON_ARRAY_APPEND',
-               db.Sequelize.col('changeHistory'),
-               '$',
-               JSON.stringify(newHistory)
-            ),
-         },
-         { where: { staffId: staffId } }
-      ).catch(() => {
-         throw createError(500, '직원정보 수정 중 DB에서 오류발생');
-      });
+//       await Staff.update(
+//          {
+//             ...(name && {name}),
+//             ...(gender && {gender}),
+//             ...(birth && {birth}),
+//             ...(tel && {tel}),
+//             ...(enrollDate && {enrollDate}),
+//             ...(leaveDate && {leaveDate}),
+//             ...(deptCode && {deptCode}),
+//             changeHistory: db.Sequelize.fn(
+//                'JSON_ARRAY_APPEND',
+//                db.Sequelize.col('changeHistory'),
+//                '$',
+//                JSON.stringify(newHistory)
+//             ),
 
-      res.status(200).send('직원 수정 완료');
-   } catch (err) {
-      next(err);
-   }
-};
+//          },
+//          { where: { staffId: staffId } }
+//       ).catch(() => {
+//          throw createError(500, '직원정보 수정 중 DB에서 오류발생');
+//       });
 
-export const resetPassword = async (req, res, next) => {
-   try {
-      const { staffId } = req.body;
+//       res.status(200).send('직원 수정 완료');
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
-      const hashedPassword = authFn.createHashedPassword('resetPassword!');
+// export const resetPassword = async (req, res, next) => {
+//    try {
+//       const { staffId } = req.body;
 
-      //암호화된 초기화비밀번호를 생성하여, 해당 사번의 직원비밀번호로 변경
-      Staff.update(
-         { password: hashedPassword },
-         { where: { staffId: staffId } }
-      ).catch(() => {
-         throw createError(500, '비밀번호 초기화 중 DB에서 오류발생');
-      });
+//       const hashedPassword = authFn.createHashedPassword('resetPassword!');
 
-      res.status(200).send(
-         '비밀번호 초기화 완료 \n 초기화비밀번호 : resetPassword! 즉시변경요망 '
-      );
-   } catch (err) {
-      next(err);
-   }
-};
+//       //암호화된 초기화비밀번호를 생성하여, 해당 사번의 직원비밀번호로 변경
+//       Staff.update(
+//          { password: hashedPassword },
+//          { where: { staffId: staffId } }
+//       ).catch(() => {
+//          throw createError(500, '비밀번호 초기화 중 DB에서 오류발생');
+//       });
 
-export const editPassword = async (req, res, next) => {
-   try {
-      const { staffId, password, newPassword, isExistingStaff } = req.body;
+//       res.status(200).send(
+//          '비밀번호 초기화 완료 \n 초기화비밀번호 : resetPassword! 즉시변경요망 '
+//       );
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
-      // const isExistingStaff = await authFn.checkExistingStaff(staffId);
-      authFn.checkPassword(isExistingStaff, password, '비밀번호 불일치');
+// export const editPassword = async (req, res, next) => {
+//    try {
+//       const { staffId, password, newPassword, isExistingStaff } = req.body;
 
-      const hashedPassword = authFn.createHashedPassword(newPassword);
+//       // const isExistingStaff = await authFn.checkExistingStaff(staffId);
+//       authFn.checkPassword(isExistingStaff, password, '비밀번호 불일치');
 
-      await Staff.update(
-         { password: hashedPassword },
-         { where: { staffId: staffId } }
-      ).catch(() => {
-         throw createError(500, '비밀번호 변경 중 DB에서 오류발생');
-      });
+//       const hashedPassword = authFn.createHashedPassword(newPassword);
 
-      res.status(200).send('비밀번호 변경완료');
-   } catch (err) {
-      next(err);
-   }
-};
+//       await Staff.update(
+//          { password: hashedPassword },
+//          { where: { staffId: staffId } }
+//       ).catch(() => {
+//          throw createError(500, '비밀번호 변경 중 DB에서 오류발생');
+//       });
 
-export const resignStaff = async (req, res, next) => {
-   try {
-      const { staffId } = req.body;
-      //요청된 사번에 해당하는 직원의 LeaveDate(=null)에 현재날짜를 입력
+//       res.status(200).send('비밀번호 변경완료');
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
-      await Staff.update(
-         { leaveDate: currentDateFormat(8) },
-         { where: { staffId: staffId } }
-      ).catch(() => {
-         throw createError(500, '직원정보 수정 중 DB에서 오류발생');
-      });
+// export const resignStaff = async (req, res, next) => {
+//    try {
+//       const { staffId } = req.body;
+//       //요청된 사번에 해당하는 직원의 LeaveDate(=null)에 현재날짜를 입력
 
-      res.status(200).send('퇴사처리 완료');
-   } catch (err) {
-      next(err);
-   }
-};
+//       await Staff.update(
+//          { leaveDate: currentDateFormat(8) },
+//          { where: { staffId: staffId } }
+//       ).catch(() => {
+//          throw createError(500, '직원정보 수정 중 DB에서 오류발생');
+//       });
+
+//       res.status(200).send('퇴사처리 완료');
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
 export const login = async (req, res, next) => {
    try {
@@ -295,7 +284,5 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = (req, res, next) => {
-   console.log('여기');
    res.status(200).clearCookie('access_token').json();
-   console.log('aasdaasd');
 };

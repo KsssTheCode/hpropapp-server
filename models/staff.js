@@ -37,12 +37,6 @@ export const Staff = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             comment: '주소',
          },
-         adminYN: {
-            type: DataTypes.STRING(1),
-            allowNull: false,
-            defaultValue: 'N',
-            comment: '관리자여부',
-         },
          enrollDate: {
             type: DataTypes.STRING(8),
             allowNull: false,
