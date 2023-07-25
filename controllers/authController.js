@@ -28,7 +28,6 @@ export const createStaff = async (req, res, next) => {
          birth,
          tel,
          address,
-         adminYN,
          enrollDate,
          role: 'MANAGER',
          deptCode,
@@ -36,9 +35,7 @@ export const createStaff = async (req, res, next) => {
          throw createError(500, '직원생성 중 DB에서 오류발생');
       });
 
-      res.status(200).send(
-         '직원생성완료 \n초기비밀번호 : Password! 즉시변경요망'
-      );
+      res.status(200);
    } catch (err) {
       next(err);
    }
