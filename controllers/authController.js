@@ -269,7 +269,7 @@ export const login = async (req, res, next) => {
             secure: true,
             sameSite: 'none',
             httpOnly: true,
-            domain: 'localhost',
+            domain: 'https://hpropapp.com',
          })
          .json({
             name: staff.name,
