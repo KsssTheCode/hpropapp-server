@@ -2,7 +2,6 @@ import express from 'express';
 import * as controller from '../controllers/groupController.js';
 import * as validation from '../middleware/validation/groupValidation.js';
 import * as existance from '../middleware/existance/groupExistance.js';
-import { pageExistanceOnly } from '../middleware/existance/commonExistance.js';
 
 const router = express.Router();
 
@@ -22,14 +21,12 @@ router.get(
 router.get(
    '/get-all-groups',
    validation.getAllGroupsValidation,
-   pageExistanceOnly,
    controller.getAllGroups
 );
 
 router.get(
    '/get-groups-in-options',
    validation.getGroupInOptionsValidation,
-   pageExistanceOnly,
    controller.getGroupsInOptions
 );
 

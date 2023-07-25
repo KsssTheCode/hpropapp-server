@@ -2,7 +2,6 @@ import express from 'express';
 import * as controller from '../controllers/memberController.js';
 import * as validation from '../middleware/validation/memberValidation.js';
 import * as existance from '../middleware/existance/memberExistance.js';
-import { pageExistanceOnly } from '../middleware/existance/commonExistance.js';
 
 const router = express.Router();
 
@@ -16,7 +15,6 @@ router.post(
 router.get(
    '/get-all-members',
    validation.getAllMembersValdiation,
-   pageExistanceOnly,
    controller.getAllMembers
 );
 
