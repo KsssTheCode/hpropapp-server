@@ -1,9 +1,7 @@
 import db from './index.js';
-import {
-   createError,
-   getChangeHistoryMessage,
-} from '../source/js/function/commonFn.js';
+import { createError } from '../source/js/function/commonFn.js';
 import { Op } from 'sequelize';
+import moment from 'moment';
 
 export const afterDestroyHook = async (rsvn, options) => {
    await db.sequelize.models.Folio.destroy({
@@ -68,34 +66,22 @@ export const afterCreateHook = async (rsvn, options) => {
 };
 
 export const afterUpdateHook = async (rsvn, options) => {
-   console.log('rsvn:' + rsvn);
    try {
-      const newHistory = await getChangeHistoryMessage(rsvn.previous(), rsvn, [
-         'rsvnId',
-      ]);
-
-      await db.sequelize.models.Reservation.update(
+      await db.sequelize.models.ReservationChangeHistory.create(
          {
-            changeHistory: db.Sequelize.fn(
-               'JSON_ARRAY_APPEND', //사용할 함수 이름
-               db.Sequelize.col('changeHistory'), //history를 속성컬럼으로 지정
-               '$', //JSON배열 마지막에 새로운 요소를 추가하도록 함 (루트객체 의미)
-               JSON.stringify(newHistory) //추가할 객체
-            ),
+            updatedProperties: rsvn.previous(),
+            updatedReservation: rsvn,
+            staffId: options.staffId,
+            updatedTime: moment().format('YYY-MM-DD HH:mm:ss'),
+            rsvnId: rsvn.rsvnId,
          },
          {
             transaction: options.transaction,
-            where: { rsvnId: rsvn.rsvnId },
-            hooks: false,
          }
       ).catch((err) => {
          console.log(err);
-         throw createError(500, '예약 변경기록 수정 중 DB에서 오류발생');
+         throw createError(500, '변경기록 생성 중 DB에서 오류발생');
       });
-
-      const a = await db.sequelize.models.Reservation.findByPk(rsvn.rsvnId);
-
-      console.log(a.changeHistory);
 
       if (options.dailyRatesData) {
          await db.sequelize.models.DailyRate.destroy({

@@ -1,7 +1,6 @@
 import db from '../models/index.js';
 import {
    createError,
-   getChangeHistoryMessage,
    getDatesBetweenTerm,
 } from '../source/js/function/commonFn.js';
 

@@ -52,21 +52,15 @@ export const GroupReservation = (sequelize, DataTypes) => {
             type: DataTypes.STRING(60),
             comment: '회사 주소',
          },
-         reservatorName: {
+         callerName: {
             type: DataTypes.STRING(15),
             allowNull: true,
             comment: '예약자',
          },
-         reservatorTel: {
+         callerTel: {
             type: DataTypes.STRING(14),
             allowNull: true,
             comment: '예약자 전화번호',
-         },
-         changeHistory: {
-            type: DataTypes.JSON,
-            allowNull: false,
-            defaultValue: [],
-            comment: '예약건 변경기록',
          },
       },
       {
@@ -104,6 +98,12 @@ export const GroupReservation = (sequelize, DataTypes) => {
          foreignKey: { name: 'statusCode', allowNull: false },
          targetKey: 'statusCode',
          onDelete: 'NO ACTION',
+      });
+      GroupReservation.hasMany(models.ReservationChangeHistory, {
+         foreignKey: { name: 'groupRsvnId', allowNull: true },
+         sourceKey: 'groupRsvnId',
+         onDelete: 'CASCADE',
+         onUpate: 'CASCADE',
       });
    };
 

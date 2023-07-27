@@ -1,3 +1,4 @@
+import { createError } from '../../source/js/function/commonFn.js';
 import {
    checkExistingRoomType,
    checkNumberOfGuestsInRange,

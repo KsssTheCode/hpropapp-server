@@ -26,7 +26,7 @@ export const getChangeHistoryMessage = async (
    originalObject,
    updatedObject
 ) => {
-   const expectProperties = ['updatedAt', 'createdAt', 'historyChange'];
+   const expectProperties = ['updatedAt', 'createdAt'];
    const changedProperties = [...updatedObject._changed].filter(
       (prop) => !expectProperties.includes(prop)
    );
@@ -41,61 +41,8 @@ export const getChangeHistoryMessage = async (
       }
    });
 
-   //로그인 및 세션 기능 완성 시, 현재 로그인된 직원의 rsvnId
-   // const staffName = await db.Staff.findByPk(staffId, {
-   //    attributes: ['name'],
-   // }).catch(() => {
-   //    throw createError(500, '변경기록 생성 직원 조회 중 DB에서 오류발생');
-   // });
-   return {
-      historyMessage,
-      editor: '230425001',
-      updateTime: moment().format('YYY-MM-DD HH:mm:ss'),
-   };
+   return historyMessage;
 };
-
-// export function getChangeHistoryMessage1(
-//    beforeChange, //변경 천 객체
-//    changePropertiesRequested, //변경 후 객체
-//    exceptProperties //변경메세지에 반영하지 않을 변수
-// ) {
-//    //changePropertiesOnly에 [ [key1, value1], [key2,value2], ..형태로 담음
-//    const changePropertiesOnly = Object.entries(changePropertiesRequested)
-//       //변경메세지에서 제외시킬 변수를 소거
-//       .filter(
-//          ([key]) =>
-//             !exceptProperties.includes(key) ||
-//             !['updatedAt', 'deletedAt', 'createdAt', 'historyChange'].includes(
-//                key
-//             )
-//       )
-//       //원본 객체에서 변수명이 동일한 변수 중 값이 다른 것만 소거
-//       .filter(([key, value]) => beforeChange[key] !== value)
-//       //flatMap으로 내부의 key,value배열을 전달한 콜백함수를 실행하여 결과를 새로운 배열로 반환
-//       .flatMap(([key, value]) =>
-//          //value값이 배열일 시, 배열 내 객체를 [objKey, objValue]형식으로 나열하여 메세지 생성
-//          //아닐 시, 메세지 생성
-//          Array.isArray(value)
-//             ? value.map((obj) =>
-//                  Object.entries(obj)
-//                     .map(
-//                        ([objKey, objValue]) =>
-//                           `${key}.${objKey}: ${beforeChange[key][objKey]} >> ${objValue}`
-//                     )
-//                     .join('/ ')
-//               )
-//             : `${key}: ${beforeChange[key]} >> ${value}`
-//       );
-
-//    //한 줄의 메세지로 변환
-//    const historyMessage = changePropertiesOnly.join('/ ');
-
-//    return {
-//       historyMessage,
-//       editor: '230425001',
-//       updateTime: new Date().getTime(),
-//    };
-// }
 
 export const createId = async (modelName) => {
    let model = null;

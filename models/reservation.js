@@ -62,12 +62,6 @@ export const Reservation = (sequelize, DataTypes) => {
             type: DataTypes.STRING(900),
             comment: '특이사항',
          },
-         changeHistory: {
-            type: DataTypes.JSON,
-            allowNull: false,
-            defaultValue: [],
-            comment: '예약건 변경기록',
-         },
       },
       {
          sequelize,
@@ -86,7 +80,8 @@ export const Reservation = (sequelize, DataTypes) => {
       Reservation.belongsTo(models.Room, {
          foreignKey: { name: 'roomNumber', allowNull: true },
          targetKey: 'roomNumber',
-         onUpdate: 'CASCADE',
+         onUpdate: 'SET NULL',
+         onDelete: 'SET NULL',
       });
       Reservation.belongsTo(models.Staff, {
          foreignKey: { name: 'createStaffId', allowNull: false },
@@ -125,6 +120,12 @@ export const Reservation = (sequelize, DataTypes) => {
       Reservation.hasMany(models.Memo, {
          foreignKey: { name: 'rsvnId', allowNull: true },
          sourceKey: 'rsvnId',
+      });
+      Reservation.hasMany(models.ReservationChangeHistory, {
+         foreignKey: { name: 'rsvnId', allowNull: true },
+         sourceKey: 'rsvnId',
+         onDelete: 'CASCADE',
+         onUpate: 'CASCADE',
       });
    };
 

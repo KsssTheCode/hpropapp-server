@@ -48,7 +48,7 @@ export const createRsvn = async (req, res, next) => {
             reference,
             roomTypeCode,
             rateTypeCode,
-            createStaffId: 230716002,
+            createStaffId: req.cookies.staffId,
          },
          {
             transaction: transaction,
@@ -103,8 +103,6 @@ export const getRsvnsInOptions = async (req, res, next) => {
                .format('YYYY-MM-DD HH:mm:ss')
          );
       }
-
-      console.log(rateTypeCodes); //COM,EPD
 
       const rsvnsData = await Rsvn.findAll({
          where: {
@@ -183,49 +181,9 @@ export const getRsvnsInOptions = async (req, res, next) => {
    }
 };
 
-// export const getCanceledRsvnsInOptions = async (req, res, next) => {
-//    try {
-//       const {
-//          keyword,
-//          statusCode,
-//          cautionYN,
-//          roomTypeCodes,
-//          rateTypeCodes,
-//          startDate,
-//          endDate,
-//       } = req.body;
-
-//       const rsvnDatas = await Rsvn.findAll({
-//          where: {
-//             rsvnId: { [Op.like]: `%${keyword}%` },
-//             guestName: { [Op.like]: `%${keyword}%` },
-//             tel1: { [Op.like]: `%${keyword}%` },
-//             tel2: { [Op.like]: `%${keyword}%` },
-//             reservatorName: { [Op.like]: `%${keyword}%` },
-//             reservatorTel: { [Op.like]: `%${keyword}%` },
-//             statusCode: { [Op.in]: statusCode },
-//             cautionYN: cautionYN,
-//             roomTypeCode: { [Op.in]: roomTypeCodes },
-//             rateTypeCode: { [Op.in]: rateTypeCodes },
-//             arrivalDate: { [Op.between]: [startDate, endDate] },
-//             departureDate: { [Op.between]: [startDate, endDate] },
-//             deletedAt: { [Op.not]: null },
-//          },
-//          order: [['createdAt', 'desc']],
-//       }).catch(() => {
-//          throw createError(500, '예약건 검색 중 DB에서 오류발생');
-//       });
-
-//       res.status(200).json(rsvnDatas);
-//    } catch (err) {
-//       next(err);
-//    }
-// };
-
 export const getSelectedRsvn = async (req, res, next) => {
    try {
       const { id } = req.query;
-
       const rsvnData = await Rsvn.findByPk(id, {
          include: [
             { model: db.Staff, attributes: ['name'] },
@@ -241,6 +199,7 @@ export const getSelectedRsvn = async (req, res, next) => {
                model: db.Member,
                attributes: ['memberId'],
             },
+            { model: db.ReservationChangeHistory },
          ],
       }).catch((err) => {
          console.log(err);
@@ -267,24 +226,6 @@ export const getSelectedRsvn = async (req, res, next) => {
       };
 
       res.status(200).json(responseData);
-   } catch (err) {
-      next(err);
-   }
-};
-
-export const getRsvnChangeHistory = async (req, res, next) => {
-   try {
-      const { rsvnId } = req.body;
-      const changeHistory = await Rsvn.findOne({
-         attributes: ['changeHistory'],
-         where: {
-            rsvnId: rsvnId,
-         },
-      }).catch(() => {
-         throw createError(500, '예약건 변경기록 조회 중 DB에서 오류발생');
-      });
-
-      res.status(200).data(changeHistory);
    } catch (err) {
       next(err);
    }
@@ -337,6 +278,7 @@ export const editRsvn = async (req, res, next) => {
             where: { rsvnId: rsvnId },
             transaction: transaction,
             ...(!!dailyRatesData && { dailyRatesData: dailyRatesData }),
+            staffId: req.cookies.staffId,
             individualHooks: true,
          }
       ).catch((err) => {
@@ -359,7 +301,7 @@ export const assignRoomToRsvn = async (req, res, next) => {
          { roomNumber: roomNumber },
          {
             where: { rsvnId: id, statusCode: 'RR' },
-            hooks: false,
+            individualHooks: true,
          }
       ).catch(() => {
          throw createError(500, '객실 배정 중 DB에서 오류발생');
@@ -381,10 +323,9 @@ export const assignRoomToRsvn = async (req, res, next) => {
 export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
    try {
       const { id } = req.body;
-      console.log(id);
       await Rsvn.update(
          { roomNumber: null },
-         { where: { rsvnId: id, statusCode: 'RR' }, hooks: false }
+         { where: { rsvnId: id, statusCode: 'RR' }, individualHooks: true }
       ).catch((err) => {
          console.log(err);
          throw createError(500, '객실 배정 중 DB에서 오류발생');
@@ -395,7 +336,45 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
    }
 };
 
-//이 메소드가 필요할지 모르곘네...
+// export const getCanceledRsvnsInOptions = async (req, res, next) => {
+//    try {
+//       const {
+//          keyword,
+//          statusCode,
+//          cautionYN,
+//          roomTypeCodes,
+//          rateTypeCodes,
+//          startDate,
+//          endDate,
+//       } = req.body;
+
+//       const rsvnDatas = await Rsvn.findAll({
+//          where: {
+//             rsvnId: { [Op.like]: `%${keyword}%` },
+//             guestName: { [Op.like]: `%${keyword}%` },
+//             tel1: { [Op.like]: `%${keyword}%` },
+//             tel2: { [Op.like]: `%${keyword}%` },
+//             reservatorName: { [Op.like]: `%${keyword}%` },
+//             reservatorTel: { [Op.like]: `%${keyword}%` },
+//             statusCode: { [Op.in]: statusCode },
+//             cautionYN: cautionYN,
+//             roomTypeCode: { [Op.in]: roomTypeCodes },
+//             rateTypeCode: { [Op.in]: rateTypeCodes },
+//             arrivalDate: { [Op.between]: [startDate, endDate] },
+//             departureDate: { [Op.between]: [startDate, endDate] },
+//             deletedAt: { [Op.not]: null },
+//          },
+//          order: [['createdAt', 'desc']],
+//       }).catch(() => {
+//          throw createError(500, '예약건 검색 중 DB에서 오류발생');
+//       });
+
+//       res.status(200).json(rsvnDatas);
+//    } catch (err) {
+//       next(err);
+//    }
+// };
+
 // export const editStatusOnly = async (req, res, next) => {
 //    const transaction = db.sequelize.transaction();
 //    try {
@@ -416,20 +395,20 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
 //    }
 // };
 
-export const cancelRsvn = async (req, res, next) => {
-   const transaction = db.sequelize.transaction();
-   try {
-      const { rsvnId } = req.body;
-      await Rsvn.update({ status: 'CX' }, { where: { rsvnId: rsvnId } }).catch(
-         () => {
-            throw createError(500, '예약건 삭제 중 DB에서 오류발생');
-         }
-      );
+// export const cancelRsvn = async (req, res, next) => {
+//    const transaction = db.sequelize.transaction();
+//    try {
+//       const { rsvnId } = req.body;
+//       await Rsvn.update({ status: 'CX' }, { where: { rsvnId: rsvnId } }).catch(
+//          () => {
+//             throw createError(500, '예약건 삭제 중 DB에서 오류발생');
+//          }
+//       );
 
-      transaction.commit();
-      res.status(200).send(`예약건 삭제완료\n (예약번호:${rsvnId})`);
-   } catch (err) {
-      transaction.rollback();
-      next(err);
-   }
-};
+//       transaction.commit();
+//       res.status(200).send(`예약건 삭제완료\n (예약번호:${rsvnId})`);
+//    } catch (err) {
+//       transaction.rollback();
+//       next(err);
+//    }
+// };

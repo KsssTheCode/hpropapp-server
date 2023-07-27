@@ -1,9 +1,5 @@
 import db from './index.js';
-import {
-   getChangeHistoryMessage,
-   createId,
-   createError,
-} from '../source/js/function/commonFn.js';
+import { createId, createError } from '../source/js/function/commonFn.js';
 
 export const beforeDestroyHook = async (groupRsvn, options) => {
    await sequelize.models.Folio.destroy(
@@ -56,7 +52,7 @@ export const afterCreateHook = async (groupRsvn, options) => {
                numberOfGuests: rsvn.numberOfGuests,
                groupRsvnId: groupRsvn.groupRsvnId,
                ...(groupRsvn.reference && { reference: groupRsvn.reference }),
-               createStaffId: 230716002,
+               createStaffId: rsvn.createStaffId,
                folioId: 'F' + rsvnId,
                reservatorName: groupRsvn.caller,
                reservatorTel: groupRsvn.callerTel,
@@ -119,24 +115,35 @@ export const afterCreateHook = async (groupRsvn, options) => {
 };
 
 export const afterUpdateHook = async (groupRsvn, options) => {
-   const newHistory = getChangeHistoryMessage(groupRsvn.previous(), groupRsvn, [
-      'groupRsvnId',
-   ]);
-
-   await db.models.GroupReservation.update(
+   await db.models.ReservationChangeHistory.create(
       {
-         changeHistory: db.Sequelize.fn(
-            'JSON_ARRAY_APPEND', //사용할 함수 이름
-            db.Sequelize.col('changeHistory'), //history를 속성컬럼으로 지정
-            '$', //JSON배열 마지막에 새로운 요소를 추가하도록 함 (루트객체 의미)
-            JSON.stringify(newHistory) //추가할 객체
-         ),
+         originContent: groupRsvn.previous(),
+         updatedContent: groupRsvn,
+         editor: options.staffId,
+         updatedTime: moment().format('YYY-MM-DD HH:mm:ss'),
+         groupRsvnId: groupRsvn.groupRsvnId,
       },
       {
-         where: { groupRsvnId: groupRsvn.groupRsvnId },
          transaction: options.transaction,
       }
    ).catch(() => {
-      throw createError(500, '변경기록 수정 중 DB에서 오류발생');
+      throw createError(500, '변경기록 생성 중 DB에서 오류발생');
    });
+
+   // await db.models.GroupReservation.update(
+   //    {
+   //       changeHistory: db.Sequelize.fn(
+   //          'JSON_ARRAY_APPEND', //사용할 함수 이름
+   //          db.Sequelize.col('changeHistory'), //history를 속성컬럼으로 지정
+   //          '$', //JSON배열 마지막에 새로운 요소를 추가하도록 함 (루트객체 의미)
+   //          JSON.stringify(newHistory) //추가할 객체
+   //       ),
+   //    },
+   //    {
+   //       where: { groupRsvnId: groupRsvn.groupRsvnId },
+   //       transaction: options.transaction,
+   //    }
+   // ).catch(() => {
+   //    throw createError(500, '변경기록 수정 중 DB에서 오류발생');
+   // });
 };

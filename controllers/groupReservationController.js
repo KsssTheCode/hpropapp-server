@@ -35,9 +35,9 @@ export const createGroupRsvn = async (req, res, next) => {
             companyName: companyName,
             companyTel: companyTel,
             companyAddress: companyAddress,
-            createStaffId: 230716002,
-            reservatorName: caller,
-            reservatorTel: callerTel,
+            createStaffId: req.cookies.staffId,
+            callerName: caller,
+            callerTel: callerTel,
          },
          { returning: true }
       ).catch((err) => {
@@ -139,16 +139,19 @@ export const getSelectedGroupRsvn = async (req, res, next) => {
       const { id } = req.query;
 
       const groupRsvn = await GroupRsvn.findByPk(id, {
-         include: {
-            model: db.Reservation,
-            include: {
-               model: db.DailyRate,
+         include: [
+            {
+               model: db.Reservation,
+               include: {
+                  model: db.DailyRate,
+               },
             },
-         },
+            { model: db.ReservationChangeHistory },
+         ],
       }).catch(() => {
          throw createError(500, '단체예약 조회 중 DB에서 오류발생');
       });
-      console.log(groupRsvn);
+
       res.status(200).json(groupRsvn);
    } catch (err) {
       next(err);
@@ -304,6 +307,7 @@ export const editGroupRsvn = async (req, res, next) => {
             {
                where: { rsvnId: rsvn.rsvnId },
                transaction: transaction,
+               staffId: req.cookies.staffId,
             }
          ).catch(() => {
             throw createError(500, '예약수정 중 DB에서 오류발생');

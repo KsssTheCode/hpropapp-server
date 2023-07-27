@@ -12,13 +12,17 @@ router.post(
    controller.createStaff
 );
 
+router.post('/login', validation.loginValidation, controller.login);
+router.post('/logout', controller.logout);
+
+router.get('/get-all-staffs', controller.getAllStaffs);
+
+/* 추후 관리자 메뉴 생성 시 사용할 라우터*/
 // router.get(
 //    '/get-staff-change-history',
 //    existance.checkStaffIdExistanceOnly,
 //    controller.getStaffChangeHistory
 // );
-
-router.get('/get-all-staffs', controller.getAllStaffs);
 
 // router.get(
 //    '/get-staffs-in-options',
@@ -53,9 +57,6 @@ router.get('/get-all-staffs', controller.getAllStaffs);
 //    existance.checkStaffIdExistanceOnly,
 //    controller.resetPassword
 // );
-
-router.post('/login', validation.loginValidation, controller.login);
-router.post('/logout', controller.logout);
 
 // router.delete(
 //    '/resign-staff',

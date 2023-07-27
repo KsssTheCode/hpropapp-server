@@ -23,6 +23,8 @@ export const Room = (sequelize, DataTypes) => {
       Room.hasOne(models.Reservation, {
          foreignKey: { name: 'roomNumber', allowNull: true },
          sourceKey: 'roomNumber',
+         onUpdate: 'SET NULL',
+         onDelete: 'SET NULL',
       });
 
       Room.belongsTo(models.RoomType, {

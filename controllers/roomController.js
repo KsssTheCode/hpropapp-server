@@ -122,7 +122,6 @@ export const getAllRooms = async (req, res, next) => {
 export const getRoomsInOptionsForAssign = async (req, res, next) => {
    const { roomTypeCodes, startDate, endDate, floors, cleanStatusCodes } =
       req.query;
-   console.log(req.query);
    try {
       const reservedRoomNumbers = await db.Reservation.findAll({
          attributes: ['roomNumber'],

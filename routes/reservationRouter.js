@@ -40,13 +40,6 @@ router.patch(
    controller.editRsvn
 );
 
-router.get(
-   '/get-change-history',
-   validation.checkRsvnIdValidationOnly,
-   existance.checkRsvnExistanceOnly,
-   controller.getRsvnChangeHistory
-);
-
 router.patch('/assign-room-to-rsvn', controller.assignRoomToRsvn);
 
 router.patch(

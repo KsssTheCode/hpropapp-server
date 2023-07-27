@@ -35,25 +35,7 @@ export const createStaff = async (req, res, next) => {
          throw createError(500, '직원생성 중 DB에서 오류발생');
       });
 
-      res.status(200);
-   } catch (err) {
-      next(err);
-   }
-};
-
-export const getStaffChangeHistory = async (req, res, next) => {
-   try {
-      const { staffId } = req.body;
-      const changeHistory = await Staff.findOne({
-         attributes: ['changeHistory'],
-         where: {
-            staffId: staffId,
-         },
-      }).catch(() => {
-         throw createError(500, '직원 변경기록 조회 중 DB에서 오류발생');
-      });
-
-      res.status(200).json(changeHistory);
+      res.status(200).send('생성 완료');
    } catch (err) {
       next(err);
    }
@@ -84,6 +66,67 @@ export const getAllStaffs = async (req, res, next) => {
       next(err);
    }
 };
+
+export const login = async (req, res, next) => {
+   try {
+      const { staffId, password } = req.body;
+
+      const staff = await db.Staff.findByPk(staffId, {
+         where: { leaveDate: null },
+      }).catch(() => {
+         throw createError(500, '직원조회 중 DB에서 오류발생');
+      });
+
+      if (!staff) res.status(400).send('로그인 실패');
+
+      if (!bcrypt.compareSync(password, staff.password)) {
+         res.status(401);
+      }
+
+      const token = jwt.sign(
+         {
+            role: staff.role,
+         },
+         process.env.JWT_SECRET, //추후 프론트엔드에서 받아온 토큰을 인증(검사)하기 위한 비공개 키
+         { expiresIn: process.env.JWT_EXPIRE_TIME }
+      );
+
+      res.cookie('access_token', 'Bearer ' + token, {
+         expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
+         secure: true,
+         sameSite: 'none',
+         httpOnly: true,
+         // domain: 'http://localhost:3000',
+      }).cookie('staffId', staffId);
+
+      res.status(200).json('');
+   } catch (err) {
+      next(err);
+   }
+};
+
+export const logout = (req, res, next) => {
+   res.status(200).clearCookie('access_token').json();
+};
+
+/* 추후 관리자 메뉴 생성 시 사용할 컨트롤러*/
+// export const getStaffChangeHistory = async (req, res, next) => {
+//    try {
+//       const { staffId } = req.body;
+//       const changeHistory = await Staff.findOne({
+//          attributes: ['changeHistory'],
+//          where: {
+//             staffId: staffId,
+//          },
+//       }).catch(() => {
+//          throw createError(500, '직원 변경기록 조회 중 DB에서 오류발생');
+//       });
+
+//       res.status(200).json(changeHistory);
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
 // export const getStaffInOptions = async (req, res, next) => {
 //    try {
@@ -240,46 +283,3 @@ export const getAllStaffs = async (req, res, next) => {
 //       next(err);
 //    }
 // };
-
-export const login = async (req, res, next) => {
-   try {
-      const { staffId, password } = req.body;
-
-      const staff = await db.Staff.findByPk(staffId, {
-         where: { leaveDate: null },
-      }).catch(() => {
-         throw createError(500, '직원조회 중 DB에서 오류발생');
-      });
-
-      if (!bcrypt.compareSync(password, staff.password)) {
-         res.status(401);
-      }
-
-      const token = jwt.sign(
-         {
-            role: staff.role,
-         },
-         process.env.JWT_SECRET, //추후 프론트엔드에서 받아온 토큰을 인증(검사)하기 위한 비공개 키
-         { expiresIn: process.env.JWT_EXPIRE_TIME }
-      );
-
-      res.status(200)
-         .cookie('access_token', 'Bearer ' + token, {
-            expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
-            secure: true,
-            sameSite: 'none',
-            httpOnly: true,
-            domain: 'https://hpropapp.com',
-         })
-         .json({
-            name: staff.name,
-            role: staff.role,
-         });
-   } catch (err) {
-      next(err);
-   }
-};
-
-export const logout = (req, res, next) => {
-   res.status(200).clearCookie('access_token').json();
-};

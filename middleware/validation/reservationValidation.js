@@ -175,8 +175,6 @@ export const editRsvnValidation = (req, res, next) => {
          roomTypeCode,
          rateTypeCode,
       } = req.body;
-      console.log(guestName);
-      console.log(arrivalDate, departureDate);
       validation.idCheck(rsvnId, '예약번호');
       if (statusCode) validation.statusCheck(statusCode);
       if (arrivalDate) rsvnDateCheck(arrivalDate);

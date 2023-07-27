@@ -1,7 +1,4 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
-console.log(process.env.NODE_ENV);
-
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -48,7 +45,7 @@ app.get('/', (req, res) => {
    res.send('Health Check');
 });
 
-app.use(authentication);
+// app.use(authentication);
 
 app.use('/auth', authRoutes);
 app.use('/room', roomRoutes);

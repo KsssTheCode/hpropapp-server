@@ -156,7 +156,7 @@ export const editGroup = async (req, res, next) => {
                JSON.stringify(newHistory)
             ),
          },
-         { where: { groupId: groupId } }
+         { where: { groupId: groupId }, individualHooks: true }
       ).catch(() => {
          throw createError(500, '단체정보 수정 중 DB에서 오류발생');
       });

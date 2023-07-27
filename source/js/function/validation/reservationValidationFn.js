@@ -4,8 +4,6 @@ export const rsvnDateCheck = (arrivalDate, departureDate) => {
    const dateRegExp =
       /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
    const currentDate = currentDateFormat(8);
-   console.log(arrivalDate, departureDate);
-   console.log(dateRegExp.test(+departureDate));
 
    if (!dateRegExp.test(+arrivalDate)) {
       throw createError(400, '투숙시작날짜 입력 오류');
