@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
    res.send('Health Check');
 });
 
-// app.use(authentication);
+app.use(authentication);
 
 app.use('/auth', authRoutes);
 app.use('/room', roomRoutes);

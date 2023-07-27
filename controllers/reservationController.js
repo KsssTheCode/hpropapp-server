@@ -147,18 +147,10 @@ export const getRsvnsInOptions = async (req, res, next) => {
                      [Op.between]: [createStartDate, createEndDate],
                   },
                }),
-            // ...(createStaffs &&
-            //    (createStaffs.includes(',')
-            //       ? { createStaffId: { [Op.in]: createStaffs.split(',') } }
-            //       : { createStaffId: { [Op.eq]: createStaffs } })),
-            // ...(checkInStaffs &&
-            //    (checkInStaffs.includes(',')
-            //       ? { checkInStaffId: { [Op.in]: checkInStaffs.split(',') } }
-            //       : { checkInStaffId: { [Op.eq]: checkInStaffs } })),
-            // ...(checkOutStaffs &&
-            //    (checkOutStaffs.includes(',')
-            //       ? { checkOutStaffId: { [Op.in]: checkOutStaffs.split(',') } }
-            //       : { checkOutStaffId: { [Op.eq]: checkOutStaffs } })),
+            ...(createStaffs &&
+               (createStaffs.includes(',')
+                  ? { createStaffId: { [Op.in]: createStaffs.split(',') } }
+                  : { createStaffId: { [Op.eq]: createStaffs } })),
          },
          include: [
             {
@@ -167,6 +159,75 @@ export const getRsvnsInOptions = async (req, res, next) => {
             },
             {
                model: db.DailyRate,
+            },
+            {
+               model: db.ReservationChangeHistory,
+               where: {
+                  ...(checkInStaffs && {
+                     [Op.and]: [
+                        {
+                           updatedProperties: {
+                              [Op.like]: {
+                                 [Op.or]: [
+                                    `"statusCode": "RR"`,
+                                    `"statusCode": "CO"`,
+                                    `"statusCode": "HC"`,
+                                 ],
+                              },
+                           },
+                        },
+                        {
+                           updatedReservation: {
+                              [Op.like]: `"statusCode": "CI"`,
+                           },
+                        },
+                        {
+                           staffId: {
+                              [Op.in]: checkInStaffs.includes(',')
+                                 ? {
+                                      checkInStaffs: {
+                                         [Op.in]: checkInStaffs.split(','),
+                                      },
+                                   }
+                                 : {
+                                      checkInStaffs: {
+                                         [Op.eq]: checkInStaffs,
+                                      },
+                                   },
+                           },
+                        },
+                     ],
+                  }),
+                  ...(checkOutStaffs && {
+                     [Op.and]: [
+                        {
+                           updatedProperties: {
+                              [Op.like]: `"statusCode": "CI"`,
+                           },
+                        },
+                        {
+                           updatedReservation: {
+                              [Op.like]: `"statusCode": "CO"`,
+                           },
+                        },
+                        {
+                           staffId: {
+                              [Op.in]: checkOutStaffs.includes(',')
+                                 ? {
+                                      checkOutStaffId: {
+                                         [Op.in]: checkOutStaffs.split(','),
+                                      },
+                                   }
+                                 : {
+                                      checkOutStaffId: {
+                                         [Op.eq]: checkOutStaffs,
+                                      },
+                                   },
+                           },
+                        },
+                     ],
+                  }),
+               },
             },
          ],
          order: [['createdAt', 'desc']],
