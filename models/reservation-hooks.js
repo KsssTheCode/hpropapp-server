@@ -72,7 +72,7 @@ export const afterUpdateHook = async (rsvn, options) => {
             updatedProperties: rsvn.previous(),
             updatedReservation: rsvn,
             staffId: options.staffId,
-            updatedTime: moment().format('YYY-MM-DD HH:mm:ss'),
+            updatedTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             rsvnId: rsvn.rsvnId,
          },
          {

@@ -120,7 +120,7 @@ export const afterUpdateHook = async (groupRsvn, options) => {
          originContent: groupRsvn.previous(),
          updatedContent: groupRsvn,
          editor: options.staffId,
-         updatedTime: moment().format('YYY-MM-DD HH:mm:ss'),
+         updatedTime: moment().format('YYYY-MM-DD HH:mm:ss'),
          groupRsvnId: groupRsvn.groupRsvnId,
       },
       {
