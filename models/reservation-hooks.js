@@ -67,6 +67,8 @@ export const afterCreateHook = async (rsvn, options) => {
 
 export const afterUpdateHook = async (rsvn, options) => {
    try {
+      console.log(rsvn.previous());
+      console.log(rsvn);
       await db.sequelize.models.ReservationChangeHistory.create(
          {
             updatedProperties: rsvn.previous(),

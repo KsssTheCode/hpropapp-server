@@ -20,7 +20,7 @@ export const ReservationChangeHistory = (sequelize, DataTypes) => {
          updatedTime: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: moment().format('YYY-MM-DD HH:mm:ss'),
+            defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
             comment: '변경 시간',
          },
       },

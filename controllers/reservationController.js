@@ -104,6 +104,8 @@ export const getRsvnsInOptions = async (req, res, next) => {
          );
       }
 
+      console.log(req.query);
+
       const rsvnsData = await Rsvn.findAll({
          where: {
             ...(keyword && {
@@ -166,64 +168,40 @@ export const getRsvnsInOptions = async (req, res, next) => {
                   ...(checkInStaffs && {
                      [Op.and]: [
                         {
-                           updatedProperties: {
-                              [Op.like]: {
-                                 [Op.or]: [
-                                    `"statusCode": "RR"`,
-                                    `"statusCode": "CO"`,
-                                    `"statusCode": "HC"`,
-                                 ],
-                              },
+                           'updatedProperties.statusCode': {
+                              [Op.or]: ['RR', 'CO', 'HC'],
                            },
                         },
                         {
-                           updatedReservation: {
-                              [Op.like]: `"statusCode": "CI"`,
-                           },
+                           'updatedReservation.statusCode': 'CI',
                         },
                         {
-                           staffId: {
-                              [Op.in]: checkInStaffs.includes(',')
-                                 ? {
-                                      checkInStaffs: {
-                                         [Op.in]: checkInStaffs.split(','),
-                                      },
-                                   }
-                                 : {
-                                      checkInStaffs: {
-                                         [Op.eq]: checkInStaffs,
-                                      },
-                                   },
-                           },
+                           staffId: checkInStaffs.includes(',')
+                              ? {
+                                   [Op.in]: checkInStaffs.split(','),
+                                }
+                              : {
+                                   [Op.eq]: checkInStaffs,
+                                },
                         },
                      ],
                   }),
                   ...(checkOutStaffs && {
                      [Op.and]: [
                         {
-                           updatedProperties: {
-                              [Op.like]: `"statusCode": "CI"`,
-                           },
+                           'updatedProperties.statusCode': 'CI',
                         },
                         {
-                           updatedReservation: {
-                              [Op.like]: `"statusCode": "CO"`,
-                           },
+                           'updatedReservation.statusCode': 'CO',
                         },
                         {
-                           staffId: {
-                              [Op.in]: checkOutStaffs.includes(',')
-                                 ? {
-                                      checkOutStaffId: {
-                                         [Op.in]: checkOutStaffs.split(','),
-                                      },
-                                   }
-                                 : {
-                                      checkOutStaffId: {
-                                         [Op.eq]: checkOutStaffs,
-                                      },
-                                   },
-                           },
+                           staffId: checkOutStaffs.includes(',')
+                              ? {
+                                   [Op.in]: checkOutStaffs.split(','),
+                                }
+                              : {
+                                   [Op.eq]: checkOutStaffs,
+                                },
                         },
                      ],
                   }),
@@ -235,7 +213,6 @@ export const getRsvnsInOptions = async (req, res, next) => {
          console.log(err);
          throw createError(500, '예약건 검색 중 DB에서 오류발생');
       });
-
       res.status(200).json(rsvnsData);
    } catch (err) {
       next(err);

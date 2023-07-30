@@ -229,19 +229,65 @@ export const getGroupRsvnsInOptions = async (req, res, next) => {
                      [Op.between]: [createStartDate, createEndDate],
                   },
                }),
-            // ...(createStaffs &&
-            //    (createStaffs.includes(',')
-            //       ? { createStaffId: { [Op.in]: createStaffs.split(',') } }
-            //       : { createStaffId: { [Op.eq]: createStaffs } })),
-            // ...(checkInStaffs &&
-            //    (checkInStaffs.includes(',')
-            //       ? { checkInStaffId: { [Op.in]: checkInStaffs.split(',') } }
-            //       : { checkInStaffId: { [Op.eq]: checkInStaffs } })),
-            // ...(checkOutStaffs &&
-            //    (checkOutStaffs.includes(',')
-            //       ? { checkOutStaffId: { [Op.in]: checkOutStaffs.split(',') } }
-            //       : { checkOutStaffId: { [Op.eq]: checkOutStaffs } })),
+            ...(createStaffs &&
+               (createStaffs.includes(',')
+                  ? { createStaffId: { [Op.in]: createStaffs.split(',') } }
+                  : { createStaffId: { [Op.eq]: createStaffs } })),
          },
+         include: [
+            {
+               model: db.GroupReservation,
+               attributes: ['groupName', 'groupRsvnId'],
+            },
+            {
+               model: db.DailyRate,
+            },
+            {
+               model: db.ReservationChangeHistory,
+               where: {
+                  ...(checkInStaffs && {
+                     [Op.and]: [
+                        {
+                           'updatedProperties.statusCode': {
+                              [Op.or]: ['RR', 'CO', 'HC'],
+                           },
+                        },
+                        {
+                           'updatedReservation.statusCode': 'CI',
+                        },
+                        {
+                           staffId: checkInStaffs.includes(',')
+                              ? {
+                                   [Op.in]: checkInStaffs.split(','),
+                                }
+                              : {
+                                   [Op.eq]: checkInStaffs,
+                                },
+                        },
+                     ],
+                  }),
+                  ...(checkOutStaffs && {
+                     [Op.and]: [
+                        {
+                           'updatedProperties.statusCode': 'CI',
+                        },
+                        {
+                           'updatedReservation.statusCode': 'CO',
+                        },
+                        {
+                           staffId: checkOutStaffs.includes(',')
+                              ? {
+                                   [Op.in]: checkOutStaffs.split(','),
+                                }
+                              : {
+                                   [Op.eq]: checkOutStaffs,
+                                },
+                        },
+                     ],
+                  }),
+               },
+            },
+         ],
       }).catch(() => {
          throw createError(500, '단체 검색 중 DB에서 오류발생');
       });
