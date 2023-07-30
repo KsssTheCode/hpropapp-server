@@ -236,13 +236,6 @@ export const getGroupRsvnsInOptions = async (req, res, next) => {
          },
          include: [
             {
-               model: db.GroupReservation,
-               attributes: ['groupName', 'groupRsvnId'],
-            },
-            {
-               model: db.DailyRate,
-            },
-            {
                model: db.ReservationChangeHistory,
                where: {
                   ...(checkInStaffs && {
@@ -288,7 +281,8 @@ export const getGroupRsvnsInOptions = async (req, res, next) => {
                },
             },
          ],
-      }).catch(() => {
+      }).catch((err) => {
+         console.log(err);
          throw createError(500, '단체 검색 중 DB에서 오류발생');
       });
 
