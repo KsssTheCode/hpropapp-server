@@ -24,7 +24,7 @@
 
 <br>
 
--  배포<sub>Deployment</sub>&nbsp;&nbsp;:&nbsp;&nbsp;[![AWS](https://img.shields.io/badge/-AWS-232F3E?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/)&nbsp;&nbsp;[![AWS S3](https://img.shields.io/badge/-AWS%20S3-569A31?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/s3/)&nbsp;&nbsp;[![AWS Frontcloud](https://img.shields.io/badge/-AWS%20Frontcloud-FF9900?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/frontcloud/)&nbsp;&nbsp;[![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-FF9900?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/rds/)
+-  배포<sub>Deployment</sub>&nbsp;&nbsp;:&nbsp;&nbsp;[![AWS](https://img.shields.io/badge/-AWS-232F3E?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/)&nbsp;&nbsp;[![AWS S3](https://img.shields.io/badge/-AWS%20S3-569A31?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/s3/)&nbsp;&nbsp;[![AWS Frontcloud](https://img.shields.io/badge/-AWS%20Frontcloud-FF9900?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/frontcloud/)&nbsp;&nbsp;[![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-FF9900?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/rds/)&nbsp;&nbsp;[![Amazon EC2](https://img.shields.io/badge/Amazon%20EC2-Compute%20in%20Cloud-orange?logo=amazon-aws&logoColor=white&style=flat)](https://aws.amazon.com/ec2/)
 
 <br><hr><br>
 
