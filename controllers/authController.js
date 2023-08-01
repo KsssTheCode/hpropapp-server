@@ -96,7 +96,7 @@ export const login = async (req, res, next) => {
          secure: true,
          sameSite: 'none',
          httpOnly: true,
-         domain: 'http://localhost:3000',
+         // domain: 'http://localhost:3000',
       }).cookie('staffId', staffId);
 
       res.status(200).json('');
