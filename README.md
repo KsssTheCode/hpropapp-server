@@ -6,9 +6,14 @@
 
 ## WANNA TEST?!
 
-Visit [Hpropapp](https://hpropapp.com) <br>
-테스트 로그인 ID : 230730001<br>
-테스트 로그인 PWD : Password!<br>
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > a1e5b7f0843f9439e29a3f9f5de64215f3028e1e
+> > > > > > > Visit [Hpropapp](https://hpropapp.com) <br>
+> > > > > > > 테스트 로그인 ID : 230730001<br>
+> > > > > > > 테스트 로그인 PWD : Password!<br>
 
 <br><br>
 
@@ -50,40 +55,77 @@ Visit [Hpropapp](https://hpropapp.com) <br>
 
 -  예약관리&nbsp;&nbsp;<img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/>
 
-| 기능          | 기능설명(특징)                                                                                                                                                             | 진행                                                                                          | 비고 |
+<<<<<<< HEAD
+| 기능 | 기능설명(특징) | 진행 | 비고 |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---- |
-| 예약 조회     | \* 필터를 이용하여 원하는 조건별로 예약건 조회<br>&nbsp;&nbsp;(키워드, 생성일, 입퇴실일, 객실유형, 요금유형, 생성자, 단체별, ...)<br><br>\* 단체예약 내 개별예약 개별 조회 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | -    |
-| 예약 생성     | \* 투숙일, 객실유형, 요금유형 입력 시, 자동으로 해당 조건의 지정된 금액 호출(금액 임의설정 가능)<br><br>\* 단체예약 생성 시, 개별예약 투숙일, 객실유형별 일괄 생성         | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | -    |
-| 예약 수정     | \* 예약, 취소, 입실, 퇴실, 퇴실보류 상태로 나누어 관리<br><br>\* 예약이 수정될 시, 관련한 데이터 즉시 업데이트(새로고침 X)                                                 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | -    |
-| 예약 변경기록 | \* 예약건에 대한 모든 수정을 기록(변경자, 변경 전후 내용, 변경일시)                                                                                                        | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | -    |
-| 폴리오 생성   | \* 예약건에 대한 폴리오 자동생성 및 관리                                                                                                                                   | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/>   | -    |
+| 예약 조회 | \* 필터를 이용하여 원하는 조건별로 예약건 조회<br>&nbsp;&nbsp;(키워드, 생성일, 입퇴실일, 객실유형, 요금유형, 생성자, 단체별, ...)<br><br>\* 단체예약 내 개별예약 개별 조회 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 생성 | \* 투숙일, 객실유형, 요금유형 입력 시, 자동으로 해당 조건의 지정된 금액 호출(금액 임의설정 가능)<br><br>\* 단체예약 생성 시, 개별예약 투숙일, 객실유형별 일괄 생성 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 수정 | \* 예약, 취소, 입실, 퇴실, 퇴실보류 상태로 나누어 관리<br><br>\* 예약이 수정될 시, 관련한 데이터 즉시 업데이트(새로고침 X) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 변경기록 | \* 예약건에 대한 모든 수정을 기록(변경자, 변경 전후 내용, 변경일시) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 폴리오 생성 | \* 예약건에 대한 폴리오 자동생성 및 관리 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+=======
+| 기능 | 기능설명(특징) | 진행 | 비고 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | ---- |
+| 예약 조회 | \* 필터를 이용하여 원하는 조건별로 예약건 조회<br>&nbsp;&nbsp;(키워드, 생성일, 입퇴실일, 객실유형, 요금유형, 생성자, 단체별, ...)<br><br>\* 단체예약 내 개별예약 개별 조회 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 생성 | \* 투숙일, 객실유형, 요금유형 입력 시, 자동으로 해당 조건의 지정된 금액 호출(금액 임의설정 가능)<br><br>\* 단체예약 생성 시, 개별예약 투숙일, 객실유형별 일괄 생성 | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 수정 | \* 예약, 취소, 입실, 퇴실, 퇴실보류 상태로 나누어 관리<br><br>\* 예약이 수정될 시, 관련한 데이터 즉시 업데이트(새로고침 X) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 예약 변경기록 | \* 예약건에 대한 모든 수정을 기록(변경자, 변경 전후 내용, 변경일시) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
+| 폴리오 생성 | \* 예약건에 대한 폴리오 자동생성 및 관리 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+
+> > > > > > > a1e5b7f0843f9439e29a3f9f5de64215f3028e1e
 
 <br><br>
 
 -  객실관리&nbsp;&nbsp;<img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/>
 
-| 기능                  | 기능설명                                                                                                                                                                                     | 진행                                                                                        | 비고       |
+<<<<<<< HEAD
+| 기능 | 기능설명 | 진행 | 비고 |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------- |
-| 객실 생성, 수정, 삭제 |                                                                                                                                                                                              | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능 |
-| 인디게이터            | \* 실시간으로 투숙중인 객실에 대한 간단한 정보를 하나의 탭에서 확인<br><br>\* 필터를 이용하여 원하는 조건별로 객실정보 조회<br>&nbsp;&nbsp;(키워드, 층별, 객실유형, 정비상태, 객실상태, ...) | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | -          |
+| 객실 생성, 수정, 삭제 | | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능 |
+=======
+| 기능 | 기능설명 | 진행 | 비고 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ---------- |
+| 객실 생성, 수정, 삭제 | | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능 |
+
+> > > > > > > a1e5b7f0843f9439e29a3f9f5de64215f3028e1e
+> > > > > > > | 인디게이터 | \* 실시간으로 투숙중인 객실에 대한 간단한 정보를 하나의 탭에서 확인<br><br>\* 필터를 이용하여 원하는 조건별로 객실정보 조회<br>&nbsp;&nbsp;(키워드, 층별, 객실유형, 정비상태, 객실상태, ...) | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
 
 <br><br>
 
 -  직원관리&nbsp;&nbsp;<img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/>
 
-| 기능        | 기능설명                                     | 진행                                                                                        | 비고        |
+<<<<<<< HEAD
+| 기능 | 기능설명 | 진행 | 비고 |
 | ----------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
-| 관리자 기능 | \* 기능별로 접근 권한 제한                   | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능  |
-| 직원 조회   | \* 필터를 이용하여 원하는 조건별로 직원 조회 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | -           |
-| 직원 수정   | \* 직원 정보 수정 및 비밀번호 변경           | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | -           |
-| 직원 퇴사   | \* 직원 퇴사 설정                            | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자 기능 |
+| 관리자 기능 | \* 기능별로 접근 권한 제한 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능 |
+| 직원 조회 | \* 필터를 이용하여 원하는 조건별로 직원 조회 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+| 직원 수정 | \* 직원 정보 수정 및 비밀번호 변경 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+| 직원 퇴사 | \* 직원 퇴사 설정 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자 기능 |
+=======
+| 기능 | 기능설명 | 진행 | 비고 |
+| ----------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------- |
+| 관리자 기능 | \* 기능별로 접근 권한 제한 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자기능 |
+| 직원 조회 | \* 필터를 이용하여 원하는 조건별로 직원 조회 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+| 직원 수정 | \* 직원 정보 수정 및 비밀번호 변경 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+| 직원 퇴사 | \* 직원 퇴사 설정 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | 관리자 기능 |
+
+> > > > > > > a1e5b7f0843f9439e29a3f9f5de64215f3028e1e
 
 <br><br>
 
 -  고객관리&nbsp;&nbsp;<img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/>
 
-| 기능      | 기능설명                                                              | 진행                                                                                          | 비고 |
+<<<<<<< HEAD
+| 기능 | 기능설명 | 진행 | 비고 |
 | --------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---- |
-| 고객 조회 | \* 필터를 이용하여 원하는 조건별로 고객 조회                          | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | -    |
-| 직원 조회 | \* 필터를 이용하여 원하는 조건별로 직원 조회                          | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | -    |
-| 직원 수정 | _ 직원 정보 수정 및 비밀번호 변경<br><br>_ 직원 퇴사처리(관리자 기능) | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | -    |
+| 고객 조회 | \* 필터를 이용하여 원하는 조건별로 고객 조회 | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+| 직원 조회 | \* 필터를 이용하여 원하는 조건별로 직원 조회 | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+| 직원 수정 | _ 직원 정보 수정 및 비밀번호 변경<br><br>_ 직원 퇴사처리(관리자 기능) | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+=======
+| 기능 | 기능설명 | 진행 | 비고 |
+| --------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------- |
+| 고객 조회 | \* 필터를 이용하여 원하는 조건별로 고객 조회 | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+| 직원 조회 | \* 필터를 이용하여 원하는 조건별로 직원 조회 | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+| 직원 수정 | _ 직원 정보 수정 및 비밀번호 변경<br><br>_ 직원 퇴사처리(관리자 기능) | <img src="https://cdn-icons-png.flaticon.com/128/7186/7186949.png" width=30px; height=30px;/> | - |
+
+> > > > > > > a1e5b7f0843f9439e29a3f9f5de64215f3028e1e
