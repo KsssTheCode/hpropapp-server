@@ -2,7 +2,12 @@ import { createError } from '../source/js/function/commonFn.js';
 import jwt from 'jsonwebtoken';
 
 export const authentication = (req, res, next) => {
-   if (req.path === '/auth/login') return next();
+   if (
+      req.path === '/auth/login' ||
+      req.path === '/rsvn/create-test-rsvns' ||
+      req.path === '/group-rsvn/create-test-rsvns'
+   )
+      return next();
    if (!req.cookies?.access_token) createError(401, '접근 권한이 없습니다');
 
    const token = req.cookies?.access_token.replace('Bearer ', '');

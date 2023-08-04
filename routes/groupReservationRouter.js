@@ -5,6 +5,8 @@ import * as existance from '../middleware/existance/groupReservationExistance.js
 
 const router = express.Router();
 
+router.post('/create-test-rsvns', controller.createTestRsvns);
+
 router.post(
    '/create-group-rsvn',
    // validation.createGroupRsvnWithDetailRsvnsValidation,

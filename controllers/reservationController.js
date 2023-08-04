@@ -1,4 +1,5 @@
 import moment from 'moment';
+import randomName from 'korean-name-generator';
 import db from '../models/index.js';
 import { createError, createId } from '../source/js/function/commonFn.js';
 
@@ -6,6 +7,123 @@ import { Op } from 'sequelize';
 
 const Rsvn = db.Reservation;
 const Memo = db.Memo;
+
+export const createTestRsvns = async (req, res, next) => {
+   const transaction = await db.sequelize.transaction();
+
+   function randomNumber() {
+      const min = 10000000;
+      const max = 99999999;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+   }
+
+   try {
+      let rsvns = [];
+
+      let rsvnId = await createId('reservation');
+      for (let i = 0; i < 120; i++) {
+         let rsvn = {
+            rsvnId: 'R' + rsvnId,
+            arrivalDate: moment().format('YYYYMMDD'),
+            tel1: '010' + randomNumber(),
+            statusCode: 'RR',
+         };
+
+         if (i % 2 === 0 || i % 7 === 0 || i % 11 === 0) {
+            rsvn.guestName = randomName.generate(true);
+            rsvn.departureDate = moment().add(1, 'day').format('YYYYMMDD');
+            rsvn.createStaffId = '230730001';
+            i % 7 === 0
+               ? (rsvn.roomTypeCode = 'ODP')
+               : i % 11 === 0
+               ? (rsvn.roomTypeCode = 'RPV')
+               : (rsvn.roomTypeCode = 'OFT');
+
+            i % 4 === 0
+               ? (rsvn.rateTypeCode = 'YNZ')
+               : rsvn.rateTypeCdoe === 'YAT';
+
+            if (i % 8 === 0) {
+               rsvn.caller = randomName.generate(false);
+               rsvn.callerTel = '010' + randomNumber();
+            }
+
+            let price = 0;
+            if (rsvn.roomTypeCode === 'ODP') {
+               rsvn.numberOfGuests = 3;
+               rsvn.rateTypeCode === 'YNZ'
+                  ? (price = 243999)
+                  : (price = 250030);
+            } else if (rsvn.roomTypeCode === 'OFT') {
+               rsvn.numberOfGuests = 4;
+               rsvn.rateTypeCode === 'YNZ'
+                  ? (price = 332000)
+                  : (price = 308500);
+            } else if (rsvn.roomTypeCode === 'RPV') {
+               rsvn.numbersOfGuests = 7;
+               rsvn.rateTypeCode === 'YNZ'
+                  ? (price = 1190000)
+                  : (price = 999000);
+            }
+            rsvn.dailyRatesData = [{ date: rsvn.arrivalDate, price }];
+         } else {
+            rsvn.guestName = randomName.generate(false);
+            rsvn.departureDate = moment().add(2, 'day').format('YYYYMMDD');
+            rsvn.createStaffId = 230730001;
+
+            i % 13 === 0
+               ? (rsvn.roomTypeCode = 'RPV')
+               : (rsvn.roomTypeCode = 'ODD');
+
+            i % 3 === 0
+               ? (rsvn.rateTypeCode = 'EPD')
+               : (rsvn.rateTypeCode = 'BKC');
+
+            if (i % 5 === 0) {
+               rsvn.caller = randomName.generate(true);
+               rsvn.callerTel = '010' + randomNumber();
+            }
+
+            let price = 0;
+            if (rsvn.roomTypeCode === 'ODD') {
+               rsvn.numberOfGuests = 2;
+               rsvn.rateTypeCode === 'BKC'
+                  ? (price = 243999)
+                  : (price = 250030);
+            } else if (rsvn.roomTypeCode === 'RPV') {
+               rsvn.numberOfGuests = 8;
+               rsvn.rateTypeCode === 'BKC'
+                  ? (price = 1190000)
+                  : (price = 999000);
+            }
+            rsvn.dailyRatesData = [
+               { date: rsvn.arrivalDate, price },
+               { date: moment().add(1, 'day').format('YYYYMMDD'), price },
+            ];
+         }
+
+         rsvns.push(rsvn);
+         +rsvnId++;
+      }
+
+      rsvns = rsvns.map((rsvn) => {
+         if (!rsvn.rateTypeCode) rsvn.rateTypeCode = 'COM';
+         return rsvn;
+      });
+
+      for await (let rsvn of rsvns) {
+         await Rsvn.create(rsvn, {
+            transaction: transaction,
+            dailyRatesData: rsvn.dailyRatesData,
+         });
+      }
+      await transaction.commit();
+      res.status(200).send('생성완료');
+   } catch (err) {
+      await transaction.rollback();
+      next(err);
+   }
+};
 
 export const createRsvn = async (req, res, next) => {
    const transaction = await db.sequelize.transaction();
@@ -55,8 +173,7 @@ export const createRsvn = async (req, res, next) => {
             dailyRatesData,
             returning: true,
          }
-      ).catch((err) => {
-         console.log(err);
+      ).catch(() => {
          throw createError(500, '예약생성 중 DB에서 오류발생');
       });
 
@@ -88,7 +205,9 @@ export const getRsvnsInOptions = async (req, res, next) => {
          createEndDate,
       } = req.query;
 
-      if (createStartDate !== undefined && createEndDate !== undefined) {
+      if (createStartDate || createEndDate) {
+         if (createStartDate && !createEndDate) createEndDate = createStartDate;
+         if (!createStartDate && createEndDate) createStartDate = createEndDate;
          createStartDate = new Date(
             moment(+createStartDate, 'YYYYMMDD')
                .startOf('day')
@@ -103,8 +222,6 @@ export const getRsvnsInOptions = async (req, res, next) => {
                .format('YYYY-MM-DD HH:mm:ss')
          );
       }
-
-      console.log(req.query);
 
       const rsvnsData = await Rsvn.findAll({
          where: {
@@ -132,7 +249,7 @@ export const getRsvnsInOptions = async (req, res, next) => {
                   ? { statusCode: { [Op.in]: statusCodes.split(',') } }
                   : { statusCode: { [Op.eq]: statusCodes } })),
             ...(arrivalStartDate &&
-               arrivalEndDate !== undefined && {
+               arrivalEndDate && {
                   arrivalDate: {
                      [Op.between]: [+arrivalStartDate, +arrivalEndDate],
                   },
@@ -162,57 +279,62 @@ export const getRsvnsInOptions = async (req, res, next) => {
             {
                model: db.DailyRate,
             },
-            {
-               model: db.ReservationChangeHistory,
-               where: {
-                  ...(checkInStaffs && {
-                     [Op.and]: [
-                        {
-                           'updatedProperties.statusCode': {
-                              [Op.or]: ['RR', 'CO', 'HC'],
-                           },
-                        },
-                        {
-                           'updatedReservation.statusCode': 'CI',
-                        },
-                        {
-                           staffId: checkInStaffs.includes(',')
-                              ? {
-                                   [Op.in]: checkInStaffs.split(','),
-                                }
-                              : {
-                                   [Op.eq]: checkInStaffs,
-                                },
-                        },
-                     ],
-                  }),
-                  ...(checkOutStaffs && {
-                     [Op.and]: [
-                        {
-                           'updatedProperties.statusCode': 'CI',
-                        },
-                        {
-                           'updatedReservation.statusCode': 'CO',
-                        },
-                        {
-                           staffId: checkOutStaffs.includes(',')
-                              ? {
-                                   [Op.in]: checkOutStaffs.split(','),
-                                }
-                              : {
-                                   [Op.eq]: checkOutStaffs,
-                                },
-                        },
-                     ],
-                  }),
-               },
-            },
          ],
+         include: [
+            checkInStaffs || checkOutStaffs
+               ? {
+                    model: db.ReservationChangeHistory,
+                    where: {
+                       ...(checkInStaffs && {
+                          [Op.and]: [
+                             {
+                                'updatedProperties.statusCode': {
+                                   [Op.or]: ['RR', 'CO', 'HC'],
+                                },
+                             },
+                             {
+                                'updatedReservation.statusCode': 'CI',
+                             },
+                             {
+                                staffId: checkInStaffs.includes(',')
+                                   ? {
+                                        [Op.in]: checkInStaffs.split(','),
+                                     }
+                                   : {
+                                        [Op.eq]: checkInStaffs,
+                                     },
+                             },
+                          ],
+                       }),
+                       ...(checkOutStaffs && {
+                          [Op.and]: [
+                             {
+                                'updatedProperties.statusCode': 'CI',
+                             },
+                             {
+                                'updatedReservation.statusCode': 'CO',
+                             },
+                             {
+                                staffId: checkOutStaffs.includes(',')
+                                   ? {
+                                        [Op.in]: checkOutStaffs.split(','),
+                                     }
+                                   : {
+                                        [Op.eq]: checkOutStaffs,
+                                     },
+                             },
+                          ],
+                       }),
+                    },
+                 }
+               : null,
+         ].filter(Boolean),
          order: [['createdAt', 'desc']],
       }).catch((err) => {
          console.log(err);
          throw createError(500, '예약건 검색 중 DB에서 오류발생');
       });
+
       res.status(200).json(rsvnsData);
    } catch (err) {
       next(err);
@@ -239,8 +361,7 @@ export const getSelectedRsvn = async (req, res, next) => {
             },
             { model: db.ReservationChangeHistory },
          ],
-      }).catch((err) => {
-         console.log(err);
+      }).catch(() => {
          throw createError(500, '에약조회 중 DB에서 오류발생');
       });
 
@@ -253,8 +374,7 @@ export const getSelectedRsvn = async (req, res, next) => {
             roomTypeCode: rsvnData.roomTypeCode,
             rateTypeCode: rsvnData.rateTypeCode,
          },
-      }).catch((err) => {
-         console.log(err);
+      }).catch(() => {
          throw createError(500, '객실가격 중 DB에서 오류발생');
       });
 
@@ -319,14 +439,12 @@ export const editRsvn = async (req, res, next) => {
             staffId: req.cookies.staffId,
             individualHooks: true,
          }
-      ).catch((err) => {
-         console.log(err);
+      ).catch(() => {
          throw createError(500, '예약수정 중 DB에서 오류발생');
       });
       await transaction.commit();
       res.status(200).json(response[1]);
    } catch (err) {
-      console.log(err);
       await transaction.rollback();
       next(err);
    }
@@ -347,8 +465,7 @@ export const assignRoomToRsvn = async (req, res, next) => {
 
       const updatedDataGroupRsvnId = await Rsvn.findByPk(id, {
          attributes: ['groupRsvnId'],
-      }).catch((err) => {
-         console.log(err);
+      }).catch(() => {
          throw createError('수정된 예약 정보 조회 중 DB에서 오류발생');
       });
 
@@ -364,8 +481,7 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
       await Rsvn.update(
          { roomNumber: null },
          { where: { rsvnId: id, statusCode: 'RR' }, individualHooks: true }
-      ).catch((err) => {
-         console.log(err);
+      ).catch(() => {
          throw createError(500, '객실 배정 중 DB에서 오류발생');
       });
       res.status(200).send('객실배정 성공');

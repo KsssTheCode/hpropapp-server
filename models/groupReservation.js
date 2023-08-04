@@ -1,7 +1,7 @@
 import {
    beforeDestroyHook,
    beforeRestoreHook,
-   afterCreateHook,
+   // afterCreateHook,
    afterUpdateHook,
 } from './groupReservation-hooks.js';
 
@@ -109,7 +109,7 @@ export const GroupReservation = (sequelize, DataTypes) => {
 
    GroupReservation.addHook('beforeDestroy', beforeDestroyHook);
    GroupReservation.addHook('beforeRestore', beforeRestoreHook);
-   GroupReservation.addHook('afterCreate', afterCreateHook);
+   // GroupReservation.addHook('afterCreate', afterCreateHook);
    GroupReservation.addHook('afterUpdate', afterUpdateHook);
 
    return GroupReservation;

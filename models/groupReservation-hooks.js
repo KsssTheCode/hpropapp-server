@@ -33,86 +33,86 @@ export const beforeRestoreHook = async (groupRsvn, options) => {
    });
 };
 
-export const afterCreateHook = async (groupRsvn, options) => {
-   let rsvnId = await createId('reservation');
-   if (options.detailRsvnsData) {
-      const convertedData = await options.detailRsvnsData.map((rsvn) => {
-         const rsvnsData = [];
-         const dailyRatesData = [];
-         const foliosData = [];
-         for (let i = 0; i < (rsvn.rooms || 1); i++) {
-            rsvnsData.push({
-               rsvnId: 'R' + rsvnId,
-               statusCode: 'RR',
-               guestName: groupRsvn.groupName,
-               arrivalDate: rsvn.arrivalDate,
-               departureDate: rsvn.departureDate,
-               roomTypeCode: rsvn.roomTypeCode,
-               rateTypeCode: 'OWN',
-               numberOfGuests: rsvn.numberOfGuests,
-               groupRsvnId: groupRsvn.groupRsvnId,
-               ...(groupRsvn.reference && { reference: groupRsvn.reference }),
-               createStaffId: rsvn.createStaffId,
-               folioId: 'F' + rsvnId,
-               reservatorName: groupRsvn.caller,
-               reservatorTel: groupRsvn.callerTel,
-            });
-            rsvn.dailyRatesData.forEach((data, j) => {
-               let number = String(j + 1).padStart(3, '0');
-               const dailyRatesDataPerRsvn = {
-                  ...data,
-                  dailyRateId: 'R' + rsvnId + number,
-                  rsvnId: 'R' + rsvnId,
-               };
-               dailyRatesData.push(dailyRatesDataPerRsvn);
-            });
+// export const afterCreateHook = async (groupRsvn, options) => {
+//    let rsvnId = await createId('reservation');
+//    if (options.detailRsvnsData) {
+//       const convertedData = await options.detailRsvnsData.map((rsvn) => {
+//          const rsvnsData = [];
+//          const dailyRatesData = [];
+//          const foliosData = [];
+//          for (let i = 0; i < (rsvn.rooms || 1); i++) {
+//             rsvnsData.push({
+//                rsvnId: 'R' + rsvnId,
+//                statusCode: 'RR',
+//                guestName: groupRsvn.groupName,
+//                arrivalDate: rsvn.arrivalDate,
+//                departureDate: rsvn.departureDate,
+//                roomTypeCode: rsvn.roomTypeCode,
+//                rateTypeCode: 'OWN',
+//                numberOfGuests: rsvn.numberOfGuests,
+//                groupRsvnId: groupRsvn.groupRsvnId,
+//                ...(groupRsvn.reference && { reference: groupRsvn.reference }),
+//                createStaffId: rsvn.createStaffId,
+//                folioId: 'F' + rsvnId,
+//                reservatorName: groupRsvn.caller,
+//                reservatorTel: groupRsvn.callerTel,
+//             });
+//             rsvn.dailyRatesData.forEach((data, j) => {
+//                let number = String(j + 1).padStart(3, '0');
+//                const dailyRatesDataPerRsvn = {
+//                   ...data,
+//                   dailyRateId: 'R' + rsvnId + number,
+//                   rsvnId: 'R' + rsvnId,
+//                };
+//                dailyRatesData.push(dailyRatesDataPerRsvn);
+//             });
 
-            foliosData.push({
-               folioId: 'F' + rsvnId,
-               rsvnId: 'R' + rsvnId,
-            });
+//             foliosData.push({
+//                folioId: 'F' + rsvnId,
+//                rsvnId: 'R' + rsvnId,
+//             });
 
-            rsvnId++;
-         }
-         return { rsvnsData, dailyRatesData, foliosData };
-      });
+//             rsvnId++;
+//          }
+//          return { rsvnsData, dailyRatesData, foliosData };
+//       });
 
-      const rsvnsData = convertedData.map((item) => item.rsvnsData).flat();
-      const dailyRatesData = convertedData
-         .map((item) => item.dailyRatesData)
-         .flat();
-      const foliosData = convertedData.map((item) => item.foliosData).flat();
-      foliosData.push({
-         folioId: 'F' + groupRsvn.groupRsvnId,
-         groupRsvnId: groupRsvn.groupRsvnId,
-      });
+//       const rsvnsData = convertedData.map((item) => item.rsvnsData).flat();
+//       const dailyRatesData = convertedData
+//          .map((item) => item.dailyRatesData)
+//          .flat();
+//       const foliosData = convertedData.map((item) => item.foliosData).flat();
+//       foliosData.push({
+//          folioId: 'F' + groupRsvn.groupRsvnId,
+//          groupRsvnId: groupRsvn.groupRsvnId,
+//       });
 
-      await db.Reservation.bulkCreate(rsvnsData, {
-         transaction: options.transaction,
-         hooks: false,
-      }).catch((err) => {
-         console.log(err);
-         throw createError('단체 개별예약 생성 중 DB에서 오류발생');
-      });
+//       await db.Reservation.bulkCreate(rsvnsData, {
+//          transaction: options.transaction,
+//          hooks: false,
+//       }).catch((err) => {
+//          console.log(err);
+//          throw createError('단체 개별예약 생성 중 DB에서 오류발생');
+//       });
 
-      await db.DailyRate.bulkCreate(dailyRatesData, {
-         transaction: options.transaction,
-         hooks: false,
-      }).catch((err) => {
-         console.log(err);
-         throw createError('단체 개별예약 일별요금 생성 중 DB에서 오류발생');
-      });
-      await db.Folio.bulkCreate(foliosData, {
-         transaction: options.transaction,
-         hooks: false,
-      }).catch(() => {
-         throw createError(
-            500,
-            '데이터베이스에서 Folio 생성 중 오류가 발생했습니다'
-         );
-      });
-   }
-};
+//       await db.DailyRate.bulkCreate(dailyRatesData, {
+//          transaction: options.transaction,
+//          hooks: false,
+//       }).catch((err) => {
+//          console.log(err);
+//          throw createError('단체 개별예약 일별요금 생성 중 DB에서 오류발생');
+//       });
+//       await db.Folio.bulkCreate(foliosData, {
+//          transaction: options.transaction,
+//          hooks: false,
+//       }).catch(() => {
+//          throw createError(
+//             500,
+//             '데이터베이스에서 Folio 생성 중 오류가 발생했습니다'
+//          );
+//       });
+//    }
+// };
 
 export const afterUpdateHook = async (groupRsvn, options) => {
    await db.models.ReservationChangeHistory.create(

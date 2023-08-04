@@ -5,6 +5,8 @@ import * as controller from '../controllers/reservationController.js';
 
 const router = express.Router();
 
+router.post('/create-test-rsvns', controller.createTestRsvns);
+
 router.post(
    '/create-rsvn',
    validation.createRsvnValidation,
