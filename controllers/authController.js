@@ -98,6 +98,7 @@ export const login = async (req, res, next) => {
          httpOnly: true,
          // domain: 'http://localhost:3000',
       }).cookie('staffId', staffId);
+      console.log(staffId);
 
       res.status(200).json(staffId);
    } catch (err) {

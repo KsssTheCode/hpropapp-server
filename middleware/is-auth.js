@@ -10,7 +10,6 @@ export const authentication = (req, res, next) => {
       return next();
    if (!req.cookies?.access_token) {
       createError(401, '로그인이 필요합니다.');
-      window.location.reload();
    }
 
    const token = req.cookies?.access_token.replace('Bearer ', '');
