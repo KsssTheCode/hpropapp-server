@@ -92,21 +92,23 @@ export const login = async (req, res, next) => {
       );
 
       res.cookie('access_token', 'Bearer ' + token, {
-         expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
+         expires: new Date(Date.now() + 8 * 3600000), //8시간
          secure: true,
          sameSite: 'none',
          httpOnly: true,
          // domain: 'http://localhost:3000',
       }).cookie('staffId', staffId);
 
-      res.status(200).json('');
+      res.status(200).json(staffId);
    } catch (err) {
       next(err);
    }
 };
 
 export const logout = (req, res, next) => {
-   res.status(200).clearCookie('access_token').json();
+   res.clearCookie('access_token');
+   res.clearCookie('staffId');
+   res.status(200).send('로그아웃 완료');
 };
 
 /* 추후 관리자 메뉴 생성 시 사용할 컨트롤러*/
