@@ -18,7 +18,7 @@ import { Memo } from './memo.js';
 import { CleanStatus } from './cleanStatus.js';
 import { ReservationStatus } from './reservationStatus.js';
 import { DailyRate } from './dailyRate.js';
-import { ReservationChangeHistory } from './ReservationChangeHistory.js';
+import { ReservationChangeHistory } from './reservationChangeHistory.js';
 import { Config } from '../config/config.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
