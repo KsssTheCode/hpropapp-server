@@ -98,9 +98,37 @@ export const login = async (req, res, next) => {
          httpOnly: true,
          // domain: 'http://localhost:3000',
       }).cookie('staffId', staffId);
-      console.log(staffId);
 
       res.status(200).json(staffId);
+   } catch (err) {
+      next(err);
+   }
+};
+
+export const extendLogin = async (req, res, next) => {
+   try {
+      const { staffId, password } = req.body;
+
+      const staff = await db.Staff.findByPk(staffId, {
+         where: { leaveDate: null },
+      }).catch(() => {
+         throw createError(500, '직원조회 중 DB에서 오류발생');
+      });
+
+      if (!bcrypt.compareSync(password, staff.password)) {
+         res.status(401);
+      }
+
+      res.clearCookie('access_token');
+      res.cookie('access_token', 'Bearer ' + token, {
+         expires: new Date(Date.now() + 8 * 3600000), //8시간
+         secure: true,
+         sameSite: 'none',
+         httpOnly: true,
+         // domain: 'http://localhost:3000',
+      });
+
+      res.status(200).send('로그인 연장완료');
    } catch (err) {
       next(err);
    }
