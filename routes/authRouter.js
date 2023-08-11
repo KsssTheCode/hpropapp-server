@@ -13,6 +13,7 @@ router.post(
 );
 
 router.post('/login', validation.loginValidation, controller.login);
+router.post('/extend-login-state', controller.extendLoginState);
 router.post('/logout', controller.logout);
 
 router.get('/get-all-staffs', controller.getAllStaffs);

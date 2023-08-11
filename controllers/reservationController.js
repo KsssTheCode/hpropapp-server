@@ -477,10 +477,10 @@ export const assignRoomToRsvn = async (req, res, next) => {
 
 export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
    try {
-      const { id } = req.body;
+      const { ids } = req.body;
       await Rsvn.update(
          { roomNumber: null },
-         { where: { rsvnId: id, statusCode: 'RR' }, individualHooks: true }
+         { where: { rsvnId: ids[0], statusCode: 'RR' }, individualHooks: true }
       ).catch(() => {
          throw createError(500, '객실 배정 중 DB에서 오류발생');
       });

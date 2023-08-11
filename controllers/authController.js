@@ -106,7 +106,7 @@ export const login = async (req, res, next) => {
    }
 };
 
-export const extendLogin = async (req, res, next) => {
+export const extendLoginState = async (req, res, next) => {
    try {
       const { staffId, password } = req.body;
 
@@ -117,8 +117,17 @@ export const extendLogin = async (req, res, next) => {
       });
 
       if (!bcrypt.compareSync(password, staff.password)) {
-         res.status(401);
+         res.status(400).send('비밀번호 입력오류');
+         return;
       }
+
+      const token = jwt.sign(
+         {
+            role: staff.role,
+         },
+         process.env.JWT_SECRET, //추후 프론트엔드에서 받아온 토큰을 인증(검사)하기 위한 비공개 키
+         { expiresIn: process.env.JWT_EXPIRE_TIME }
+      );
 
       res.clearCookie('access_token');
       res.cookie('access_token', 'Bearer ' + token, {
@@ -126,7 +135,7 @@ export const extendLogin = async (req, res, next) => {
          secure: true,
          sameSite: 'none',
          httpOnly: true,
-         domain: 'http://localhost:3000',
+         // domain: 'http://localhost:3000',
       });
 
       res.status(200).send('로그인 연장완료');
