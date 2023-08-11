@@ -8,13 +8,15 @@ export const authentication = (req, res, next) => {
       req.path === '/group-rsvn/create-test-rsvns'
    )
       return next();
+
    if (!req.cookies?.access_token) {
-      createError(401, '로그인이 필요합니다.');
+      res.status(401).send('해당 기능 접근 권한 없음');
+      return;
+   } else {
+      const token = req.cookies?.access_token.replace('Bearer ', '');
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.staffRole = decodedToken.role;
    }
-
-   const token = req.cookies?.access_token.replace('Bearer ', '');
-   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-   req.staffRole = decodedToken.role;
    next();
 };

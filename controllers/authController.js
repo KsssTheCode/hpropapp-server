@@ -91,13 +91,14 @@ export const login = async (req, res, next) => {
          { expiresIn: process.env.JWT_EXPIRE_TIME }
       );
 
+      res.cookie('staffId', staffId);
       res.cookie('access_token', 'Bearer ' + token, {
          expires: new Date(Date.now() + 8 * 3600000), //8시간
          secure: true,
          sameSite: 'none',
          httpOnly: true,
          // domain: 'http://localhost:3000',
-      }).cookie('staffId', staffId);
+      });
 
       res.status(200).json(staffId);
    } catch (err) {
@@ -125,7 +126,7 @@ export const extendLogin = async (req, res, next) => {
          secure: true,
          sameSite: 'none',
          httpOnly: true,
-         // domain: 'http://localhost:3000',
+         domain: 'http://localhost:3000',
       });
 
       res.status(200).send('로그인 연장완료');
