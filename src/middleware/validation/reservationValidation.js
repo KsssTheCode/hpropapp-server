@@ -148,6 +148,7 @@ export const getRsvnsInOptionsValidation = (req, res, next) => {
 
 export const checkRsvnIdValidationOnly = (req, res, next) => {
    try {
+      console.log(req.query);
       const { id } = req.query;
       validation.idCheck(id, '예약번호');
       next();

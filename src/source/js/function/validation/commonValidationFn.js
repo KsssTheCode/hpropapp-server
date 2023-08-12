@@ -98,9 +98,15 @@ export const referenceCheck = (reference) => {
       throw createError(400, '(한글,영어,숫자 무관)100자 이하');
 };
 
+/**
+ * [Validation] Check validation of provided id value. If validation fails, an error will be thrown.
+ * @param {string} id - ID value.
+ * @param {string} idName - Kind of id value which will be created as an error message.
+ */
 export const idCheck = (id, idName) => {
    const idRegExp = /^(?:[A-Z]\d{9}|[A-Z]{2}\d{9})$/;
-   if (!idRegExp.test(id)) throw createError(400, `${idName} 입력오류`);
+   if (!idRegExp.test(id))
+      throw createError(400, `잘못된 입력의 ${idName}입니다.`);
 };
 export const groupNameCheck = (groupName) => {
    const groupNameRegExp = /^[\dA-Za-z가-힣()]{2,30}$/;

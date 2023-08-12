@@ -28,6 +28,7 @@ router.get(
 //    controller.getCanceledRsvnsInOptions
 // );
 
+/* 완료 */
 router.get(
    '/get-selected-rsvn',
    validation.checkRsvnIdValidationOnly,

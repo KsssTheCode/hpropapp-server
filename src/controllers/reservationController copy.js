@@ -355,10 +355,10 @@ export const getSelectedRsvn = async (req, res, next) => {
                model: db.GroupReservation,
                attributes: ['groupName', 'groupRsvnId'],
             },
-            {
-               model: db.Member,
-               attributes: ['memberId'],
-            },
+            // {
+            //    model: db.Member,
+            //    attributes: ['memberId'],
+            // },
             { model: db.ReservationChangeHistory },
          ],
       }).catch(() => {

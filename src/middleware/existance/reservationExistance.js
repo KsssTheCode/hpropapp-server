@@ -133,7 +133,8 @@ export const checkRsvnExistanceOnly = async (req, res, next) => {
       const { id } = req.query;
 
       const isExistingRsvn = await existance.checkExistingRsvn(id);
-      if (!isExistingRsvn) throw createError(400, '존재하지 않는 예약');
+      if (!isExistingRsvn)
+         throw createError(404, '존재하지 않는 예약번호입니다.');
 
       next();
    } catch (err) {

@@ -11,6 +11,7 @@ import {
 const GroupRsvn = db.GroupReservation;
 
 export const createTestRsvns = async (req, res, next) => {
+   console.log('a');
    const transaction = await db.sequelize.transaction();
 
    function randomNumber() {
