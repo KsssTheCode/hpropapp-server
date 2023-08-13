@@ -9,6 +9,7 @@ import { systemClosing } from './src/middleware/systemClosing.js';
 
 import authRoutes from './src/routes/authRouter.js';
 import roomRoutes from './src/routes/roomRouter.js';
+import staffRoutes from './src/routes/staffRouter.js';
 import roomTypeRoutes from './src/routes/roomTypeRouter.js';
 import reservatinoRoutes from './src/routes/reservationRouter.js';
 import groupReservationRoutes from './src/routes/groupReservationRouter.js';
@@ -53,6 +54,7 @@ app.get('/', (req, res) => {
 app.use(authentication);
 
 app.use('/auth', authRoutes);
+app.use('/staff', staffRoutes);
 app.use('/room', roomRoutes);
 app.use('/roomtype', roomTypeRoutes);
 app.use('/rsvn', reservatinoRoutes);
