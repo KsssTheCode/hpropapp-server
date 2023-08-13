@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import { createError } from '../source/js/function/commonFn.js';
 
 import db from '../models/index.js';
 
@@ -41,6 +42,26 @@ export const getSelectedRsvnDAO = async (id) => {
       });
 
       return { rsvnData, roomRatesData };
+   } catch (err) {
+      throw err;
+   }
+};
+
+export const createRsvnDAO = async (
+   newRsvnObject,
+   dailyRatesData,
+   transaction
+) => {
+   try {
+      const response = await Rsvn.create(newRsvnObject, {
+         transaction,
+         dailyRatesData,
+         returning: true,
+      }).catch(() => {
+         throw createError(500, '예약생성 중 DB에서 오류발생');
+      });
+
+      return response;
    } catch (err) {
       throw err;
    }

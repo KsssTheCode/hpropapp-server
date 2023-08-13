@@ -71,7 +71,7 @@ app.use('/floor', floorRoutes);
 
 app.use(async (error, req, res, next) => {
    console.log(error);
-   res.status(error.status).send(error.message);
+   res.status(error.status).json(error);
 });
 
 app.listen(port);

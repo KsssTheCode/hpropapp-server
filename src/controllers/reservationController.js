@@ -4,7 +4,10 @@ import db from '../models/index.js';
 import { createError, createId } from '../source/js/function/commonFn.js';
 
 import { Op } from 'sequelize';
-import { getSelectedRsvnService } from '../service/reservationService.js';
+import {
+   createRsvnService,
+   getSelectedRsvnService,
+} from '../service/reservationService.js';
 
 const Rsvn = db.Reservation;
 const Memo = db.Memo;
@@ -127,61 +130,11 @@ export const createTestRsvns = async (req, res, next) => {
 };
 
 export const createRsvn = async (req, res, next) => {
-   const transaction = await db.sequelize.transaction();
    try {
-      const {
-         arrivalDate,
-         departureDate,
-         numberOfGuests,
-         guestName,
-         tel1,
-         tel2,
-         caller,
-         callerTel,
-         reference,
-         roomTypeCode,
-         rateTypeCode,
-         dailyRatesData,
-      } = req.body;
-      let { arrivalTime, departureTime } = req.body;
-
-      let rsvnId = await createId('reservation');
-      rsvnId = 'R' + rsvnId;
-      if (arrivalTime) arrivalTime = arrivalTime.replace(':', '');
-      if (departureTime) departureTime = departureTime.replace(':', '');
-
-      const response = await Rsvn.create(
-         {
-            rsvnId: rsvnId,
-            statusCode: 'RR',
-            arrivalDate,
-            departureDate,
-            numberOfGuests,
-            guestName,
-            tel1,
-            tel2,
-            caller,
-            callerTel,
-            arrivalTime,
-            departureTime,
-            reference,
-            roomTypeCode,
-            rateTypeCode,
-            createStaffId: req.cookies.staffId,
-         },
-         {
-            transaction: transaction,
-            dailyRatesData,
-            returning: true,
-         }
-      ).catch(() => {
-         throw createError(500, '예약생성 중 DB에서 오류발생');
-      });
-
-      await transaction.commit();
+      const staffId = req.cookies.staffId;
+      const response = await createRsvnService(req.body, staffId);
       res.status(200).json(response);
    } catch (err) {
-      await transaction.rollback();
       next(err);
    }
 };
