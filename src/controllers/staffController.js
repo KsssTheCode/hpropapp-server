@@ -1,55 +1,19 @@
-import db from '../models/index.js';
-import * as authFn from '../source/js/function/authFn.js';
-import { createError, createId } from '../source/js/function/commonFn.js';
-
-const Staff = db.Staff;
+import * as staffService from '../service/staffService.js';
 
 export const createStaff = async (req, res, next) => {
    try {
-      const { name, gender, birth, tel, address, enrollDate, deptCode } =
-         req.body;
+      const response = await staffService.createStaffService(req.body);
 
-      let staffId = await createId('staff');
-
-      const hashedPassword = authFn.createHashedPassword('Password!');
-
-      await Staff.create({
-         staffId,
-         password: hashedPassword,
-         name,
-         gender,
-         birth,
-         tel,
-         address,
-         enrollDate,
-         role: 'MANAGER',
-         deptCode,
-      }).catch(() => {
-         throw createError(500, '직원생성 중 DB에서 오류발생');
-      });
-
-      res.status(200).send('생성 완료');
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
 
-export const getStaffs = async (req, res, next) => {
+export const getStaffsInOptions = async (req, res, next) => {
    try {
-      const staffsData = await Staff.findAll(
-         { attributes: ['name', 'staffId'] },
-         {
-            where: { leaveDate: null },
-            include: {
-               model: db.Department,
-               attributes: ['deptName'],
-            },
-            order: [['createdAt', 'desc']],
-         }
-      ).catch(() => {
-         throw createError(500, '직원 검색 중 DB에서 오류발생');
-      });
-      res.status(200).json(staffsData);
+      const response = await staffService.getStaffsInOptionsService();
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
