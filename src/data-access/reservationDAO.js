@@ -1,5 +1,4 @@
 import { Op } from 'sequelize';
-
 import { createError } from '../source/js/function/commonFn.js';
 import db from '../models/index.js';
 

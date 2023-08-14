@@ -1,5 +1,4 @@
 import db from '../models/index.js';
-
 import { createError } from '../source/js/function/commonFn.js';
 
 const Staff = db.Staff;

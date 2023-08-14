@@ -12,7 +12,7 @@ router.post(
    controller.createDepartment
 );
 
-router.get('/get-all-depts', controller.getAllDepartments);
+router.get('get-depts-in-options', controller.getDepartmentsInOptions);
 
 router.get(
    '/get-selected-depts',
