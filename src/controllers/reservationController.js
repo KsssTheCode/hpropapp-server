@@ -17,9 +17,11 @@ export const createRsvn = async (req, res, next) => {
    }
 };
 
-export const getRsvnsInOptions = async (req, res, next) => {
+export const getRsvnsInFilterOptions = async (req, res, next) => {
    try {
-      const response = await rsvnService.getRsvnInOptionsService(req.query);
+      const response = await rsvnService.getRsvnsInFilterOptionsService(
+         req.query
+      );
       res.status(200).json(response);
    } catch (err) {
       next(err);

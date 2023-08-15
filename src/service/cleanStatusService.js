@@ -1,4 +1,4 @@
-import * as cleanStatusDAO from '../data-access/cleanStatusDAO';
+import * as cleanStatusDAO from '../data-access/cleanStatusDAO.js';
 
 export const createCleanStatusService = async (bodyData) => {
    try {

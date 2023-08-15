@@ -27,9 +27,9 @@ export const createStaffService = async (bodyData) => {
    }
 };
 
-export const getStaffsInOptionsService = async () => {
+export const getStaffsDataForFilterSelectionService = async () => {
    try {
-      return await staffDAO.getStaffsInOptionsDAO();
+      return await staffDAO.getStaffsDataForFilterSelectionDAO();
    } catch (err) {
       throw err;
    }

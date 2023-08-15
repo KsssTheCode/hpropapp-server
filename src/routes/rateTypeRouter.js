@@ -5,7 +5,10 @@ import * as existance from '../middleware/existance/rateTypeExistance.js';
 
 const router = express.Router();
 
-router.get('/get-all-ratetypes', controller.getAllRateTypes);
+router.get(
+   '/get-ratetypes-data-for-filter-selection',
+   controller.getRateTypesDataForFilterSelection
+);
 
 router.post(
    '/create-ratetype',

@@ -1,4 +1,4 @@
-import * as cleanStatusService from '../service/cleanStatusService';
+import * as cleanStatusService from '../service/cleanStatusService.js';
 
 export const createCleanStatus = async (req, res, next) => {
    try {

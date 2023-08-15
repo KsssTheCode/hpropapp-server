@@ -13,7 +13,7 @@ export const createStaffDAO = async (createData) => {
    }
 };
 
-export const getStaffsInOptionsDAO = async () => {
+export const getStaffsDataForFilterSelectionDAO = async () => {
    try {
       return await Staff.findAll(
          { attributes: ['name', 'staffId'] },

@@ -32,7 +32,7 @@ router.get(
    '/get-group-rsvns-in-options',
    validation.getGroupRsvnsInOptionsValidation,
    existance.getGroupRsvnsInOptionsExistance,
-   controller.getGroupRsvnsInOptions
+   controller.getGroupRsvnsInFilterOptions
 );
 
 router.post(

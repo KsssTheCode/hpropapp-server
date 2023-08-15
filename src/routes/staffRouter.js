@@ -12,7 +12,10 @@ router.post(
    controller.createStaff
 );
 
-router.get('/get-staffs-in-options', controller.getStaffsInOptions);
+router.get(
+   '/get-staffs-data-for-filter-selection',
+   controller.getStaffsDataForFilterSelection
+);
 
 /* 추후 관리자 메뉴 생성 시 사용할 라우터*/
 // router.get(

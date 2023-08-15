@@ -73,13 +73,14 @@ export const createRsvnService = async (bodyData, staffId) => {
    }
 };
 
-export const getRsvnInOptionsService = async (queryData) => {
+export const getRsvnsInFilterOptionsService = async (queryData) => {
    try {
       let { createStartDate, createEndDate } = queryData;
 
       if (createStartDate || createEndDate) {
          if (createStartDate && !createEndDate) createEndDate = createStartDate;
          if (!createStartDate && createEndDate) createStartDate = createEndDate;
+
          createStartDate = new Date(
             moment(+createStartDate, 'YYYYMMDD')
                .startOf('day')
@@ -93,15 +94,12 @@ export const getRsvnInOptionsService = async (queryData) => {
                .tz('Asia/Seoul')
                .format('YYYY-MM-DD HH:mm:ss')
          );
+
+         queryData.options.createStartDate = createStartDate;
+         queryData.options.createEndDate = createEndDate;
       }
 
-      const searchOptions = {
-         ...queryData,
-         createStartDate,
-         createEndDate,
-      };
-
-      return await rsvnDAO.getRsvnsInOptionsDAO(searchOptions);
+      return await rsvnDAO.getRsvnsInFilterOptionsDAO(queryData);
    } catch (err) {
       throw err;
    }

@@ -1,6 +1,6 @@
 import db from '../models/index.js';
-import * as dailyRateDAO from '../data-access/dailyRateDAO';
-import { getDatesBetweenTerm } from '../source/js/function/commonFn';
+import * as dailyRateDAO from '../data-access/dailyRateDAO.js';
+import { getDatesBetweenTerm } from '../source/js/function/commonFn.js';
 
 export const getNewDailyRateService = async (queryData) => {
    const transaction = db.sequelize.transaction();

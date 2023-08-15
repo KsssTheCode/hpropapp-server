@@ -10,9 +10,10 @@ export const createStaff = async (req, res, next) => {
    }
 };
 
-export const getStaffsInOptions = async (req, res, next) => {
+export const getStaffsDataForFilterSelection = async (req, res, next) => {
    try {
-      const response = await staffService.getStaffsInOptionsService();
+      const response =
+         await staffService.getStaffsDataForFilterSelectionService();
       res.status(200).json(response);
    } catch (err) {
       next(err);

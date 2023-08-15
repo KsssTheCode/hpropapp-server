@@ -78,10 +78,10 @@ export const createRsvnDAO = async (
 
 /**
  *
- * @param {object} searchOptions - User-configured filter options get from widget.
+ * @param {object<array, object} searchOptions - Object consisting of required attributes and user-configured filter options get from widget.
  * @returns {Promise<Array<Reservation>>}Reservation datas.
  */
-export const getRsvnsInOptionsDAO = async (searchOptions) => {
+export const getRsvnsInFilterOptionsDAO = async (searchOptions) => {
    try {
       const {
          keyword,

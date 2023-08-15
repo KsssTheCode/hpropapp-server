@@ -1,9 +1,10 @@
+import { Op } from 'sequelize';
 import db from '../models/index.js';
 import { createError } from '../source/js/function/commonFn.js';
 
 const Dept = db.Department;
 
-export const createDepartmentDAO = async (deptCode, deptName) => {
+export const createDeptDAO = async (deptCode, deptName) => {
    try {
       return await Department.create({
          deptCode,
@@ -16,19 +17,19 @@ export const createDepartmentDAO = async (deptCode, deptName) => {
    }
 };
 
-export const getDepartmentsInOptionsDAO = async (attributes, searchOptions) => {
+export const getDeptsDataForFilterSelectionDAO = async () => {
    try {
-      return await Dept.findAll({
-         attributes: attributes,
-      }).catch(() => {
-         throw createError(500, '부서 조회 중 DB에서 오류발생');
-      });
+      return await Dept.findAll({ attributes: ['deptCode', 'deptName'] }).catch(
+         () => {
+            throw createError(500, '부서 조회 중 DB에서 오류발생');
+         }
+      );
    } catch (err) {
       throw err;
    }
 };
 
-export const getSelectedDepartmentDAO = async (deptCode) => {
+export const getSelectedDeptDataDAO = async (deptCode) => {
    try {
       return await Department.findByPk(deptCode).catch(() => {
          throw createError(500, '부서 조회 중 DB에서 오류발생');
@@ -38,7 +39,7 @@ export const getSelectedDepartmentDAO = async (deptCode) => {
    }
 };
 
-export const editDepartmentDAO = async (deptCode, newDeptName, newDeptCode) => {
+export const editDeptDAO = async (deptCode, newDeptName, newDeptCode) => {
    try {
       return await Department.update(
          { deptName: newDeptName, deptCode: newDeptCode },
@@ -52,7 +53,7 @@ export const editDepartmentDAO = async (deptCode, newDeptName, newDeptCode) => {
    }
 };
 
-export const deleteDepartmentDAO = async (deptCode) => {
+export const deleteDeptDAO = async (deptCode) => {
    try {
       return await Department.destroy({
          where: { deptCode: deptCode },

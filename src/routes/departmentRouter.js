@@ -9,30 +9,33 @@ router.post(
    '/create-dept',
    validation.departmentCodeValidationOnly,
    existance.createDepartmentCodeExistance,
-   controller.createDepartment
+   controller.createDept
 );
 
-router.get('get-depts-in-options', controller.getDepartmentsInOptions);
+router.get(
+   'get-depts-data-for-filter-selection',
+   controller.getDeptsDataForFilterSelection
+);
 
 router.get(
    '/get-selected-depts',
    validation.departmentCodeValidationOnly,
    existance.departmentCodeExistanceOnly,
-   controller.getSelectedDepartment
+   controller.getSelectedDeptData
 );
 
 router.post(
    '/edit-dept',
    validation.editDepartmentValidation,
    existance.editDepartmentExistance,
-   controller.editDepertment
+   controller.editDept
 );
 
 router.delete(
    '/delete-dept',
    validation.departmentCodeValidationOnly,
    existance.departmentCodeExistanceOnly,
-   controller.deleteDepartment
+   controller.deleteDept
 );
 
 export default router;

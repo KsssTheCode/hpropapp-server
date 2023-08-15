@@ -13,7 +13,10 @@ router.post(
    existance.createRoomTypeExistance,
    controller.createRoomType
 );
-router.get('/get-all-roomtypes', controller.getAllRoomTypes);
+router.get(
+   '/get-roomtypes-data-for-filter-selection',
+   controller.getRoomTypesDataForFilterSelection
+);
 router.get(
    '/get-selected-roomtype',
    validation.checkRoomTypeValidationOnly,

@@ -15,10 +15,10 @@ router.post(
 );
 
 router.get(
-   '/get-rsvns-in-options',
+   '/get-rsvns-in-filter-options',
    // validation.getRsvnsInOptionsValidation,
    // existance.getRsvnsInOptionsExistance,
-   controller.getRsvnsInOptions
+   controller.getRsvnsInFilterOptions
 );
 
 // router.get(

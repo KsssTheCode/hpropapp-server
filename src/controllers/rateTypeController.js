@@ -1,22 +1,15 @@
-import { Op } from 'sequelize';
+import * as rateTypeService from '../service/rateTypeService.js';
 import db from '../models/index.js';
 import { createError } from '../source/js/function/commonFn.js';
 
 const RateType = db.RateType;
 
-export const getAllRateTypes = async (req, res, next) => {
+export const getRateTypesDataForFilterSelection = async (req, res, next) => {
    try {
-      const { attributes } = req.query;
-      let attributesArr = null;
-      if (attributes) attributesArr = attributes.split(',');
-      const rateTypesData = await RateType.findAll({
-         attributes: attributesArr,
-         where: { deletedAt: null },
-      }).catch((err) => {
-         throw createError(500, '요금책정형식 조회 중 DB에서 오류발생');
-      });
+      const response =
+         await rateTypeService.getRateTypesDataForFilterSelectionService();
 
-      res.status(200).json(rateTypesData);
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }

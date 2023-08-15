@@ -23,12 +23,10 @@ export const createRoomType = async (req, res, next) => {
    }
 };
 
-export const getAllRoomTypes = async (req, res, next) => {
+export const getRoomTypesDataForFilterSelection = async (req, res, next) => {
    try {
-      const { attributes } = req.query;
-      const attributesArr = attributes.split(',');
       const roomTypeDatas = await RoomType.findAll({
-         attributes: attributesArr,
+         attributes: ['roomTypeCode', 'roomTypeName'],
          where: { deletedAt: null },
       }).catch((err) => {
          console.log(err);
