@@ -18,8 +18,7 @@ export const RoomStatus = (sequelize, DataTypes) => {
          },
       },
       {
-         paranoid: true,
-         createdAt: false,
+         timestamps: false,
       }
    );
 

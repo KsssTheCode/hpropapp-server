@@ -19,7 +19,6 @@ export const Folio = (sequelize, DataTypes) => {
          },
       },
       {
-         freezeTableName: true,
          paranoid: true,
          createdAt: false,
       }

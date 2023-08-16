@@ -14,7 +14,7 @@ export const RateType = (sequelize, DataTypes) => {
          },
       },
       {
-         paranoid: true,
+         timestamps: false,
       }
    );
 

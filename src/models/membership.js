@@ -23,17 +23,10 @@ export const Membership = (sequelize, DataTypes) => {
             allowNull: true,
             comment: '설명',
          },
-         changeHistory: {
-            type: DataTypes.JSON,
-            allowNull: true,
-            defaultValue: '[]',
-            commnet: '변경기록',
-         },
       },
       {
          modelName: 'Membership',
-         createdAt: false,
-         paranoid: true,
+         timestamps: false,
       }
    );
 

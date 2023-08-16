@@ -22,6 +22,7 @@ export const RoomRate = (sequelize, DataTypes) => {
          indexes: [
             { unique: true, fields: ['rateTypeCode', 'roomTypeCode', 'date'] },
          ],
+         timestamps: false,
       }
    );
 
