@@ -35,7 +35,7 @@ export const createRsvnService = async (bodyData, staffId) => {
          roomTypeCode,
          rateTypeCode,
          dailyRatesData,
-      } = requestBodyData;
+      } = bodyData;
       let { arrivalTime, departureTime } = bodyData;
 
       let rsvnId = await createId('reservation');

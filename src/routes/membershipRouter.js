@@ -12,7 +12,10 @@ router.post(
    controller.createMembership
 );
 
-router.get('/get-all-memberships', controller.getAllMemberships);
+router.get(
+   '/get-memberships-data-for-filter-selection',
+   controller.getMembershipsDataForFilterSelection
+);
 
 router.get(
    '/get-selected-memberships',

@@ -24,11 +24,11 @@ router.post(
 router.get('/get-rooms-for-room-preview', controller.getRoomsForRoomPreview);
 
 router.get(
-   '/get-rooms-in-options-for-assign',
-   controller.getRoomsInOptionsForAssign
+   '/get-rooms-data-in-options-for-assign',
+   controller.getRoomsDataInOptionsForAssign
 );
 
-router.get('/get-all-rooms', controller.getAllRooms);
+router.get('/get-all-rooms', controller.getRoomsInReserveStatus);
 router.post(
    '/edit-roomtype-of-rooms',
    validation.createEditDeleteRoomValidation,

@@ -1,8 +1,6 @@
-import * as groupRsvnService from '../service/groupReservationService';
+import * as groupRsvnService from '../service/groupReservationService.js';
 
 import randomName from 'korean-name-generator';
-
-const GroupRsvn = db.GroupReservation;
 
 export const createGroupRsvn = async (req, res, next) => {
    try {

@@ -8,7 +8,7 @@ export const getRateTypesDataForFilterSelection = async (req, res, next) => {
    try {
       const response =
          await rateTypeService.getRateTypesDataForFilterSelectionService();
-
+      // console.log(response);
       res.status(200).json(response);
    } catch (err) {
       next(err);

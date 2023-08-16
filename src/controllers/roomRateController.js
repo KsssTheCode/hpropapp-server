@@ -1,4 +1,4 @@
-import * as roomRateService from '../service/roomRateService';
+import * as roomRateService from '../service/roomRateService.js';
 
 export const initializeRoomRatesInTerm = async (req, res, next) => {
    try {
@@ -49,7 +49,7 @@ export const getSelectedRoomRate = async (req, res, next) => {
 export const getRoomRateByIndexes = async (req, res, next) => {
    try {
       const response = await roomRateService.getRoomRateByIndexesService(
-         req.body
+         req.query
       );
 
       res.status(200).json(response);

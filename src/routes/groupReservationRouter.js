@@ -42,13 +42,6 @@ router.post(
    controller.editGroupRsvn
 );
 
-router.delete(
-   '/cancel-group-rsvn',
-   validation.checkGroupRsvnIdValidationOnly,
-   existance.checkGroupRsvnExistanceOnly,
-   controller.cancelGroupRsvn
-);
-
 router.delete('/delete-detail-rsvns', controller.deleteDetailRsvns);
 
 export default router;

@@ -70,9 +70,9 @@ export const getSelectedRoomRateService = async (bodyData) => {
       throw err;
    }
 };
-export const getRoomRateByIndexesService = async (bodyData) => {
+export const getRoomRateByIndexesService = async (queryData) => {
    try {
-      const { roomTypeCode, rateTypeCode, startDate, endDate } = bodyData;
+      const { roomTypeCode, rateTypeCode, startDate, endDate } = queryData;
 
       let term = getDatesBetweenTerm(startDate, endDate);
 
