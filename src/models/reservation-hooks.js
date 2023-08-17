@@ -112,5 +112,6 @@ export const afterUpdateHook = async (rsvn, options) => {
       }
    } catch (err) {
       console.log(err);
+      throw err;
    }
 };

@@ -1,3 +1,5 @@
+import { afterUpdateHook } from './group-hooks.js';
+
 export const Group = (sequelize, DataTypes) => {
    const Group = sequelize.define(
       'Group',
@@ -46,7 +48,6 @@ export const Group = (sequelize, DataTypes) => {
       {
          sequelize,
          paranoid: true,
-         modelName: 'Group',
       }
    );
 
@@ -63,7 +64,13 @@ export const Group = (sequelize, DataTypes) => {
          foreignKey: { name: 'groupId', allowNull: true },
          sourceKey: 'groupId',
       });
+      Group.hasMany(models.CustomerChangeHistory, {
+         foreignKey: { name: 'groupId', allowNull: true },
+         sourceKey: 'groupId',
+      });
    };
+
+   Group.addHook('afterUpdate', afterUpdateHook);
 
    return Group;
 };

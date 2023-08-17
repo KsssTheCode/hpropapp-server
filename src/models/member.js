@@ -1,4 +1,5 @@
 import { getChangeHistoryMessage } from '../source/js/function/commonFn.js';
+import { afterUpdateHook } from './member-hooks.js';
 
 export const Member = (sequelize, DataTypes) => {
    const Member = sequelize.define(
@@ -63,37 +64,7 @@ export const Member = (sequelize, DataTypes) => {
          },
       },
       {
-         modelName: 'Member',
          paranoid: true,
-         hooks: {
-            afterUpdate: async (member, options) => {
-               const newHistory = getChangeHistoryMessage(
-                  member.previous(),
-                  member,
-                  ['memberId']
-               );
-
-               await db.models.Member.update(
-                  {
-                     changeHistory: db.Sequelize.fn(
-                        'JSON_ARRAY_APPEND', //사용할 함수 이름
-                        db.Sequelize.col('changeHistory'), //history를 속성컬럼으로 지정
-                        '$', //JSON배열 마지막에 새로운 요소를 추가하도록 함 (루트객체 의미)
-                        JSON.stringify(newHistory) //추가할 객체
-                     ),
-                  },
-                  {
-                     where: { memberId: member.memberId },
-                     transaction: options.transaction,
-                  }
-               ).catch(() => {
-                  throw createError(
-                     500,
-                     '회원변경기록 수정 중 DB에서 오류발생'
-                  );
-               });
-            },
-         },
       }
    );
 
@@ -106,6 +77,10 @@ export const Member = (sequelize, DataTypes) => {
          foreignKey: { name: 'memberId', allowNull: true },
          sourceKey: 'memberId',
       });
+      Member.hasMany(models.CustomerChangeHistory, {
+         foreignKey: { name: 'memberId', allowNull: true },
+         sourceKey: 'memberId',
+      });
       Member.belongsTo(models.Membership, {
          foreignKey: { name: 'membershipGrade', allowNull: true },
          targetKey: 'membershipGrade',
@@ -113,6 +88,8 @@ export const Member = (sequelize, DataTypes) => {
          onUpdate: 'CASCADE',
       });
    };
+
+   Member.addHook('afterUpdate', afterUpdateHook);
 
    return Member;
 };

@@ -85,6 +85,10 @@ export const Staff = (sequelize, DataTypes) => {
          foreignKey: { name: 'createStaffId', allowNull: false },
          sourceKey: 'staffId',
       });
+      Staff.hasMany(models.CustomerChangeHistory, {
+         foreignKey: { name: 'staffId', allowNull: false },
+         sourceKey: 'staffId',
+      });
    };
 
    return Staff;

@@ -19,6 +19,7 @@ import { CleanStatus } from './cleanStatus.js';
 import { ReservationStatus } from './reservationStatus.js';
 import { DailyRate } from './dailyRate.js';
 import { ReservationChangeHistory } from './reservationChangeHistory.js';
+import { CustomerChangeHistory } from './customerChangeHistory.js';
 import { Config } from '../../config/config.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -54,6 +55,7 @@ db.CleanStatus = CleanStatus(sequelize, DataTypes);
 db.ReservationStatus = ReservationStatus(sequelize, DataTypes);
 db.DailyRate = DailyRate(sequelize, DataTypes);
 db.ReservationChangeHistory = ReservationChangeHistory(sequelize, DataTypes);
+db.CustomerChangeHistory = CustomerChangeHistory(sequelize, DataTypes);
 
 Object.keys(db).forEach((modelName) => {
    if (db[modelName].associate) {

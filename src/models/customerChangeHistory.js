@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-export const ReservationChangeHistory = (sequelize, DataTypes) => {
-   const ReservationChangeHistory = sequelize.define(
-      'ReservationChangeHistory',
+export const CustomerChangeHistory = (sequelize, DataTypes) => {
+   const CustomerChangeHistory = sequelize.define(
+      'CustomerChangeHistory',
       {
          changeHistoryId: {
             type: DataTypes.INTEGER,
@@ -30,22 +30,22 @@ export const ReservationChangeHistory = (sequelize, DataTypes) => {
       }
    );
 
-   ReservationChangeHistory.associate = function (models) {
-      ReservationChangeHistory.belongsTo(models.Staff, {
+   CustomerChangeHistory.associate = function (models) {
+      CustomerChangeHistory.belongsTo(models.Staff, {
          foreignKey: { name: 'staffId', allowNull: false },
          targetKey: 'staffId',
       });
 
-      ReservationChangeHistory.belongsTo(models.Reservation, {
-         foreignKey: { name: 'rsvnId', allowNull: true },
-         targetKey: 'rsvnId',
+      CustomerChangeHistory.belongsTo(models.Member, {
+         foreignKey: { name: 'memberId', allowNull: true },
+         targetKey: 'memberId',
       });
 
-      ReservationChangeHistory.belongsTo(models.GroupReservation, {
-         foreignKey: { name: 'groupRsvnId', allowNull: true },
-         targetKey: 'groupRsvnId',
+      CustomerChangeHistory.belongsTo(models.Group, {
+         foreignKey: { name: 'groupId', allowNull: true },
+         targetKey: 'groupId',
       });
    };
 
-   return ReservationChangeHistory;
+   return CustomerChangeHistory;
 };
