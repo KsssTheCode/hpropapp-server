@@ -10,7 +10,7 @@ export const authentication = (req, res, next) => {
       return next();
 
    if (!req.cookies?.access_token) {
-      res.status(401).send('해당 기능 접근 권한 없음');
+      res.status(403).send('해당 기능 접근 권한 없음');
       return;
    } else {
       const token = req.cookies?.access_token.replace('Bearer ', '');
