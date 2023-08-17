@@ -254,10 +254,10 @@ export const editRsvnDAO = async (bodyData, staffId, transaction) => {
             rateTypeCode,
          },
          {
-            where: { rsvnId: rsvnId },
-            transaction: transaction,
-            ...(!!dailyRatesData && { dailyRatesData: dailyRatesData }),
+            where: { rsvnId },
+            ...(!!dailyRatesData && { dailyRatesData }),
             staffId,
+            transaction,
             individualHooks: true,
          }
       ).catch(() => {
@@ -275,12 +275,11 @@ export const assignRoomToRsvnDAO = async (
    transaction
 ) => {
    try {
-      console.log(staffId);
       await Rsvn.update(
          { roomNumber: roomNumber },
          {
             where: { rsvnId: id, statusCode: 'RR' },
-            transaction: transaction,
+            transaction,
             staffId,
             individualHooks: true,
          }

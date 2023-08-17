@@ -13,21 +13,9 @@ router.post(
 );
 
 router.get(
-   '/get-group-change-history',
-   existance.checkGroupExistanceOnly,
-   controller.getGroupChangeHistory
-);
-
-router.get(
-   '/get-all-groups',
-   validation.getAllGroupsValidation,
-   controller.getAllGroups
-);
-
-router.get(
    '/get-groups-in-options',
    validation.getGroupInOptionsValidation,
-   controller.getGroupsInOptions
+   controller.getGroupsDataInFilterOptions
 );
 
 router.get(

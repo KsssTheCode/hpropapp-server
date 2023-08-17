@@ -22,6 +22,7 @@ export const getRsvnsInFilterOptions = async (req, res, next) => {
       const response = await rsvnService.getRsvnsInFilterOptionsService(
          req.query
       );
+
       res.status(200).json(response);
    } catch (err) {
       next(err);
@@ -41,10 +42,7 @@ export const getSelectedRsvn = async (req, res, next) => {
 export const editRsvn = async (req, res, next) => {
    try {
       const staffId = req.cookies.staffId;
-      const response = await rsvnService.getRsvnInOptionsService(
-         req.body,
-         staffId
-      );
+      const response = await rsvnService.editRsvnService(req.body, staffId);
       res.status(200).json(response[1]);
    } catch (err) {
       next(err);
@@ -53,11 +51,9 @@ export const editRsvn = async (req, res, next) => {
 
 export const assignRoomToRsvn = async (req, res, next) => {
    try {
-      const { id, roomNumber } = req.body;
       const staffId = req.cookies.staffId;
       const response = await rsvnService.assignRoomToRsvnService(
-         id,
-         roomNumber,
+         req.body,
          staffId
       );
 

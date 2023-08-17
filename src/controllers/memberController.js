@@ -1,73 +1,24 @@
-import db from '../models/index.js';
-import {
-   createError,
-   createId,
-   getOffset,
-} from '../source/js/function/commonFn.js';
-
-const Member = db.Member;
+import * as memberService from '../service/memberService.js';
 
 export const createMember = async (req, res, next) => {
    try {
-      const {
-         name,
-         gender,
-         birth,
-         tel,
-         address,
-         nationality,
-         carNumber,
-         blackListYN,
-         reference,
-         membershipGrade,
-      } = req.body;
+      const response = await memberService.createMemberService(req.body);
 
-      let memberId = 'M' + (await createId('Member'));
-
-      await Member.create({
-         memberId,
-         name,
-         gender,
-         birth,
-         tel,
-         address,
-         nationality,
-         carNumber,
-         blackListYN,
-         reference,
-         membershipGrade,
-         // ...(gender && { gender }),
-         // ...(birth && { birth }),
-         // tel,
-         // ...(address && { address }),
-         // ...(nationality && { nationality }),
-         // ...(carNumber && { carNumber }),
-         // ...(blackListYN && { blackListYN }),
-         // ...(reference && { reference }),
-         // ...(membershipGrade && { membershipGrade }),
-      }).catch((err) => {
-         throw createError(500, '고객생성 중 DB에서 오류발생');
-      });
-
-      res.status(200).send(`고객생성완료 \n(고객번호 : ${memberId})`);
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
 
+//멤버 전체를 무리없는 선에서 불러오되, 필터를 이용한 검색 이용 시, Redux state에서 필터링하여 정보제공하는게 어때?
 export const getAllMembers = async (req, res, next) => {
    try {
-      const { page, itemsInOnePage } = req.body;
-      const offset = getOffset(page, itemsInOnePage);
-
       const memberDatas = await Member.findAll({
          order: [['createdAt', 'desc']],
-         offset: offset,
-         limit: itemsInOnePage,
       }).catch(() => {
          throw createError(500, '멤버 조회 중 DB에서 오류발생');
       });
-      res.status(200).json(memberDatas);
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
@@ -75,131 +26,59 @@ export const getAllMembers = async (req, res, next) => {
 
 export const getSelectedMember = async (req, res, next) => {
    try {
-      const memberData = await Member.findByPk(req.body.memberId).catch(() => {
-         throw createError(500, '고객 조회 중 DB에서 오류발생');
-      });
+      const response = await memberService.getAllMembersService(req.query);
 
-      res.status(200).json(memberData);
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
 
-export const getMembersInOptions = async (req, res, next) => {
+export const getMembersDataInFilterOptions = async (req, res, next) => {
    try {
-      const {
-         page,
-         itemsInOnePage,
-         keyword,
-         blackListYN,
-         membershipGrades,
-         startDate, //생성일
-         endDate, // 생성일
-         nationalities,
-      } = req.body;
-      const offset = getOffset(page, itemsInOnePage);
-
-      //방문횟수도 고려해봐야함
-      const memberDatas = await Member.findAll({
-         where: {
-            name: { [Op.like]: `%${keyword}%` },
-            reference: { [Op.like]: `%${keyword}%` },
-            blackListYN: blackListYN,
-            membershipGrade: { [Op.in]: membershipGrades },
-            createdAt: { [Op.between]: [startDate, endDate] },
-            nationality: { [Op.in]: nationalities },
-            include: [
-               {
-                  model: Membership,
-                  where: {
-                     membershipGrade: { [Op.in]: membershipGrade },
-                  },
-               },
-            ],
-         },
-         order: [['createdAt', 'desc']],
-         offset: offset,
-         limit: itemsInOnePage,
-      }).catch((err) => {
-         next(err);
-      });
-
-      res.status(200).json(memberDatas);
-   } catch (err) {
-      next(err);
-   }
-};
-
-export const autoCompeletionWithName = async (req, res, next) => {
-   try {
-      const { name } = req.body;
-
-      const relatedMemberDatas = await Member.findAll(
-         { attributes: ['name', 'tel'] },
-         { where: { name: { [Op.like]: `%${name}%` } } }
+      const response = await memberService.getMembersInFilterOptionsService(
+         req.query
       );
-      res.status(200).json(relatedMemberDatas);
+
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
 
 export const editMember = async (req, res, next) => {
-   const transaction = db.sequelize.transaction();
    try {
-      const {
-         memberId,
-         newName,
-         newGender,
-         newBirth,
-         newTel,
-         newAddress,
-         newNationality,
-         newCarNumber,
-         blackListYN,
-         newMembershipGrade,
-         newReference,
-      } = req.body;
-
-      await Member.update(
-         {
-            name: newName,
-            gender: newGender,
-            birth: newBirth,
-            tel: newTel,
-            address: newAddress,
-            nationality: newNationality,
-            carNumber: newCarNumber,
-            blackListYN,
-            membershipGrade: newMembershipGrade,
-            reference: newReference,
-         },
-         { where: { memberId: memberId }, transaction: transaction }
-      ).catch(() => {
-         throw createError(500, '고객정보 수정 중 DB에서 오류발생');
-      });
-
-      transaction.commit();
-      res.status(200).send('고객정보 수정완료');
+      const response = await memberService.editMemberService(req.body);
+      res.status(200).json(response);
    } catch (err) {
-      transaction.rollback();
       next(err);
    }
 };
 
 export const deleteMember = async (req, res, next) => {
    try {
-      const { memberId } = req.body;
-      await Member.destroy({
-         where: {
-            memberId: memberId,
-         },
-      }).catch(() => {
-         throw createError(500, '고객정보 삭제 중 DB에서 오류발생');
-      });
+      const staffId = req.cookies.staffId;
+      const response = await memberService.deleteMemberService(
+         req.body,
+         staffId
+      );
 
-      res.status(200).send('고객정보 삭제완료');
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
+
+// export const autoCompeletionWithName = async (req, res, next) => {
+//    try {
+//       const { name } = req.body;
+
+//       const relatedMemberDatas = await Member.findAll(
+//          { attributes: ['name', 'tel'] },
+//          { where: { name: { [Op.like]: `%${name}%` } } }
+//       );
+//       res.status(200).json(relatedMemberDatas);
+//    } catch (err) {
+//       next(err);
+//    }
+// };

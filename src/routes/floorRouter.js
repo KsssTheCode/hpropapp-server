@@ -6,13 +6,13 @@ import * as existance from '../middleware/existance/floorExistance.js';
 
 const router = express.Router();
 
-router.get('/get-floors', controller.getFloors);
+router.get('/get-floors-data', controller.getFloorsData);
 
 router.post(
-   '/create-floors',
+   '/create-floors-data',
    validation.createFloorsValidation,
    existance.craeteFloorsExistance,
-   controller.createFloors
+   controller.createFloorsData
 );
 
 export default router;

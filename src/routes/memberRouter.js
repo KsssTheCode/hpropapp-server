@@ -25,16 +25,10 @@ router.get(
 );
 
 router.get(
-   '/get-members-in-options',
+   '/get-members-data-in-filter-options',
    validation.getMembersInOptionsValidation,
    existance.getMembersInOptionsExistance,
-   controller.getMembersInOptions
-);
-
-router.get(
-   '/auto-compeletion-with-name',
-   validation.autoCompeletionWithNameValidation,
-   controller.autoCompeletionWithName
+   controller.getMembersDataInFilterOptions
 );
 
 router.post(
@@ -50,4 +44,9 @@ router.post(
    controller.editMember
 );
 
+// router.get(
+//    '/auto-compeletion-with-name',
+//    validation.autoCompeletionWithNameValidation,
+//    controller.autoCompeletionWithName
+// );
 export default router;

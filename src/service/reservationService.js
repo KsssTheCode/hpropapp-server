@@ -95,8 +95,8 @@ export const getRsvnsInFilterOptionsService = async (queryData) => {
                .format('YYYY-MM-DD HH:mm:ss')
          );
 
-         queryData.options.createStartDate = createStartDate;
-         queryData.options.createEndDate = createEndDate;
+         queryData.createStartDate = createStartDate;
+         queryData.createEndDate = createEndDate;
       }
 
       return await rsvnDAO.getRsvnsInFilterOptionsDAO(queryData);
@@ -105,10 +105,14 @@ export const getRsvnsInFilterOptionsService = async (queryData) => {
    }
 };
 
-export const editRsvnService = async (bodyData) => {
+export const editRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
-      const response = await rsvnDAO.editRsvnDAO(bodyData, transaction);
+      const response = await rsvnDAO.editRsvnDAO(
+         bodyData,
+         staffId,
+         transaction
+      );
       await transaction.commit();
       return response;
    } catch (err) {
@@ -117,9 +121,10 @@ export const editRsvnService = async (bodyData) => {
    }
 };
 
-export const assignRoomToRsvnService = async (id, roomNumber, staffId) => {
+export const assignRoomToRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
+      const { id, roomNumber } = bodyData.idAndRoomPairs[0];
       const response = await rsvnDAO.assignRoomToRsvnDAO(
          id,
          roomNumber,
