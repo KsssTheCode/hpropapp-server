@@ -52,7 +52,7 @@ export const createGroupDetailRsvnsDailyRatesDataDAO = async (
       throw err;
    }
 };
-export const createGroupDetailRsvnsFolioDAODAO = async (
+export const createGroupDetailRsvnsFolioDAO = async (
    foliosData,
    transaction
 ) => {

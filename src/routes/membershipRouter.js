@@ -19,6 +19,7 @@ router.get(
 
 router.get(
    '/get-selected-memberships',
+
    existance.checkMembershipExistanceOnly,
    controller.getSelectedMemebership
 );

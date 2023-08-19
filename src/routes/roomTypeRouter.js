@@ -19,7 +19,7 @@ router.get(
 );
 router.get(
    '/get-selected-roomtype',
-   validation.checkRoomTypeValidationOnly,
+   validation.checkRoomTypeCodeValidationOnly,
    existance.checkRoomTypeExistanceOnly,
    controller.getSelectedRoomType
 );
@@ -31,7 +31,7 @@ router.post(
 );
 router.delete(
    '/delete-roomtype',
-   validation.checkRoomTypeValidationOnly,
+   validation.checkRoomTypeCodeValidationOnly,
    existance.checkRoomTypeExistanceOnly,
    controller.deleteRoomType
 );

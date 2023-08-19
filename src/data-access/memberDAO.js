@@ -13,7 +13,19 @@ export const createMemberDAO = async (createData) => {
    }
 };
 
-export const getAllMembersDAO = async (id) => {
+export const getAllMembersDAO = async () => {
+   try {
+      return await Member.findAll({
+         order: [['createdAt', 'desc']],
+      }).catch(() => {
+         throw createError(500, '멤버 조회 중 DB에서 오류발생');
+      });
+   } catch (err) {
+      throw err;
+   }
+};
+
+export const getSelectedMemberDataDAO = async (id) => {
    try {
       return await Member.findByPk(id).catch(() => {
          throw createError(500, '고객 조회 중 DB에서 오류발생');

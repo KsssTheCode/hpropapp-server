@@ -57,11 +57,11 @@ export const destoryDailyRate = async (rsvnId, transaction) => {
 };
 
 export const editSpecificRsvnDailyRateDAO = async (
-   newDailyRatesData,
+   newDailyRateData,
    transaction
 ) => {
    try {
-      const { dailyRateId, price } = data;
+      const { dailyRateId, price } = newDailyRateData;
       const [updatedCount, updatedRows] = await DailyRate.update(
          { price },
          {
@@ -69,7 +69,9 @@ export const editSpecificRsvnDailyRateDAO = async (
             transaction,
             returning: true,
          }
-      );
+      ).catch(() => {
+         throw createError(500, '일별요금 변경 중 DB에서 오류발생');
+      });
       if (updatedCount > 0) {
          return updatedRows[0]; // 업데이트된 레코드 반환
       }

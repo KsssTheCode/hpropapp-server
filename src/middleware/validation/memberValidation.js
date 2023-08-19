@@ -21,77 +21,78 @@ export const createMemberValidation = (req, res, next) => {
    }
 };
 
-export const getAllMembersValdiation = (req, res, next) => {
+export const checkMemberIdValidationOnly = (req, res, next) => {
    try {
-      const { page, itemsInOnePage } = req.body;
-      page ? validation.numberCheck(page, '페이지') : (page = 1);
-      itemsInOnePage
-         ? validation.itemInOnePageCheck(itemsInOnePage)
-         : (itemsInOnePage = 50);
-
-      next();
+      const { memberId } = req.query;
+      validation.idCheck(id, '고객고유번호');
    } catch (err) {
       next(err);
    }
 };
 
-export const getMembersInOptionsValidation = (req, res, next) => {
+export const getMembersInFilterOptionsValidation = (req, res, next) => {
    try {
       const {
-         page,
-         itemsInOnePage,
          blackListYN,
          adminYN,
          groupYN,
          membershipGrades,
-         startDate,
-         endDate,
+         createStartDate,
+         createEndDate,
          nationalities,
-      } = req.body;
-      page ? validation.numberCheck(page, '페이지') : (page = 1);
-      itemsInOnePage
-         ? validation.itemInOnePageCheck(itemsInOnePage)
-         : (itemsInOnePage = 50);
+      } = req.query;
       if (blackListYN) validation.yesOrNoCheck(blackListYN);
       if (adminYN) validation.yesOrNoCheck(adminYN);
       if (groupYN) validation.yesOrNoCheck(groupYN);
-      Array.isArray(membershipGrades)
-         ? membershipGrades.forEach((grade) => {
-              validation.membershipGradeCheck(grade);
-           })
-         : () => {
-              throw createError(400, '멤버십등급 입력오류(배열이 아님)');
-           };
-      Array.isArray(nationalities)
-         ? nationalities.forEach((nationCode) => {
-              memberValidation.nationalityCheck(nationCode);
-           })
-         : () => {
-              throw createError(400, '국가코드 입력오류(배열이 아님)');
-           };
-      if (startDate) dateCheck(startDate);
-      if (endDate) dateCheck(endDate);
-      if (+startDate > +endDate)
-         throw createError(400, '검색 시작일이 검색 종료일보다 늦을 수 없음');
+
+      membershipGrades.split(',').forEach((grade) => {
+         validation.membershipGradeCheck(grade);
+      });
+      // Array.isArray(membershipGrades)
+      //    ? membershipGrades.forEach((grade) => {
+      //         validation.membershipGradeCheck(grade);
+      //      })
+      //    : () => {
+      //         throw createError(422, '멤버십등급 입력오류(Not an array)');
+      //      };
+
+      if (nationalities) {
+         nationalities.split(',').forEach((nationCode) => {
+            validation.nationalityCheck(nationCode);
+         });
+      }
+      // Array.isArray(nationalities)
+      //    ? nationalities.forEach((nationCode) => {
+      //         validation.nationalityCheck(nationCode);
+      //      })
+      //    : () => {
+      //         throw createError(422, '국가코드 입력오류(Not an array)');
+      //      };
+
+      const { adjustedStartDate, adjustedEndDate } =
+         validation.dateSearchOptionsCheck(createStartDate, createEndDate);
+      req.query.createStartDate = adjustedStartDate;
+      req.query.createEndDate = adjustedEndDate;
       next();
    } catch (err) {
       next(err);
    }
 };
 
-export const autoCompeletionWithNameValidation = (req, res, next) => {
-   try {
-      const { name } = req.body;
-      validation.specialCharacterCheck(name);
-      next();
-   } catch (err) {
-      next(err);
-   }
-};
+// export const autoCompeletionWithNameValidation = (req, res, next) => {
+//    try {
+//       const { name } = req.body;
+//       validation.specialCharacterCheck(name);
+//       next();
+//    } catch (err) {
+//       next(err);
+//    }
+// };
 
 export const editMemberValidation = (req, res, next) => {
    try {
       const {
+         memberId,
          newName,
          newGender,
          newBirth,
@@ -101,16 +102,16 @@ export const editMemberValidation = (req, res, next) => {
          blackListYN,
          newMembershipGrade,
       } = req.body;
-      validation.nameCheck(newName);
 
+      validation.idCheck(memberId, '고객고유번호');
+      if (newName) validation.nameCheck(newName);
       if (newTel) validation.telCheck(newTel);
       if (newGender) validation.genderCheck(newGender);
       if (newBirth) validation.birthCheck(newBirth);
-      if (newNationality) memberValidation.nationCheck(newNationality);
+      if (newNationality) validation.nationalityCheck(newNationality);
       if (newCarNumber) validation.carNumberCheck(newCarNumber);
       if (!blackListYN) throw createError(400, '블랙리스트 여부 미입력');
       validation.yesOrNoCheck(blackListYN);
-
       if (newMembershipGrade)
          validation.membershipGradeCheck(newMembershipGrade);
       next();

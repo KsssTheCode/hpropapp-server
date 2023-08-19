@@ -7,22 +7,10 @@ export const createGroupValidation = (req, res, next) => {
 
       validation.groupNameCheck(groupName);
       validation.telCheck(representorTel);
-      validation.nameCheck(representorName);
-      if (companyName) validation.groupNameCheck(companyName);
-      if (companyName && companyTel) validation.telCheck(companyTel);
-      next();
-   } catch (err) {
-      next(err);
-   }
-};
 
-export const getAllGroupsValidation = (req, res, next) => {
-   try {
-      const { page, itemsInOnePage } = req.body;
-      page ? validation.numberCheck(page, '페이지') : (page = 1);
-      itemsInOnePage
-         ? validation.itemInOnePageCheck(itemsInOnePage)
-         : (itemsInOnePage = 50);
+      if (representorName) validation.nameCheck(representorName);
+      if (companyName) validation.groupNameCheck(companyName);
+      if (companyTel) validation.telCheck(companyTel);
       next();
    } catch (err) {
       next(err);
@@ -31,16 +19,23 @@ export const getAllGroupsValidation = (req, res, next) => {
 
 export const getGroupInOptionsValidation = (req, res, next) => {
    try {
-      const { page, itemsInOnePage, startDate, endDate } = req.body;
-      page ? validation.numberCheck(page, '페이지') : (req.body.page = 1);
-      itemsInOnePage
-         ? validation.numberCheck(itemsInOnePage, '행 갯수')
-         : (req.body.itemsInOnePage = 50);
-      if (startDate) dateCheck(startDate);
-      if (endDate) dateCheck(endDate);
-      if (+startDate > +endDate)
-         throw createError(400, '검색 시작일이 검색 종료일보다 늦을 수 없음');
+      const { startDate, endDate } = req.query;
+
+      const { adjustedStartDate, adjustedEndDate } =
+         validation.dateSearchOptionsCheck(startDate, endDate);
+      req.query.startDate = adjustedStartDate;
+      req.query.endDate = adjustedEndDate;
+
       next();
+   } catch (err) {
+      next(err);
+   }
+};
+
+export const checkGroupIdValidationOnly = (req, res, next) => {
+   try {
+      const { groupId } = req.body;
+      validation.idCheck(groupId, '그룹고유번호');
    } catch (err) {
       next(err);
    }

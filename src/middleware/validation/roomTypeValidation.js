@@ -28,7 +28,7 @@ export const editRoomTypeValidation = (req, res, next) => {
    }
 };
 
-export const checkRoomTypeValidationOnly = (req, res, next) => {
+export const checkRoomTypeCodeValidationOnly = (req, res, next) => {
    try {
       const { roomTypeCode } = req.body;
       validation.roomTypeCodeCheck(roomTypeCode);

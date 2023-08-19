@@ -1,4 +1,5 @@
-import { createError, currentDateFormat } from '../commonFn.js';
+import moment from 'moment';
+import { createError } from '../commonFn.js';
 
 export const nameCheck = (name) => {
    const nameRegExp = /^[가-힣a-zA-Z]{2,30}$/;
@@ -12,7 +13,7 @@ export const genderCheck = (gender) => {
 
 export const birthCheck = (birth) => {
    const birthRegExp = /^[0-9]{8}$/;
-   if (!birthRegExp.test(birth) || +birth >= currentDateFormat(8))
+   if (!birthRegExp.test(birth) || +birth >= moment().format('YYYYMMDD'))
       throw createError(422, '생년월일 입력오류');
 };
 
@@ -88,8 +89,8 @@ export const departmentCodeCheck = (deptCode) => {
 };
 
 export const cleanStatusCodeCheck = (cleanStatusCode) => {
-   const cleanStatusArr = ['dirty', 'clear', 'inspected', 'cleaning'];
-   const isExisiting = cleanStatusArr.includes(cleanStatusCode.lowerCase());
+   const cleanStatusArr = ['D', 'C', 'I', 'NG'];
+   const isExisiting = cleanStatusArr.includes(cleanStatusCode.upperCase());
    return isExisiting;
 };
 
@@ -121,17 +122,6 @@ export const carNumberCheck = (carNumber) => {
    }
 };
 
-export const itemInOnePageCheck = (itemsInOnePage) => {
-   if (
-      !(
-         itemsInOnePage === 50 ||
-         itemsInOnePage === 100 ||
-         itemsInOnePage === 150
-      )
-   )
-      throw createError(422, '페이지 당 항목 수 입력오류');
-};
-
 export const membershipGradeCheck = (grade) => {
    if ((grade >= 'Z', grade <= 'A'))
       throw createError(422, '멤버십 등급 입력오류');
@@ -157,4 +147,46 @@ export const nationalityCheck = (nationCode) => {
    if (!nationRegExp.test(nationCode)) {
       throw createError(422, '국가코드 오입력');
    }
+};
+
+export const rsvnDateCheck = (arrivalDate, departureDate) => {
+   const dateRegExp =
+      /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+   const currentDate = moment().format('YYYYMMDD');
+
+   if (!dateRegExp.test(+arrivalDate)) {
+      throw createError(422, '투숙시작날짜 입력 오류');
+   }
+
+   if (!dateRegExp.test(+departureDate)) {
+      throw createError(422, '투숙종료날짜 입력 오류');
+   }
+
+   if (+arrivalDate < +currentDate) {
+      throw createError(422, '투숙시작일이 현재날짜보다 이전일 수 없습니다.');
+   }
+
+   if (+arrivalDate > +departureDate) {
+      throw createError(
+         422,
+         '투숙시작날짜가 투숙종료날짜보다 늦을 수 없습니다.'
+      );
+   }
+};
+
+export const dateSearchOptionsCheck = (startDate, endDate) => {
+   if (startDate && endDate) {
+      dateCheck(startDate);
+      dateCheck(endDate);
+      if (+startDate > +endDate)
+         throw createError(422, '검색 시작일이 검색 종료일보다 늦을 수 없음');
+   } else if (startDate && !endDate) {
+      dateCheck(startDate);
+      endDate = startDate;
+   } else if (!startDate && endDate) {
+      dateCheck(endDate);
+      startDate = endDate;
+   }
+
+   return { startDate, endDate };
 };

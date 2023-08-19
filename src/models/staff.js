@@ -1,4 +1,4 @@
-import { STAFF_ROLE } from '../constants/role.js';
+import { STAFF_ROLE } from '../constants/constants.js';
 
 export const Staff = (sequelize, DataTypes) => {
    const Staff = sequelize.define(

@@ -2,9 +2,12 @@ import * as cleanStatusDAO from '../data-access/cleanStatusDAO.js';
 
 export const createCleanStatusService = async (bodyData) => {
    try {
-      const { statusCode, statusName } = bodyData;
+      const { cleanStatusCode, statusName } = bodyData;
 
-      return await cleanStatusDAO.createCleanStatusDAO(statusCode, statusName);
+      return await cleanStatusDAO.createCleanStatusDAO(
+         cleanStatusCode,
+         statusName
+      );
    } catch (err) {
       throw err;
    }
@@ -12,8 +15,8 @@ export const createCleanStatusService = async (bodyData) => {
 
 export const deleteCleansStatusService = async (bodyData) => {
    try {
-      const { statusCode } = bodyData;
-      return await cleanStatusDAO.deleteCleansStatusDAO(statusCode);
+      const { cleanStatusCode } = bodyData;
+      return await cleanStatusDAO.deleteCleansStatusDAO(cleanStatusCode);
    } catch (err) {
       throw err;
    }

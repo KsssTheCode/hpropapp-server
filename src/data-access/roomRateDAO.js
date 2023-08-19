@@ -58,15 +58,6 @@ export const getRoomRatesInOptionsDAO = async (
    }
 };
 
-export const getSelectedRoomRateDAO = async (roomRateId) => {
-   try {
-      return await RoomRate.findByPk(roomRateId).catch(() => {
-         throw createError(500, '객실료 조회 중 DB에서 오류발생');
-      });
-   } catch (err) {
-      throw err;
-   }
-};
 export const getRoomRateByIndexesDAO = async (
    roomTypeCode,
    rateTypeCode,

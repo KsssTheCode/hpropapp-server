@@ -62,14 +62,6 @@ export const getRoomRatesInOptionsService = async (bodyData) => {
    }
 };
 
-export const getSelectedRoomRateService = async (bodyData) => {
-   try {
-      const { roomRateId } = bodyData;
-      return await roomRateDAO.getSelectedRoomRateDAO(roomRateId);
-   } catch (err) {
-      throw err;
-   }
-};
 export const getRoomRateByIndexesService = async (queryData) => {
    try {
       const { roomTypeCode, rateTypeCode, startDate, endDate } = queryData;

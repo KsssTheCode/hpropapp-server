@@ -4,7 +4,7 @@ import * as dailyRateService from '../service/dailyRateService.js';
 //작성완료 후 변경될 시에도 촉발됨
 export const getNewDailyRate = async (req, res, next) => {
    try {
-      const response = await dailyRateService.getNewDailyRateService(req.body);
+      const response = await dailyRateService.getNewDailyRateService(req.query);
       res.status(200).json(response);
    } catch (err) {
       next(err);

@@ -35,34 +35,23 @@ export const editMemberExistance = async (req, res, next) => {
    }
 };
 
-export const getMembersInOptionsExistance = async (req, res, next) => {
+export const getMembersInFilterOptionsExistance = async (req, res, next) => {
    try {
-      const {
-         memberId,
-         page,
-         itemsInOnePage,
-         membershipGrades,
-         nationalities,
-      } = req.body;
-
-      const isExistingMemberId = await existance.checkExistingMember(memberId);
-      if (!isExistingMemberId) throw createError(400, '존재하지 않는 고객');
+      const { membershipGrades, nationalities } = req.body;
 
       if (membershipGrades)
          for await (let grade of membershipGrades) {
             const isExistingGrade =
                existance.checkExistingMembershipGrade(grade);
             if (!isExistingGrade)
-               throw createError(400, '존재하지 않는 멤버십등급');
+               throw createError(404, '존재하지 않는 멤버십등급');
          }
       if (nationalities)
          for await (let nationCode of nationalities) {
             const isExistingCode = existance.checkExistingNation(nationCode);
             if (!isExistingCode)
-               throw createError(400, '존재하지 않는 국가코드');
+               throw createError(404, '존재하지 않는 국가코드');
          }
-
-      if (page > 1) existance.checkAvailablePage(page, itemsInOnePage);
       next();
    } catch (err) {
       next(err);
@@ -73,7 +62,7 @@ export const checkMemberExistanceOnly = async (req, res, next) => {
    try {
       const { memberId } = req.body;
       const isExistingMemberId = await existance.checkExistingMember(memberId);
-      if (!isExistingMemberId) throw createError(400, '존재하지 않는 고객');
+      if (!isExistingMemberId) throw createError(404, '존재하지 않는 고객');
       next();
    } catch (err) {
       next(err);

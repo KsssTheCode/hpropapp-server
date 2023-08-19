@@ -1,9 +1,6 @@
 import db from '../models/index.js';
 import { Op } from 'sequelize';
-import {
-   createError,
-   currentDateFormat,
-} from '../source/js/function/commonFn.js';
+import { createError } from '../source/js/function/commonFn.js';
 
 const Room = db.Room;
 

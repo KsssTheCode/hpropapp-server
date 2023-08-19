@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
    '/initialize-roomrates',
-   validation.getAndInitializeRoomRatesValidation,
+   validation.initializeRoomRatesValidation,
    existance.checkRateTypeAndRoomTypeExistance,
    controller.initializeRoomRatesInTerm
 );
@@ -18,17 +18,16 @@ router.get(
 );
 
 router.get(
-   '/get-selected-roomrate',
-   existance.getRoomRateExistanceOnly,
-   controller.getSelectedRoomRate
+   '/get-roomrates-by-indexes',
+   validation.validateAllOptionsOfRoomRates,
+   existance.checkExistanceOfAllRoomRateOptions,
+   controller.getRoomRateByIndexes
 );
-
-router.get('/get-roomrates-by-indexes', controller.getRoomRateByIndexes);
 
 router.post(
    '/edit-roomrates-in-options',
-   validation.editRoomRatesInOptionsValidation,
-   existance.checkRateTypeAndRoomTypeExistance,
+   validation.validateAllOptionsOfRoomRates,
+   existance.checkExistanceOfAllRoomRateOptions,
    controller.editRoomRatesInOptions
 );
 

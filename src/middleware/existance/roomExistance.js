@@ -99,7 +99,7 @@ export const getRoomsInOptionsForPreviewExistance = async (req, res, next) => {
 
       if (groupIds)
          for await (let id of groupIds) {
-            const isExistingGroup = await existance.checkExistingGroupById(id);
+            const isExistingGroup = await existance.checkExistingGroup(id);
             if (!isExistingGroup)
                throw createError(400, `존재하지 않는 단체 ID(${id})`);
          }

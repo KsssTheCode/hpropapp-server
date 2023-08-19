@@ -1,6 +1,5 @@
 import { createError } from '../../source/js/function/commonFn.js';
 import * as validation from '../../source/js/function/validation/commonValidationFn.js';
-import { rsvnDateCheck } from '../../source/js/function/validation/reservationValidationFn.js';
 
 export const createRsvnValidation = (req, res, next) => {
    try {
@@ -21,7 +20,7 @@ export const createRsvnValidation = (req, res, next) => {
          roomChargeDatas,
       } = req.body;
 
-      rsvnDateCheck(arrivalDate, departureDate);
+      validation.rsvnDateCheck(arrivalDate, departureDate);
       validation.roomTypeCodeCheck(roomTypeCode);
       validation.rateTypeCodeCheck(rateTypeCode);
       validation.nameCheck(guestName);
@@ -30,14 +29,14 @@ export const createRsvnValidation = (req, res, next) => {
               data.date && data.roomRateId
                  ? validation.dateCheck(data.date)
                  : () => {
-                      throw createError(400, '일별객실요금 입력오류');
+                      throw createError(422, '일별객실요금 입력오류');
                    };
 
               if (data.fixedRoomCharge)
                  validation.numberCheck(data.fixedRoomCharge);
            })
          : () => {
-              throw createError(400, '일별객실요금 입력오류(배열이 아님)');
+              throw createError(422, '일별객실요금 입력오류(배열이 아님)');
            };
 
       if (tel1) validation.telCheck(tel1);
@@ -54,7 +53,7 @@ export const createRsvnValidation = (req, res, next) => {
    }
 };
 
-export const getRsvnsInOptionsValidation = (req, res, next) => {
+export const getRsvnsInFilterOptionsValidation = (req, res, next) => {
    try {
       const {
          status,
@@ -70,75 +69,47 @@ export const getRsvnsInOptionsValidation = (req, res, next) => {
       } = req.query;
 
       if (status) {
-         const statusArr = status.split(',');
-         statusArr.forEach((code) => {
+         status.split(',').forEach((code) => {
             validation.statusCheck(code);
          });
-         req.query.status = statusArr;
       }
 
       if (cautionYN) validation.yesOrNoCheck(cautionYN, '주의여부');
 
       if (roomTypeCodes) {
-         const roomTypeCodesArr = roomTypeCodes.split(',');
-         roomTypeCodesArr.forEach((code) => {
+         roomTypeCodes.split(',').forEach((code) => {
             validation.roomTypeCodeCheck(code);
          });
-         req.query.roomTypeCodes = roomTypeCodesArr;
       }
 
       if (roomTypeCodes) {
-         const rateTypeCodesArr = rateTypeCodes.split(',');
-         rateTypeCodesArr.forEach((code) => {
+         rateTypeCodes.split(',').forEach((code) => {
             validation.rateTypeCodeCheck(code);
          });
-         req.query.roomTypeCodes = rateTypeCodesArr;
       }
 
-      if (arrivalStartDate && arrivalEndDate) {
-         validation.dateCheck(arrivalStartDate);
-         validation.dateCheck(arrivalEndDate);
-         if (arrivalStartDate > arrivalEndDate)
-            throw createError(
-               400,
-               '검색 시작일이 검색 종료일보다 늦을 수 없음'
-            );
-      } else if (arrivalStartDate && !arrivalEndDate) {
-         validation.dateCheck(arrivalStartDate);
-         req.query.arrivalEndDate = arrivalStartDate;
-      } else if (!arrivalStartDate && arrivalEndDate) {
-         validation.dateCheck(arrivalEndDate);
-         req.query.arrivalStartDate = arrivalEndDate;
+      if (arrivalStartDate || arrivalEndDate) {
+         const { adjustedArrStartDate, adjustedArrEndDate } =
+            validation.dateSearchOptionsCheck(arrivalStartDate, arrivalEndDate);
+         req.query.arrivalStartDate = adjustedArrStartDate;
+         req.query.arrivalEndDate = adjustedArrEndDate;
       }
 
-      if (departureStartDate && departureEndDate) {
-         validation.dateCheck(departureStartDate);
-         validation.dateCheck(departureEndDate);
-         if (departureStartDate > departureEndDate)
-            throw createError(
-               400,
-               '검색 시작일이 검색 종료일보다 늦을 수 없음'
+      if (departureStartDate || departureEndDate) {
+         const { adjustedDepStartDate, adjustedDepEndDate } =
+            validation.dateSearchOptionsCheck(
+               departureStartDate,
+               departureEndDate
             );
-      } else if (departureStartDate && !departureEndDate) {
-         validation.dateCheck(departureStartDate);
-         req.query.departureEndDate = departureStartDate;
-      } else if (!departureStartDate && departureEndDate) {
-         validation.dateCheck(departureEndDate);
-         req.query.departureStartDate = departureEndDate;
+         req.query.arrivalStartDate = adjustedDepStartDate;
+         req.query.arrivalEndDate = adjustedDepEndDate;
       }
 
-      if (createStartDate && createEndDate) {
-         validation.dateCheck(createStartDate);
-         validation.dateCheck(createEndDate);
-         if (+createStartDate > +createEndDate)
-            throw createError(
-               400,
-               '검색 시작일이 검색 종료일보다 늦을 수 없음'
-            );
-      } else if (createStartDate && !createEndDate) {
-         req.query.createEndDate = createStartDate;
-      } else if (!createStartDate && createEndDate) {
-         req.query.createStartDate = createEndDate;
+      if (createStartDate || createEndDate) {
+         const { adjustedCreateStartDate, adjustedCreateEndDate } =
+            validation.dateSearchOptionsCheck(createStartDate, createEndDate);
+         req.query.createStartDate = adjustedCreateStartDate;
+         req.query.createEndDate = adjustedCreateEndDate;
       }
       next();
    } catch (err) {
@@ -177,8 +148,8 @@ export const editRsvnValidation = (req, res, next) => {
       } = req.body;
       validation.idCheck(rsvnId, '예약번호');
       if (statusCode) validation.statusCheck(statusCode);
-      if (arrivalDate) rsvnDateCheck(arrivalDate);
-      if (departureDate) rsvnDateCheck(departureDate);
+      if (arrivalDate) validation.rsvnDateCheck(arrivalDate);
+      if (departureDate) validation.rsvnDateCheck(departureDate);
       if (guestName) validation.nameCheck(guestName);
       if (numberOfGuests) validation.numberCheck(numberOfGuests, '인원 수');
       if (tel1) validation.telCheck(tel1);
@@ -196,25 +167,36 @@ export const editRsvnValidation = (req, res, next) => {
    }
 };
 
-export const editStatusOnlyValidation = (req, res, next) => {
+// export const editStatusOnlyValidation = (req, res, next) => {
+//    try {
+//       const { rsvnId, status } = req.body;
+//       validation.idCheck(rsvnId, '예약 번호');
+//       validation.statusCheck(status);
+//       next();
+//    } catch (err) {
+//       next(err);
+//    }
+// };
+
+export const assignRoomToRsvnValidation = async (req, res, next) => {
    try {
-      const { rsvnId, status } = req.body;
-      validation.idCheck(rsvnId, '예약 번호');
-      validation.statusCheck(status);
+      const { id, roomNumber } = req.body.idAndRoomPairs[0];
+      validation.idCheck(id, '예약번호');
+      validation.numberCheck(roomNumber, '객실번호');
       next();
    } catch (err) {
       next(err);
    }
 };
 
-export const createMemoValidation = (req, res, next) => {
-   try {
-      if (!req.body.memoTitle) throw createError(400, '메모 제목 미입력');
-      validation.memoTitleCheck(req.body.memoTitle);
+// export const createMemoValidation = (req, res, next) => {
+//    try {
+//       if (!req.body.memoTitle) throw createError(400, '메모 제목 미입력');
+//       validation.memoTitleCheck(req.body.memoTitle);
 
-      if (!req.body.memoContent) throw createError(400, '메모 내용 미입력');
-      next();
-   } catch (err) {
-      next(err);
-   }
-};
+//       if (!req.body.memoContent) throw createError(400, '메모 내용 미입력');
+//       next();
+//    } catch (err) {
+//       next(err);
+//    }
+// };

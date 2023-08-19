@@ -13,20 +13,18 @@ export const createMember = async (req, res, next) => {
 //멤버 전체를 무리없는 선에서 불러오되, 필터를 이용한 검색 이용 시, Redux state에서 필터링하여 정보제공하는게 어때?
 export const getAllMembers = async (req, res, next) => {
    try {
-      const memberDatas = await Member.findAll({
-         order: [['createdAt', 'desc']],
-      }).catch(() => {
-         throw createError(500, '멤버 조회 중 DB에서 오류발생');
-      });
+      const response = memberService.getAllMembersService();
       res.status(200).json(response);
    } catch (err) {
       next(err);
    }
 };
 
-export const getSelectedMember = async (req, res, next) => {
+export const getSelectedMemberData = async (req, res, next) => {
    try {
-      const response = await memberService.getAllMembersService(req.query);
+      const response = await memberService.getSelectedMemberDataService(
+         req.query
+      );
 
       res.status(200).json(response);
    } catch (err) {

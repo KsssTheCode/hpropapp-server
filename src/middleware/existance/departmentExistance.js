@@ -7,7 +7,7 @@ export const createDepartmentCodeExistance = async (req, res, next) => {
       const isExistingDeptCode = await existance.checkExistingDeptCode(
          deptCode
       );
-      if (isExistingDeptCode) throw createError(400, '이미 존재하는 부서코드');
+      if (isExistingDeptCode) throw createError(409, '이미 존재하는 부서코드');
 
       next();
    } catch (err) {
@@ -21,7 +21,7 @@ export const departmentCodeExistanceOnly = async (req, res, next) => {
       const isExistingDeptCode = await existance.checkExistingDeptCode(
          deptCode
       );
-      if (!isExistingDeptCode) throw createError(400, '존재하지 않는 부서코드');
+      if (!isExistingDeptCode) throw createError(404, '존재하지 않는 부서코드');
       next();
    } catch (err) {
       next(err);
@@ -41,7 +41,7 @@ export const editDepartmentExistance = async (req, res, next) => {
             newDeptCode
          );
          if (isDuplicateDeptCode)
-            throw createError(400, '이미 존재하는 부서코드(변경할 코드)');
+            throw createError(409, '이미 존재하는 부서코드(변경할 코드)');
       }
       next();
    } catch (err) {

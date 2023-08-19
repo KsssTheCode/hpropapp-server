@@ -6,7 +6,7 @@ export const craeteFloorsExistance = async (req, res, next) => {
       const { floors } = req.body;
       for await (let floor of floors) {
          const isDuplicatedFloor = await existance.checkExistingFloor(floor);
-         if (isDuplicatedFloor) throw createError(400, '이미 존재하는 층');
+         if (isDuplicatedFloor) throw createError(409, '이미 존재하는 층');
       }
       next();
    } catch (err) {

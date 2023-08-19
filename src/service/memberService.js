@@ -39,10 +39,18 @@ export const createMemberService = async (bodyData) => {
    }
 };
 
-export const getAllMembersService = async (queryData) => {
+export const getAllMembersService = async () => {
    try {
-      const { id } = queryData;
-      return await memberDAO.getAllMembersDAO(id);
+      return await memberDAO.getAllMembersDAO();
+   } catch (err) {
+      throw err;
+   }
+};
+
+export const getSelectedMemberDataService = async (queryData) => {
+   try {
+      const { memberId } = queryData;
+      return await memberDAO.getSelectedMemberDataDAO(memberId);
    } catch (err) {
       throw err;
    }
@@ -54,8 +62,8 @@ export const getMembersInFilterOptionsService = async (queryData) => {
          keyword,
          blackListYN,
          membershipGrades,
-         startDate, //생성일
-         endDate, // 생성일
+         createStartDate, //생성일
+         createEndDate, // 생성일
          nationalities,
       } = queryData;
 
@@ -63,8 +71,8 @@ export const getMembersInFilterOptionsService = async (queryData) => {
          keyword,
          blackListYN,
          membershipGrades,
-         startDate,
-         endDate,
+         createStartDate,
+         createEndDate,
          nationalities
       );
    } catch (err) {

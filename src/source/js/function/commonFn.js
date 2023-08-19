@@ -8,20 +8,6 @@ export function createError(status, message) {
    return err;
 }
 
-export function currentDateFormat(length) {
-   const year = new Date().getFullYear().toString().substring(2);
-   let month = (new Date().getMonth() + 1).toString();
-   month = month.length === 1 ? '0' + month : month;
-   let date = new Date().getDate().toString();
-   date = date.length === 1 ? '0' + date : date;
-
-   if (length === 8) {
-      return new Date().getFullYear().toString() + month + date;
-   } else if (length === 6) {
-      return year + month + date;
-   }
-}
-
 export const getChangeHistoryMessage = async (
    originalObject,
    updatedObject
@@ -78,7 +64,7 @@ export const createId = async (modelName) => {
          break;
    }
 
-   let id = Number(currentDateFormat(6) + '001');
+   let id = Number(moment().format('YYYYMMDD') + '001');
    let latestId = await model.max(primaryKey).catch(() => {
       throw createError(500, '예약번호 최대값 조회 중 DB에서 오류발생');
    });

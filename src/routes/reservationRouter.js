@@ -16,8 +16,8 @@ router.post(
 
 router.get(
    '/get-rsvns-in-filter-options',
-   // validation.getRsvnsInOptionsValidation,
-   // existance.getRsvnsInOptionsExistance,
+   validation.getRsvnsInFilterOptionsValidation,
+   existance.getRsvnsInFilterOptionsExistance,
    controller.getRsvnsInFilterOptions
 );
 
@@ -43,10 +43,17 @@ router.patch(
    controller.editRsvn
 );
 
-router.patch('/assign-room-to-rsvn', controller.assignRoomToRsvn);
+router.patch(
+   '/assign-room-to-rsvn',
+   validation.assignRoomToRsvnValidation,
+   existance.assignRoomToRsvnExistance,
+   controller.assignRoomToRsvn
+);
 
 router.patch(
    '/release-assigned-room-from-rsvn',
+   validation.checkRsvnIdValidationOnly,
+   existance.releaseAssignedRoomFromRsvnExistance
    controller.releaseAssignedRoomFromRsvn
 );
 

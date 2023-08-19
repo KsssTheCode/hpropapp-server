@@ -12,22 +12,19 @@ router.post(
    controller.createMember
 );
 
-router.get(
-   '/get-all-members',
-   validation.getAllMembersValdiation,
-   controller.getAllMembers
-);
+router.get('/get-all-members', controller.getAllMembers);
 
 router.get(
    '/get-selected-member',
+   validation.checkMemberIdValidationOnly,
    existance.checkMemberExistanceOnly,
-   controller.getSelectedMember
+   controller.getSelectedMemberData
 );
 
 router.get(
    '/get-members-data-in-filter-options',
-   validation.getMembersInOptionsValidation,
-   existance.getMembersInOptionsExistance,
+   validation.getMembersInFilterOptionsValidation,
+   existance.getMembersInFilterOptionsExistance,
    controller.getMembersDataInFilterOptions
 );
 
@@ -40,6 +37,7 @@ router.post(
 
 router.post(
    '/delete-member',
+   validation.checkMemberIdValidationOnly,
    existance.checkMemberExistanceOnly,
    controller.editMember
 );

@@ -1,9 +1,6 @@
 import db from '../models/index.js';
 
-import {
-   getChangeHistoryMessage,
-   createId,
-} from '../source/js/function/commonFn.js';
+import { createId } from '../source/js/function/commonFn.js';
 import * as groupDAO from '../data-access/groupDAO.js';
 
 export const createGroupService = async (bodyData) => {

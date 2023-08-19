@@ -8,7 +8,6 @@ const router = express.Router();
 router.post(
    '/create-group',
    validation.createGroupValidation,
-   existance.createGroupExistance,
    controller.createGroup
 );
 
@@ -20,6 +19,7 @@ router.get(
 
 router.get(
    '/get-selected-group',
+   validation.checkGroupIdValidationOnly,
    existance.checkGroupExistanceOnly,
    controller.getSelectedGroup
 );
@@ -27,12 +27,13 @@ router.get(
 router.post(
    '/edit-group',
    validation.editGroupValidation,
-   existance.editGroupExistance,
+   existance.checkGroupExistanceOnly,
    controller.editGroup
 );
 
 router.delete(
    '/delete-group',
+   validation.checkGroupIdValidationOnly,
    existance.checkGroupExistanceOnly,
    controller.deleteGroup
 );

@@ -6,9 +6,7 @@ export const createMembershipValidation = (req, res, next) => {
    try {
       const { membershipGrade, discount } = req.body;
 
-      if (membershipGrade <= 'A' || membershipGrade >= 'Z')
-         throw createError(400, '멤버십등급 입력오류');
-
+      validation.membershipGradeCheck(membershipGrade);
       if (discount) validation.discountCheck(discount);
 
       next();
@@ -19,11 +17,10 @@ export const createMembershipValidation = (req, res, next) => {
 
 export const editMembershipValidation = (req, res, next) => {
    try {
-      const { membershipGrade, newDiscount } = req.body;
+      const { membershipGrade, newMembershipGrade, newDiscount } = req.body;
 
-      if (membershipGrade <= 'A' || membershipGrade >= 'Z')
-         throw createError(400, '멤버십등급 입력오류');
-
+      validation.membershipGradeCheck(membershipGrade);
+      validation.membershipGradeCheck(newMembershipGrade);
       if (newDiscount) validation.discountCheck(newDiscount);
       next();
    } catch (err) {
@@ -34,8 +31,7 @@ export const editMembershipValidation = (req, res, next) => {
 export const deleteMembership = (req, res, next) => {
    try {
       const { membershipGrade } = req.body;
-      if (membershipGrade <= 'A' || membershipGrade >= 'Z')
-         throw createError(400, '멤버십등급 입력오류');
+      validation.membershipGradeCheck(membershipGrade);
       next();
    } catch (err) {
       next(err);

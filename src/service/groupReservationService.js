@@ -1,10 +1,7 @@
 import moment from 'moment';
 import db from '../models/index.js';
 import * as groupRsvnDAO from '../data-access/groupReservationDAO.js';
-import {
-   createId,
-   getDatesBetweenTerm,
-} from '../source/js/function/commonFn.js';
+import { createId } from '../source/js/function/commonFn.js';
 
 export const createGroupRsvnService = async (bodyData) => {
    try {
@@ -146,6 +143,7 @@ export const getGroupRsvnsInFilterOptionsService = async (bodyData) => {
       throw err;
    }
 };
+
 export const editGroupRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {

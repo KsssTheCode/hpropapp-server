@@ -39,15 +39,13 @@ export const checkExistingRateType = async (rateTypeCode) => {
 };
 
 export const checkAssignedRoom = async (roomNumber, arrDate, depDate) => {
-   const assignedRoom = await db.Reservation.findAll({
+   return await db.Reservation.findAll({
       where: {
          roomNumber: roomNumber,
          arrivalDate: { [Op.lt]: depDate },
          departureDate: { [Op.gt]: arrDate },
       },
    });
-
-   return assignedRoom;
 };
 
 /** (취소된 예약 제외)존재하는 예약일 시, 해당 id를 가진 예약 객체를 return */
@@ -99,12 +97,11 @@ export const checkExistingMemo = async (memoId) => {
 };
 
 export const checkExistingStaff = async (staffId) => {
-   const isExistingStaff = await db.Staff.findByPk(staffId, {
+   return await db.Staff.findByPk(staffId, {
       where: { leaveDate: null },
    }).catch(() => {
       throw createError(500, '직원조회 중 DB에서 오류발생');
    });
-   return isExistingStaff;
 };
 
 export const checkExistingRoomNumber = async (roomNumber) => {
@@ -192,25 +189,6 @@ export const checkExistingGroup = async (groupId) => {
    return isExistingGroupId;
 };
 
-export const checkExistingGroupByName = async (groupName) => {
-   const isExistingGroupName = await db.Group.findOne({
-      where: { groupName: groupName },
-      returning: true,
-   }).catch(() => {
-      throw createError(500, '그룹명 조회 중 DB에서 오류발생');
-   });
-   return isExistingGroupName;
-};
-
-// export const checkExistingGroup = async (groupName, groupId) => {
-//    const isExistingGroup = await db.Group.findOne({
-//       where: { [Op.or]: [{ groupName: groupName }, { groupId: groupId }] },
-//    }).catch(() => {
-//       throw createError(500, '그룹명 조회 중 DB에서 오류발생');
-//    });
-//    return isExistingGroup;
-// };
-
 export const checkExistingFloor = async (floor) => {
    const isExistingFloor = await db.Floor.findByPk(floor).catch(() => {
       throw createError(500, '층 조회 중 DB에서 오류발생');
@@ -253,3 +231,22 @@ export const checkExistingGroupRsvn = async (id) => {
    });
    return isExistingGroupRsvn;
 };
+
+export const checkExistingRsvnStatus = async () => {
+   const areExistingRsvnStatuses = await db.ReservationStatus.findAll({
+      attributes: ['statusCode'],
+   }).catch(() => {
+      throw createError(500, '객실상태코드 조회 중 DB에서 오류발생');
+   });
+};
+
+// export const checkAvailableNumberOfGuests = async (roomTypeCode, numberOfGuests) => {
+//    const availableNumberOfGuests = await db.RoomType.findOne({
+//       attributes: ['numberOfGuests'],
+//       where: { roomTypeCode: roomTypeCode },
+//    }).catch(() => {
+//       throw createError(500, '객실유형별 최대투숙인원 조회 중 DB에서 오류발생');
+//    });
+
+//    if (availableNumberOfGuests.numberOfGuests > numberOfGuests) throw createError(422, '투숙인원 초과');
+// };

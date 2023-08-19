@@ -7,7 +7,7 @@ export const createRsvnExistance = async (req, res, next) => {
       const isExistingRoomType = await existance.checkExistingRoomType(
          roomTypeCode
       );
-      if (!isExistingRoomType) throw createError(400, '존재하지 않는 객실타입');
+      if (!isExistingRoomType) throw createError(404, '존재하지 않는 객실타입');
 
       existance.checkNumberOfGuestsInRange(isExistingRoomType, numberOfGuests);
 
@@ -16,14 +16,14 @@ export const createRsvnExistance = async (req, res, next) => {
       );
 
       if (!isExistingRateType)
-         throw createError(400, '존재하지 않는 요금책정형식');
+         throw createError(404, '존재하지 않는 요금책정형식');
       next();
    } catch (err) {
       next(err);
    }
 };
 
-export const getRsvnsInOptionsExistance = async (req, res, next) => {
+export const getRsvnsInFilterOptionsExistance = async (req, res, next) => {
    try {
       const {
          roomTypeCodes,
@@ -31,39 +31,41 @@ export const getRsvnsInOptionsExistance = async (req, res, next) => {
          createStaff,
          checkInStaff,
          checkOutStaff,
-      } = req.body;
+      } = req.query;
 
       if (roomTypeCodes) {
          for await (let code of roomTypeCodes) {
+            const roomTypeCode = roomTypeCodes[code];
             const isExistingRoomType = await existance.checkExistingRoomType(
-               code
+               roomTypeCode
             );
             if (!isExistingRoomType)
-               throw createError(400, '존재하지 않는 객실타입코드');
+               throw createError(404, '존재하지 않는 객실타입코드');
          }
       }
 
       if (rateTypeCodes) {
          for await (let code of rateTypeCodes) {
+            const rateTypeCode = rateTypeCodes[code];
             const isExistingRateType = await existance.checkExistingRateType(
-               code
+               rateTypeCode
             );
             if (!isExistingRateType)
-               throw createError(400, '존재하지 않는 객실타입코드');
+               throw createError(404, '존재하지 않는 객실타입코드');
          }
       }
 
       if (createStaff) {
          const isExistingStaff = existance.checkExistingStaff(createStaff);
-         if (!isExistingStaff) throw createError(400, '존재하지 않는 직원');
+         if (!isExistingStaff) throw createError(404, '존재하지 않는 직원');
       }
       if (checkInStaff) {
          const isExistingStaff = existance.checkExistingStaff(checkInStaff);
-         if (!isExistingStaff) throw createError(400, '존재하지 않는 직원');
+         if (!isExistingStaff) throw createError(404, '존재하지 않는 직원');
       }
       if (checkOutStaff) {
          const isExistingStaff = existance.checkExistingStaff(checkOutStaff);
-         if (!isExistingStaff) throw createError(400, '존재하지 않는 직원');
+         if (!isExistingStaff) throw createError(404, '존재하지 않는 직원');
       }
       next();
    } catch (err) {
@@ -75,9 +77,13 @@ export const editStatusOnlyExistance = async (req, res, next) => {
    try {
       const { rsvnId, newStatus } = req.body;
       const isExistingRsvn = await existance.checkExistingRsvn(rsvnId);
-      if (!isExistingRsvn) throw createError(400, '존재하지 않는 에약');
+      if (!isExistingRsvn) throw createError(404, '존재하지 않는 에약');
 
-      await existance.checkAvailableRsvnStatus(newStatus);
+      await existance.checkAvailableRsvnStatus(
+         'reservation',
+         rsvnId,
+         newStatus
+      );
 
       next();
    } catch (err) {
@@ -95,7 +101,7 @@ export const editRsvnExistance = async (req, res, next) => {
          numbersOfGuests,
       } = req.body;
       const isExistingRsvn = await existance.checkExistingRsvn(rsvnId);
-      if (!isExistingRsvn) throw createError(400, '존재하지 않는 예약');
+      if (!isExistingRsvn) throw createError(404, '존재하지 않는 예약');
 
       if (statusCode)
          await existance.checkAvailableRsvnStatus(
@@ -109,7 +115,7 @@ export const editRsvnExistance = async (req, res, next) => {
             rateTypeCode
          );
          if (!isExistingRateType)
-            throw createError(400, '존재하지 않는 요금책정형식');
+            throw createError(404, '존재하지 않는 요금책정형식');
       }
 
       if (roomTypeCode) {
@@ -117,12 +123,52 @@ export const editRsvnExistance = async (req, res, next) => {
             roomTypeCode
          );
          if (!isExistingRoomType)
-            throw createError(400, '존재하지 않는 객실타입');
-         if (numbersOfGuests)
-            existance.checkNumberOfGuestsInRange(roomTypeData, numbersOfGuests);
+            throw createError(404, '존재하지 않는 객실타입');
       }
+      if (numbersOfGuests)
+         existance.checkNumberOfGuestsInRange(roomTypeData, numbersOfGuests);
 
       next();
+   } catch (err) {
+      next(err);
+   }
+};
+
+export const assignRoomToRsvnExistance = async (req, res, next) => {
+   try {
+      const { id, roomNumber } = req.body.idAndRoomPairs[0];
+      const isExistingRsvn = await existance.checkExistingRsvn(id);
+      if (!isExistingRsvn)
+         throw createError(400, '존재하지 않는 예약번호입니다.');
+
+      const isExistingRoomNumber = await existance.checkExistingRoomNumber(
+         roomNumber
+      );
+      if (!isExistingRoomNumber)
+         throw createError(404, '존재하지 않는 객실번호');
+
+      const alreadyAssigedRoomNumber = await existance.checkAssignedRoom(
+         roomNumber,
+         isExistingRsvn.arrivalDate,
+         isExistingRsvn.departureDate
+      );
+      if (alreadyAssigedRoomNumber)
+         throw createError(409, '이미 배정된 객실번호');
+   } catch (err) {
+      next(err);
+   }
+};
+
+export const releaseAssignedRoomFromRsvnExistance = async (req, res, next) => {
+   try {
+      const { ids } = req.body;
+
+      const isExistingRsvn = existance.checkExistingRsvn(ids);
+      if (!isExistingRsvn)
+         throw createError(404, '존재하지 않는 예약번호입니다.');
+
+      if (!isExistingRsvn.roomNumber)
+         throw createError(404, '배정되지 않은 객실');
    } catch (err) {
       next(err);
    }
@@ -142,12 +188,12 @@ export const checkRsvnExistanceOnly = async (req, res, next) => {
    }
 };
 
-export const deleteMemoExistance = async (req, res, next) => {
-   try {
-      await existance.checkExistingRsvn(rsvnId);
-      await existance.checkExistingRsvnMemo(memoId);
-      next();
-   } catch (err) {
-      next(err);
-   }
-};
+// export const deleteMemoExistance = async (req, res, next) => {
+//    try {
+//       await existance.checkExistingRsvn(rsvnId);
+//       await existance.checkExistingRsvnMemo(memoId);
+//       next();
+//    } catch (err) {
+//       next(err);
+//    }
+// };

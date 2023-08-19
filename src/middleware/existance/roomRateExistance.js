@@ -26,34 +26,38 @@ export const checkRateTypeAndRoomTypeExistance = async (req, res, next) => {
    }
 };
 
-export const editSpecificRoomRatesExistance = async (req, res, next) => {
+export const checkExistanceOfAllRoomRateOptions = (req, res, next) => {
    try {
-      const { editItems } = req.body;
+      const { rateTypeCode, roomTypeCode } = req.query;
 
-      for await (const item of editItems) {
-         const { rateTypeCode, roomTypeCode } = editItems[item];
-         const isExistingRateType = await existance.checkExistingRateType(
-            rateTypeCode
-         );
-         if (!isExistingRateType)
-            throw createError(400, '존재하지 않는 요금책정형식');
-         const isExistingRoomType = await existance.checkExistingRoomType(
-            roomTypeCode
-         );
-         if (!isExistingRoomType)
-            throw createError(400, '존재하지 않는 객실타입');
-      }
-      next();
+      const isExistingRateType = existance.checkExistingRateType(rateTypeCode);
+      if (!isExistingRateType)
+         throw createError(404, '존재하지 않는 요금책정형식');
+
+      const isExistingRoomType = existance.checkExistingRoomType(roomTypeCode);
+      if (!isExistingRoomType) throw createError(404, '존재하지 않는 객실유형');
    } catch (err) {
       next(err);
    }
 };
 
-export const getRoomRateExistanceOnly = async (req, res, next) => {
+export const editSpecificRoomRatesExistance = async (req, res, next) => {
    try {
-      const { roomTypeCode } = req.body;
-      const isExistingRoomType = existance.checkExistingRoomType(roomTypeCode);
-      if (!isExistingRoomType) throw createError(400, '존재하지 않는 객실타입');
+      const { editObjects } = req.body;
+
+      for await (const item of editObjects) {
+         const { rateTypeCode, roomTypeCode } = editObjects[item];
+         const isExistingRateType = await existance.checkExistingRateType(
+            rateTypeCode
+         );
+         if (!isExistingRateType)
+            throw createError(404, '존재하지 않는 요금책정형식');
+         const isExistingRoomType = await existance.checkExistingRoomType(
+            roomTypeCode
+         );
+         if (!isExistingRoomType)
+            throw createError(404, '존재하지 않는 객실타입');
+      }
       next();
    } catch (err) {
       next(err);

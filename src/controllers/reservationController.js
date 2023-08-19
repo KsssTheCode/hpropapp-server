@@ -65,10 +65,9 @@ export const assignRoomToRsvn = async (req, res, next) => {
 
 export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
    try {
-      const { ids } = req.body;
       const staffId = req.cookies.staffId;
       const response = await rsvnService.releaseAssignedRoomFromRsvnService(
-         ids,
+         req.body,
          staffId
       );
 

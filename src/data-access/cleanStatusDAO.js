@@ -3,10 +3,10 @@ import { createError } from '../source/js/function/commonFn.js';
 
 const CleanStatus = db.CleanStatus;
 
-export const createCleanStatusDAO = async (statusCode, statusName) => {
+export const createCleanStatusDAO = async (cleanStatusCode, statusName) => {
    try {
       return await CleanStatus.create({
-         cleanStatusCode: statusCode,
+         cleanStatusCode,
          statusName,
       }).catch((err) => {
          console.log(err);
@@ -17,10 +17,10 @@ export const createCleanStatusDAO = async (statusCode, statusName) => {
    }
 };
 
-export const deleteCleansStatusDAO = async (bodyData) => {
+export const deleteCleansStatusDAO = async (cleanStatusCode) => {
    try {
       return await CleanStatus.destroy({
-         where: { cleanStatusCode: statusCode },
+         where: { cleanStatusCode },
       }).catch(() => {
          throw createError(500, '정비상태 생성 중 DB에서 오류발생');
       });

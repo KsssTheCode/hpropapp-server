@@ -9,29 +9,28 @@ router.post('/create-test-rsvns', controller.createTestRsvns);
 
 router.post(
    '/create-group-rsvn',
-   // validation.createGroupRsvnWithDetailRsvnsValidation,
-   // existance.createGroupRsvnWithDetailRsvnsExistance,
+   validation.createGroupRsvnValidation,
    controller.createGroupRsvn
 );
 
 router.post(
    '/create-detail-rsvns',
-   // validation.createDetailRsvnsOfGroupRsvn,
-   // existance.createDetailRsvnsOfGroupRsvn,
+   validation.createDetailRsvnsValidation,
+   existance.createDetailRsvnsExistance,
    controller.createDetailRsvns
 );
 
 router.get(
    '/get-selected-group-rsvn',
    validation.checkGroupRsvnIdValidationOnly,
-   existance.checkGroupRsvnExistanceAndStore,
+   existance.checkGroupRsvnExistanceOnly,
    controller.getSelectedGroupRsvn
 );
 
 router.get(
-   '/get-group-rsvns-in-options',
-   validation.getGroupRsvnsInOptionsValidation,
-   existance.getGroupRsvnsInOptionsExistance,
+   '/get-group-rsvns-in-filter-options',
+   validation.getGroupRsvnsInFilterOptionsValidation,
+   existance.getGroupRsvnsInFilterOptionsExistance,
    controller.getGroupRsvnsInFilterOptions
 );
 

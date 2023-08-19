@@ -30,27 +30,23 @@ export const createStaffValidation = (req, res, next) => {
    }
 };
 
-export const getStaffsInOptionsValidation = (req, res, next) => {
+export const getStaffsInFilterOptionsValidation = (req, res, next) => {
    try {
-      const { page, itemsInOnePage, startDate, endDate, deptCodes, leaveYN } =
-         req.body;
-      page ? validation.numberCheck(page, '페이지') : (page = 1);
-      itemsInOnePage
-         ? validation.itemInOnePageCheck(itemsInOnePage)
-         : (itemsInOnePage = 50);
+      const { startDate, endDate, deptCodes, leaveYN } = req.body;
 
-      Array.isArray(deptCodes)
-         ? deptCodes.forEach((code) => {
-              validation.deptCodeCheck(code);
-           })
-         : () => {
-              throw createError(400, '부서코드 입력오류(배열이 아님)');
-           };
+      if (deptCodes) {
+         deptCodes.split(',').forEach((code) => {
+            validation.deptCodeCheck(code);
+         });
+      }
       if (leaveYN) validation.yesOrNoCheck(leaveYN, '퇴사여부');
-      if (startDate) validation.dateCheck(startDate);
-      if (endDate) validation.dateCheck(endDate);
-      if (+startDate > +endDate)
-         throw createError(400, '검색 시작일이 검색 종료일보다 늦을 수 없음');
+
+      if (startDate || endDate) {
+         const { adjustedStartDate, adjustedEndDate } =
+            validation.dateSearchOptionsCheck(startDate, endDate);
+         req.query.startDate = adjustedStartDate;
+         req.query.endDate = adjustedEndDate;
+      }
       next();
    } catch (err) {
       next(err);

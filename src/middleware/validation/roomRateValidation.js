@@ -1,29 +1,22 @@
 import { createError } from '../../source/js/function/commonFn.js';
 import * as validation from '../../source/js/function/validation/commonValidationFn.js';
 
-export const getAndInitializeRoomRatesValidation = (req, res, next) => {
+export const initializeRoomRatesValidation = (req, res, next) => {
    try {
       const { rateTypeCode, roomTypeCode, startDate, endDate } = req.body;
-      Array.isArray(rateTypeCode)
-         ? roomTypeCode.forEach((code) => {
-              validation.rateTypeCodeCheck(code);
-           })
-         : () => {
-              throw createError(400, '요금책정타입 입력오류(배열이 아님)');
-           };
 
-      Array.isArray(roomTypeCode)
-         ? roomTypeCode.forEach((code) => {
-              validation.roomTypeCodeCheck(code);
-           })
-         : () => {
-              throw createError(400, '객실타입 입력오류(배열이 아님)');
-           };
+      rateTypeCode.split(',').forEach((code) => {
+         validation.rateTypeCodeCheck(code);
+      });
 
-      if (startDate) validation.dateCheck(startDate);
-      if (endDate) validation.dateCheck(endDate);
-      if (+startDate > +endDate)
-         throw createError(400, '시작일이 종료일보다 늦을 수 없음');
+      roomTypeCode.split(',').forEach((code) => {
+         validation.roomTypeCodeCheck(code);
+      });
+
+      const { adjustedStartDate, adjustedEndDate } =
+         validation.dateSearchOptionsCheck(startDate, endDate);
+      req.query.startDate = adjustedStartDate;
+      req.query.endDate = adjustedEndDate;
 
       next();
    } catch (err) {
@@ -48,10 +41,23 @@ export const editSpecificRoomRatesValidation = (req, res, next) => {
    }
 };
 
+export const validateAllOptionsOfRoomRates = (req, res, next) => {
+   try {
+      const { rateTypeCode, roomTypeCode, startDate, endDate } = req.query;
+
+      validation.rateTypeCodeCheck(rateTypeCode);
+      validation.roomTypeCodeCheck(roomTypeCode);
+      validation.dateSearchOptionsCheck(startDate, endDate);
+   } catch (err) {
+      next(err);
+   }
+};
+
 export const editRoomRatesInOptionsValidation = (req, res, next) => {
    try {
       const { startDate, endDate, rateTypeCodes, roomTypeCodes, newPrice } =
          req.body;
+
       Array.isArray(rateTypeCodes)
          ? roomTypeCodes.forEach((code) => {
               validation.rateTypeCodeCheck(code);
