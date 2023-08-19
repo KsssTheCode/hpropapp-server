@@ -53,7 +53,7 @@ router.patch(
 router.patch(
    '/release-assigned-room-from-rsvn',
    validation.checkRsvnIdValidationOnly,
-   existance.releaseAssignedRoomFromRsvnExistance
+   existance.releaseAssignedRoomFromRsvnExistance,
    controller.releaseAssignedRoomFromRsvn
 );
 

@@ -139,11 +139,12 @@ export const assignRoomToRsvnService = async (bodyData, staffId) => {
    }
 };
 
-export const releaseAssignedRoomFromRsvnService = async (id, staffId) => {
+export const releaseAssignedRoomFromRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
+      const { ids } = bodyData;
       const response = await rsvnDAO.releaseAssignedRoomFromRsvnDAO(
-         id,
+         ids,
          staffId,
          transaction
       );
