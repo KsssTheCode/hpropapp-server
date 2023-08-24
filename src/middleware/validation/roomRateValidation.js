@@ -48,6 +48,7 @@ export const validateAllOptionsOfRoomRates = (req, res, next) => {
       validation.rateTypeCodeCheck(rateTypeCode);
       validation.roomTypeCodeCheck(roomTypeCode);
       validation.dateSearchOptionsCheck(startDate, endDate);
+      next();
    } catch (err) {
       next(err);
    }
@@ -58,21 +59,16 @@ export const editRoomRatesInOptionsValidation = (req, res, next) => {
       const { startDate, endDate, rateTypeCodes, roomTypeCodes, newPrice } =
          req.body;
 
-      Array.isArray(rateTypeCodes)
-         ? roomTypeCodes.forEach((code) => {
-              validation.rateTypeCodeCheck(code);
-           })
-         : () => {
-              throw createError(400, '요금책정형식 입력오류(배열이 아님)');
-           };
-
-      Array.isArray(roomTypeCodes)
-         ? roomTypeCodes.forEach((code) => {
-              validation.roomTypeCodeCheck(code);
-           })
-         : () => {
-              throw createError(400, '객실타입 입력오류(배열이 아님)');
-           };
+      if (rateTypeCodes) {
+         rateTypeCodes.split(',').forEach((code) => {
+            validation.rateTypeCodeCheck(code);
+         });
+      }
+      if (roomTypeCodes) {
+         roomTypeCodes.split(',').forEach((code) => {
+            validation.roomTypeCodeCheck(code);
+         });
+      }
 
       newPrice
          ? numberCheck(newPrice)

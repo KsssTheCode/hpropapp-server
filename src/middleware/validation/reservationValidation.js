@@ -119,7 +119,10 @@ export const getRsvnsInFilterOptionsValidation = (req, res, next) => {
 
 export const checkRsvnIdValidationOnly = (req, res, next) => {
    try {
-      const { id } = req.query;
+      let id;
+      if (Object.keys(req.body).length > 0) ({ id } = req.body);
+      if (Object.keys(req.query).length > 0) ({ id } = req.query);
+      if (Array.isArray(id)) id = id[0];
       validation.idCheck(id, '예약번호');
       next();
    } catch (err) {
@@ -147,9 +150,9 @@ export const editRsvnValidation = (req, res, next) => {
          rateTypeCode,
       } = req.body;
       validation.idCheck(rsvnId, '예약번호');
+      if (req.body === { rsvnId }) console.log('없음');
       if (statusCode) validation.statusCheck(statusCode);
-      if (arrivalDate) validation.rsvnDateCheck(arrivalDate);
-      if (departureDate) validation.rsvnDateCheck(departureDate);
+      if (arrivalDate) validation.rsvnDateCheck(arrivalDate, departureDate);
       if (guestName) validation.nameCheck(guestName);
       if (numberOfGuests) validation.numberCheck(numberOfGuests, '인원 수');
       if (tel1) validation.telCheck(tel1);

@@ -36,6 +36,8 @@ export const checkExistanceOfAllRoomRateOptions = (req, res, next) => {
 
       const isExistingRoomType = existance.checkExistingRoomType(roomTypeCode);
       if (!isExistingRoomType) throw createError(404, '존재하지 않는 객실유형');
+
+      next();
    } catch (err) {
       next(err);
    }

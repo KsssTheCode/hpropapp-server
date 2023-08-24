@@ -108,9 +108,49 @@ export const getRsvnsInFilterOptionsService = async (queryData) => {
 export const editRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
+      const {
+         statusCode,
+         arrivalDate,
+         roomNumber,
+         departureDate,
+         numberOfGuests,
+         guestName,
+         tel1,
+         tel2,
+         caller,
+         callerTel,
+         arrivalTime,
+         departureTime,
+         reference,
+         roomTypeCode,
+         rateTypeCode,
+         dailyRatesData,
+         rsvnId,
+      } = bodyData;
+
+      const updateData = {
+         ...(statusCode && { statusCode }),
+         ...(arrivalDate && { arrivalDate }),
+         ...(roomNumber && { roomNumber }),
+         ...(departureDate && { departureDate }),
+         ...(numberOfGuests && { numberOfGuests }),
+         ...(guestName && { guestName }),
+         ...(tel1 && { tel1 }),
+         ...(tel2 && { tel2 }),
+         ...(caller && { caller }),
+         ...(callerTel && { callerTel }),
+         ...(arrivalTime && { arrivalTime }),
+         ...(departureTime && { departureTime }),
+         ...(reference && { reference }),
+         ...(roomTypeCode && { roomTypeCode }),
+         ...(rateTypeCode && { rateTypeCode }),
+      };
+
       const response = await rsvnDAO.editRsvnDAO(
-         bodyData,
+         rsvnId,
+         updateData,
          staffId,
+         dailyRatesData,
          transaction
       );
       await transaction.commit();
@@ -142,9 +182,9 @@ export const assignRoomToRsvnService = async (bodyData, staffId) => {
 export const releaseAssignedRoomFromRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
-      const { ids } = bodyData;
+      const rsvnId = bodyData.id[0];
       const response = await rsvnDAO.releaseAssignedRoomFromRsvnDAO(
-         ids,
+         rsvnId,
          staffId,
          transaction
       );

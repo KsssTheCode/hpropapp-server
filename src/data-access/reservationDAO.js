@@ -213,54 +213,30 @@ export const getRsvnsInFilterOptionsDAO = async (searchOptions) => {
    }
 };
 
-export const editRsvnDAO = async (bodyData, staffId, transaction) => {
+/**
+ *
+ * @param {string} rsvnId - Reservation ID.
+ * @param {object} updateData - Object includes only the attributes requested to be edited.
+ * @param {string} staffId
+ * @param {array<object>} dailyRatesData - An array incldues with daily rates data objects.
+ * @param {Promise<transaction>} transaction
+ * @returns Edited object of reservation.
+ */
+export const editRsvnDAO = async (
+   rsvnId,
+   updateData,
+   staffId,
+   dailyRatesData,
+   transaction
+) => {
    try {
-      const {
-         rsvnId,
-         statusCode,
-         roomNumber,
-         arrivalDate,
-         departureDate,
-         arrivalTime,
-         departureTime,
-         numberOfGuests,
-         guestName,
-         tel1,
-         tel2,
-         caller,
-         callerTel,
-         reference,
-         roomTypeCode,
-         rateTypeCode,
-         dailyRatesData,
-      } = bodyData;
-
-      return await Rsvn.update(
-         {
-            statusCode,
-            arrivalDate,
-            roomNumber,
-            departureDate,
-            numberOfGuests,
-            guestName,
-            tel1,
-            tel2,
-            caller,
-            callerTel,
-            arrivalTime,
-            departureTime,
-            reference,
-            roomTypeCode,
-            rateTypeCode,
-         },
-         {
-            where: { rsvnId },
-            ...(!!dailyRatesData && { dailyRatesData }),
-            staffId,
-            transaction,
-            individualHooks: true,
-         }
-      ).catch(() => {
+      return await Rsvn.update(updateData, {
+         where: { rsvnId },
+         ...(!!dailyRatesData && { dailyRatesData }),
+         staffId,
+         transaction,
+         individualHooks: true,
+      }).catch(() => {
          throw createError(500, '예약수정 중 DB에서 오류발생');
       });
    } catch (err) {

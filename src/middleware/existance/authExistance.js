@@ -6,6 +6,7 @@ export const loginExistance = async (req, res, next) => {
       const { staffId } = req.body;
       const isExistingStaff = await existance.checkExistingStaff(staffId);
       if (!isExistingStaff) createError(422, '유효하지 않은 사번');
+      next();
    } catch (err) {
       next(err);
    }

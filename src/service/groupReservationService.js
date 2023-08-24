@@ -209,10 +209,10 @@ export const editGroupRsvnService = async (bodyData, staffId) => {
    }
 };
 
-export const deleteDetailRsvnsService = async (bodyData) => {
+export const deleteDetailRsvnsService = async (queryData) => {
    const transaction = await db.sequelize.transaction();
    try {
-      const { rsvnIds } = bodyData;
+      const { rsvnIds } = queryData;
       const response = await groupRsvnDAO.deleteDetailRsvnsDAO(
          rsvnIds,
          transaction

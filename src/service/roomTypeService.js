@@ -1,4 +1,4 @@
-import * as roomTypeDAO from '../data-access/roomTypeDAO';
+import * as roomTypeDAO from '../data-access/roomTypeDAO.js';
 
 export const createRoomTypeService = async (bodyData) => {
    try {

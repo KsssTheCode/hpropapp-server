@@ -59,7 +59,7 @@ export const editGroupRsvn = async (req, res, next) => {
 export const deleteDetailRsvns = async (req, res, next) => {
    try {
       const response = await groupRsvnService.deleteDetailRsvnsService(
-         req.body
+         req.query
       );
 
       res.status(200).json(response);

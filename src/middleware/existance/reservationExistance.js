@@ -139,7 +139,7 @@ export const assignRoomToRsvnExistance = async (req, res, next) => {
       const { id, roomNumber } = req.body.idAndRoomPairs[0];
       const isExistingRsvn = await existance.checkExistingRsvn(id);
       if (!isExistingRsvn)
-         throw createError(400, '존재하지 않는 예약번호입니다.');
+         throw createError(404, '존재하지 않는 예약번호입니다.');
 
       const isExistingRoomNumber = await existance.checkExistingRoomNumber(
          roomNumber
@@ -152,8 +152,10 @@ export const assignRoomToRsvnExistance = async (req, res, next) => {
          isExistingRsvn.arrivalDate,
          isExistingRsvn.departureDate
       );
-      if (alreadyAssigedRoomNumber)
+
+      if (alreadyAssigedRoomNumber.length > 0)
          throw createError(409, '이미 배정된 객실번호');
+      next();
    } catch (err) {
       next(err);
    }
@@ -161,14 +163,15 @@ export const assignRoomToRsvnExistance = async (req, res, next) => {
 
 export const releaseAssignedRoomFromRsvnExistance = async (req, res, next) => {
    try {
-      const { ids } = req.body;
+      const { id } = req.body;
 
-      const isExistingRsvn = existance.checkExistingRsvn(ids);
+      const isExistingRsvn = await existance.checkExistingRsvn(id[0]);
       if (!isExistingRsvn)
          throw createError(404, '존재하지 않는 예약번호입니다.');
 
       if (!isExistingRsvn.roomNumber)
          throw createError(404, '배정되지 않은 객실');
+      next();
    } catch (err) {
       next(err);
    }
@@ -182,6 +185,7 @@ export const checkRsvnExistanceOnly = async (req, res, next) => {
       if (!isExistingRsvn)
          throw createError(400, '존재하지 않는 예약번호입니다.');
 
+      console.log('existance done');
       next();
    } catch (err) {
       next(err);
