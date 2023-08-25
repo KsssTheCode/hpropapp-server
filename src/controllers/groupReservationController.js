@@ -1,6 +1,13 @@
 import * as groupRsvnService from '../service/groupReservationService.js';
 
+import db from '../models/index.js';
+import {
+   createId,
+   getDatesBetweenTerm,
+   createError,
+} from '../source/js/function/commonFn.js';
 import randomName from 'korean-name-generator';
+import moment from 'moment';
 
 export const createGroupRsvn = async (req, res, next) => {
    try {
@@ -102,6 +109,8 @@ export const createTestRsvns = async (req, res, next) => {
             createStaffId: '230730001',
          };
 
+         console.log(groupRsvn.groupRsvnId);
+
          if (i % 2 === 0) {
             groupRsvn.departureDate = moment().add(4, 'day').format('YYYYMMDD');
             groupRsvn.leaderName = randomName.generate(true);
@@ -171,7 +180,8 @@ export const createTestRsvns = async (req, res, next) => {
       let rsvnId = await createId('reservation');
       for await (const rsvn of groupRsvns) {
          const { detailRsvns, ...groupRsvn } = rsvn;
-         await db.GroupRsvn.create(groupRsvn).catch(() => {
+         await db.GroupReservation.create(groupRsvn).catch((err) => {
+            console.log(err);
             throw createError('그룹예약건 생성 중 DB에서 오류발생');
          });
 

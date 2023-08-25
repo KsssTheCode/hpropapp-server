@@ -2,7 +2,6 @@ import db from '../../../../models/index.js';
 import nations from 'i18n-iso-countries';
 import { createError } from '../commonFn.js';
 import { Op } from 'sequelize';
-import { countRecords } from '../commonFn.js';
 
 export const checkExistingRoomType = async (roomTypeCode) => {
    const isExistingRoomType = await db.RoomType.findByPk(roomTypeCode, {

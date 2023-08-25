@@ -64,7 +64,7 @@ export const createId = async (modelName) => {
          break;
    }
 
-   let id = Number(moment().format('YYYYMMDD') + '001');
+   let id = Number(moment().format('YYMMDD') + '001');
    let latestId = await model.max(primaryKey).catch(() => {
       throw createError(500, '예약번호 최대값 조회 중 DB에서 오류발생');
    });
