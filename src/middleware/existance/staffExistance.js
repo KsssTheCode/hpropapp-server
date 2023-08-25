@@ -14,15 +14,15 @@ export const createStaffExistance = async (req, res, next) => {
 
 export const getStaffsInOptionsExistance = async (req, res, next) => {
    try {
-      const { page, itemsInOnePage, deptCodes } = req.body;
-      if (deptCodes)
-         for await (let code of deptCodes) {
+      const { deptCodes } = req.query;
+      if (deptCodes) {
+         const deptCodesArr = deptCodes.split(',');
+         for await (let code of deptCodesArr) {
             const isExistingCode = existance.checkExistingMembershipGrade(code);
             if (!isExistingCode)
                throw createError(400, '존재하지 않는 부서코드');
          }
-
-      if (page > 1) existance.checkAvailablePage(page, itemsInOnePage);
+      }
       next();
    } catch (err) {
       next(err);

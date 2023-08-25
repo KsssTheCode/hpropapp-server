@@ -37,21 +37,25 @@ export const editMemberExistance = async (req, res, next) => {
 
 export const getMembersInFilterOptionsExistance = async (req, res, next) => {
    try {
-      const { membershipGrades, nationalities } = req.body;
+      const { membershipGrades, nationalities } = req.query;
 
-      if (membershipGrades)
-         for await (let grade of membershipGrades) {
+      if (membershipGrades) {
+         const membershipGradesArr = membershipGrades.split(',');
+         for await (let grade of membershipGradesArr) {
             const isExistingGrade =
                existance.checkExistingMembershipGrade(grade);
             if (!isExistingGrade)
                throw createError(404, '존재하지 않는 멤버십등급');
          }
-      if (nationalities)
-         for await (let nationCode of nationalities) {
+      }
+      if (nationalities) {
+         const nationalitiesArr = nationalities.split(',');
+         for await (let nationCode of nationalitiesArr) {
             const isExistingCode = existance.checkExistingNation(nationCode);
             if (!isExistingCode)
                throw createError(404, '존재하지 않는 국가코드');
          }
+      }
       next();
    } catch (err) {
       next(err);

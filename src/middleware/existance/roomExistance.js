@@ -81,30 +81,37 @@ export const deleteRoomExistance = async (req, res, next) => {
 
 export const getRoomsInOptionsForPreviewExistance = async (req, res, next) => {
    try {
-      const { floors, cleanStatusCodes, groupIds, roomTypeCodes } = req.body;
-      if (floors)
-         for await (let number of floors) {
+      const { floors, cleanStatusCodes, groupIds, roomTypeCodes } = req.query;
+      if (floors) {
+         const floorsArr = floors.split(',');
+         for await (let number of floorsArr) {
             const isExistingFloor = existance.checkExistingFloor(number);
             if (!isExistingFloor)
                throw createError(400, '존재하지 않는 층수(${number})');
          }
+      }
 
-      if (cleanStatusCodes)
-         for await (let code of cleanStatusCodes) {
+      if (cleanStatusCodes) {
+         const cleanStatusCodesArr = cleanStatusCodes.split(',');
+         for await (let code of cleanStatusCodesArr) {
             const isExistingCleanStatus =
                await existance.checkExsitingCleanStatusCode(code);
             if (!isExistingCleanStatus)
                throw createError(400, `존재하지 않는 정비코드(${code})`);
          }
+      }
 
-      if (groupIds)
+      if (groupIds) {
+         const groupIdsArr = groupIds.split(',');
          for await (let id of groupIds) {
             const isExistingGroup = await existance.checkExistingGroup(id);
             if (!isExistingGroup)
                throw createError(400, `존재하지 않는 단체 ID(${id})`);
          }
+      }
 
-      if (roomTypeCodes)
+      if (roomTypeCodes) {
+         const roomTypeCodesArr = roomTypeCodes.split(',');
          for await (let code of roomTypeCodes) {
             const isExistingRoomType = await existance.checkExistingRoomType(
                code
@@ -112,6 +119,7 @@ export const getRoomsInOptionsForPreviewExistance = async (req, res, next) => {
             if (!isExistingRoomType)
                throw createError(400, `존재하지 않는 객실타입코드(${code})`);
          }
+      }
       next();
    } catch (err) {
       next(err);

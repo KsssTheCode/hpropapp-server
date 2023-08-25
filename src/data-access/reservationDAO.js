@@ -205,7 +205,8 @@ export const getRsvnsInFilterOptionsDAO = async (searchOptions) => {
                : null,
          ].filter(Boolean),
          order: [['createdAt', 'desc']],
-      }).catch(() => {
+      }).catch((err) => {
+         console.log(err);
          throw createError(500, '예약건 검색 중 DB에서 오류발생');
       });
    } catch (err) {

@@ -99,6 +99,8 @@ export const getRsvnsInFilterOptionsService = async (queryData) => {
          queryData.createEndDate = createEndDate;
       }
 
+      if (!queryData.statusCodes) queryData.statusCodes = 'RR,CI,HC,CO';
+
       return await rsvnDAO.getRsvnsInFilterOptionsDAO(queryData);
    } catch (err) {
       throw err;

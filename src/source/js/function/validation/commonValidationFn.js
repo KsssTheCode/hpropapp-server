@@ -188,5 +188,5 @@ export const dateSearchOptionsCheck = (startDate, endDate) => {
       startDate = endDate;
    }
 
-   return { startDate, endDate };
+   return { adjustedStartDate: startDate, adjustedEndDate: endDate };
 };

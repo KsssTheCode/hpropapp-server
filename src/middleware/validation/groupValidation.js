@@ -19,10 +19,11 @@ export const createGroupValidation = (req, res, next) => {
 
 export const getGroupInOptionsValidation = (req, res, next) => {
    try {
-      const { startDate, endDate } = req.query;
-
       const { adjustedStartDate, adjustedEndDate } =
-         validation.dateSearchOptionsCheck(startDate, endDate);
+         validation.dateSearchOptionsCheck(
+            req.query.startDate,
+            req.query.endDate
+         );
       req.query.startDate = adjustedStartDate;
       req.query.endDate = adjustedEndDate;
 

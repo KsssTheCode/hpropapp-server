@@ -27,8 +27,9 @@ export const getNewDailyRateExistance = async (req, res, next) => {
 
 export const editSpecificRsvnDailyRateExistance = async (req, res, next) => {
    try {
-      const { newDailyRateDatas } = req.body;
-      for await (let data of newDailyRateDatas) {
+      const { newDailyRatesData } = req.body;
+
+      for await (let data of newDailyRatesDataArr) {
          const rsvnId = data.dailyRateId.substr(0, 8);
          const isExistingRsvnId = await existance.checkExistingRsvn(rsvnId);
          if (!isExistingRsvnId) throw createError(404, '존재하지 않는 예약');

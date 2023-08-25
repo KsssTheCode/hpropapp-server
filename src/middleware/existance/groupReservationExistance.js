@@ -99,10 +99,12 @@ export const checkGroupRsvnExistanceOnly = async (req, res, next) => {
    try {
       let groupRsvnIds;
       if (Object.keys(req.body).length > 0) ({ groupRsvnIds } = req.body);
-      if (Object.keys(req.query).length > 0) ({ groupRsvnIds } = req.query);
+      if (Object.keys(req.query).length > 0) {
+         ({ groupRsvnIds } = req.query);
+         groupRsvnIds = groupRsvnIds.split(',');
+      }
 
-      const groupRsvnIdsArr = groupRsvnIds.groupRsvnIds.split(',');
-      for await (let id of groupRsvnIdsArr) {
+      for await (let id of groupRsvnIds) {
          const isExistingGroupRsvn = await existance.checkExistingRsvn(id);
          if (!isExistingGroupRsvn)
             throw createError(404, '존재하지 않는 단체예약');

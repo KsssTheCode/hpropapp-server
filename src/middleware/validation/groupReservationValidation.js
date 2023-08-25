@@ -97,27 +97,27 @@ export const getGroupRsvnsInFilterOptionsValidation = (req, res, next) => {
       }
 
       if (arrivalStartDate || arrivalEndDate) {
-         const { adjustedArrStartDate, adjustedArrEndDate } =
+         const { adjustedStartDate, adjustedEndDate } =
             validation.dateSearchOptionsCheck(arrivalStartDate, arrivalEndDate);
-         req.query.arrivalStartDate = adjustedArrStartDate;
-         req.query.arrivalEndDate = adjustedArrEndDate;
+         req.query.arrivalStartDate = adjustedStartDate;
+         req.query.arrivalEndDate = adjustedEndDate;
       }
 
       if (departureStartDate || departureEndDate) {
-         const { adjustedDepStartDate, adjustedDepEndDate } =
+         const { adjustedStartDate, adjustedEndDate } =
             validation.dateSearchOptionsCheck(
                departureStartDate,
                departureEndDate
             );
-         req.query.arrivalStartDate = adjustedDepStartDate;
-         req.query.arrivalEndDate = adjustedDepEndDate;
+         req.query.arrivalStartDate = adjustedStartDate;
+         req.query.arrivalEndDate = adjustedEndDate;
       }
 
       if (createStartDate || createEndDate) {
-         const { adjustedCreateStartDate, adjustedCreateEndDate } =
+         const { adjustedStartDate, adjustedEndDate } =
             validation.dateSearchOptionsCheck(createStartDate, createEndDate);
-         req.query.createStartDate = adjustedCreateStartDate;
-         req.query.createEndDate = adjustedCreateEndDate;
+         req.query.createStartDate = adjustedStartDate;
+         req.query.createEndDate = adjustedEndDate;
       }
 
       next();

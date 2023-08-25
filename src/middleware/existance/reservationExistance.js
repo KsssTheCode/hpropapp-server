@@ -34,10 +34,10 @@ export const getRsvnsInFilterOptionsExistance = async (req, res, next) => {
       } = req.query;
 
       if (roomTypeCodes) {
-         for await (let code of roomTypeCodes) {
-            const roomTypeCode = roomTypeCodes[code];
+         const roomTypeCodesArr = roomTypeCodes.split(',');
+         for await (let code of roomTypeCodesArr) {
             const isExistingRoomType = await existance.checkExistingRoomType(
-               roomTypeCode
+               code
             );
             if (!isExistingRoomType)
                throw createError(404, '존재하지 않는 객실타입코드');
@@ -45,13 +45,15 @@ export const getRsvnsInFilterOptionsExistance = async (req, res, next) => {
       }
 
       if (rateTypeCodes) {
-         for await (let code of rateTypeCodes) {
-            const rateTypeCode = rateTypeCodes[code];
+         const rateTypeCodesArr = rateTypeCodes.split(',');
+         console.log(rateTypeCodesArr);
+         for await (let code of rateTypeCodesArr) {
             const isExistingRateType = await existance.checkExistingRateType(
-               rateTypeCode
+               code
             );
+            console.log(isExistingRateType);
             if (!isExistingRateType)
-               throw createError(404, '존재하지 않는 객실타입코드');
+               throw createError(404, '존재하지 않는 요금형식');
          }
       }
 

@@ -4,7 +4,6 @@ import moment from 'moment';
 import { createError } from '../source/js/function/commonFn.js';
 
 export const systemClosing = async () => {
-   console.log('1!!!');
    const transaction = await db.sequelize.transaction();
    try {
       await db.Reservation.update(
@@ -22,8 +21,7 @@ export const systemClosing = async () => {
             },
             transaction: transaction,
          }
-      ).catch((err) => {
-         console.log(err);
+      ).catch(() => {
          throw createError(400, '일반 예약 마감 중 DB에서 오류 발생');
       });
 
@@ -41,7 +39,9 @@ export const systemClosing = async () => {
                ],
             },
          }
-      );
+      ).catch(() => {
+         throw createError(400, '일반 예약 마감 중 DB에서 오류 발생');
+      });
 
       await db.GroupReservation.update(
          { statusCode: 'NS' },

@@ -171,7 +171,7 @@ export const createTestRsvns = async (req, res, next) => {
       let rsvnId = await createId('reservation');
       for await (const rsvn of groupRsvns) {
          const { detailRsvns, ...groupRsvn } = rsvn;
-         await GroupRsvn.create(groupRsvn).catch(() => {
+         await db.GroupRsvn.create(groupRsvn).catch(() => {
             throw createError('그룹예약건 생성 중 DB에서 오류발생');
          });
 
