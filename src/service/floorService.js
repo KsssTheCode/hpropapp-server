@@ -2,7 +2,7 @@ import * as floorDAO from '../data-access/floorDAO.js';
 
 export const getFloorsDataService = async () => {
    try {
-      return await floorDAO.getFloorsDataService();
+      return await floorDAO.getFloorsDataDAO();
    } catch (err) {
       throw err;
    }

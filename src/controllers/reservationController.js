@@ -155,7 +155,6 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
 // };
 
 export const createTestRsvns = async (req, res, next) => {
-   console.log('here');
    const transaction = await db.sequelize.transaction();
 
    function randomNumber() {

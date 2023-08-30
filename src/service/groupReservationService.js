@@ -118,19 +118,19 @@ export const getSelectedGroupRsvnService = async (bodyData) => {
       throw err;
    }
 };
-export const getGroupRsvnsInFilterOptionsService = async (bodyData) => {
+export const getGroupRsvnsInFilterOptionsService = async (queryData) => {
    try {
-      const { createStartDate, createEndDate } = bodyData;
+      const { createStartDate, createEndDate } = queryData;
 
       if (createStartDate !== undefined && createEndDate !== undefined) {
-         bodyData.createStartDate = new Date(
+         queryData.createStartDate = new Date(
             moment(+createStartDate, 'YYYYMMDD')
                .startOf('day')
                .tz('Asia/Seoul')
                .format('YYYY-MM-DD HH:mm:ss')
          );
 
-         bodyData.createEndDate = new Date(
+         queryData.createEndDate = new Date(
             moment(+createEndDate, 'YYYYMMDD')
                .endOf('day')
                .tz('Asia/Seoul')
@@ -138,7 +138,7 @@ export const getGroupRsvnsInFilterOptionsService = async (bodyData) => {
          );
       }
 
-      return await groupRsvnDAO.getGroupRsvnsInFilterOptionsDAO(bodyData);
+      return await groupRsvnDAO.getGroupRsvnsInFilterOptionsDAO(queryData);
    } catch (err) {
       throw err;
    }

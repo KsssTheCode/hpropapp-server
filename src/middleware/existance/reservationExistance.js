@@ -46,12 +46,10 @@ export const getRsvnsInFilterOptionsExistance = async (req, res, next) => {
 
       if (rateTypeCodes) {
          const rateTypeCodesArr = rateTypeCodes.split(',');
-         console.log(rateTypeCodesArr);
          for await (let code of rateTypeCodesArr) {
             const isExistingRateType = await existance.checkExistingRateType(
                code
             );
-            console.log(isExistingRateType);
             if (!isExistingRateType)
                throw createError(404, '존재하지 않는 요금형식');
          }
@@ -187,7 +185,6 @@ export const checkRsvnExistanceOnly = async (req, res, next) => {
       if (!isExistingRsvn)
          throw createError(400, '존재하지 않는 예약번호입니다.');
 
-      console.log('existance done');
       next();
    } catch (err) {
       next(err);

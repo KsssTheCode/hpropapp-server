@@ -44,8 +44,7 @@ export const getSelectedGroupRsvn = async (req, res, next) => {
 export const getGroupRsvnsInFilterOptions = async (req, res, next) => {
    try {
       const response =
-         await groupRsvnService.getGroupRsvnsInFilterOptionsService(req.body);
-
+         await groupRsvnService.getGroupRsvnsInFilterOptionsService(req.query);
       res.status(200).json(response);
    } catch (err) {
       next(err);
@@ -108,8 +107,6 @@ export const createTestRsvns = async (req, res, next) => {
             statusCode: 'RR',
             createStaffId: '230730001',
          };
-
-         console.log(groupRsvn.groupRsvnId);
 
          if (i % 2 === 0) {
             groupRsvn.departureDate = moment().add(4, 'day').format('YYYYMMDD');

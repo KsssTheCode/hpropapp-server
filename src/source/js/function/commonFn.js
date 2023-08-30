@@ -21,7 +21,6 @@ export const getChangeHistoryMessage = async (
    changedProperties.forEach((prop) => {
       if (!historyMessage) {
          historyMessage = `${prop} : ${originalObject[prop]} >> ${updatedObject[prop]}`;
-         console.log(historyMessage);
       } else {
          historyMessage += `/ ${prop} : ${originalObject[prop]} >> ${updatedObject[prop]}`;
       }

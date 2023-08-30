@@ -89,7 +89,7 @@ export const getSelectedGroupRsvnDAO = async (id) => {
       throw err;
    }
 };
-export const getGroupRsvnsInFilterOptionsDAO = async (
+export const getGroupRsvnsInFilterOptionsDAO = async ({
    keyword,
    arrivalStartDate,
    arrivalEndDate,
@@ -100,8 +100,8 @@ export const getGroupRsvnsInFilterOptionsDAO = async (
    checkOutStaffs,
    statusCodes,
    createStartDate,
-   createEndDate
-) => {
+   createEndDate,
+}) => {
    try {
       return await GroupRsvn.findAll({
          where: {
