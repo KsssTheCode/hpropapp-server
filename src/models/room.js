@@ -1,3 +1,5 @@
+import { ROOM_CLEAN_STATUS, ROOM_OCCUPATION } from '../constants/constants.js';
+
 export const Room = (sequelize, DataTypes) => {
    const Room = sequelize.define(
       'Room',
@@ -6,6 +8,16 @@ export const Room = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             comment: '객실호수',
+         },
+         cleanStatus: {
+            type: DataTypes.STRING(3),
+            allowNull: false,
+            defaultValue: ROOM_CLEAN_STATUS.DIRTY,
+         },
+         occupation: {
+            type: DataTypes.STRING(1),
+            allowNull: false,
+            defaultValue: ROOM_OCCUPATION.VACANT,
          },
          changeHistory: {
             type: DataTypes.JSON,
@@ -39,14 +51,6 @@ export const Room = (sequelize, DataTypes) => {
          targetKey: 'floorNumber',
          onUpdate: 'CASCADE',
          onDelete: 'RESTRICT',
-      });
-      Room.belongsTo(models.CleanStatus, {
-         foreignKey: { name: 'cleanStatusCode', allowNull: true },
-         targetKey: 'cleanStatusCode',
-      });
-      Room.belongsTo(models.RoomStatus, {
-         foreignKey: { name: 'roomStatusCode', allowNull: true },
-         targetKey: 'roomStatusCode',
       });
    };
 

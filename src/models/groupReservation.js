@@ -13,6 +13,11 @@ export const GroupReservation = (sequelize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.STRING(10),
          },
+         reservationStatus: {
+            type: DataTypes.STRING(3),
+            allowNull: false,
+            comment: '예약상태',
+         },
          arrivalDate: {
             type: DataTypes.STRING(8),
             allowNull: false,
@@ -26,7 +31,7 @@ export const GroupReservation = (sequelize, DataTypes) => {
          groupName: {
             type: DataTypes.STRING(30),
             allowNull: false,
-            commnet: '단체명',
+            comment: '단체명',
          },
          leaderName: {
             type: DataTypes.STRING(30),
@@ -92,11 +97,6 @@ export const GroupReservation = (sequelize, DataTypes) => {
       GroupReservation.belongsTo(models.Staff, {
          foreignKey: { name: 'createStaffId', allowNull: false },
          targetKey: 'staffId',
-         onDelete: 'NO ACTION',
-      });
-      GroupReservation.belongsTo(models.ReservationStatus, {
-         foreignKey: { name: 'statusCode', allowNull: false },
-         targetKey: 'statusCode',
          onDelete: 'NO ACTION',
       });
       GroupReservation.hasMany(models.ReservationChangeHistory, {

@@ -30,7 +30,6 @@ router.get(
 router.get(
    '/get-group-rsvns-in-filter-options',
    validation.getGroupRsvnsInFilterOptionsValidation,
-   existance.getGroupRsvnsInFilterOptionsExistance,
    controller.getGroupRsvnsInFilterOptions
 );
 

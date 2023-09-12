@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { createError } from '../commonFn.js';
+import { RSVN_STATUS } from '../../../../constants/constants.js';
 
 export const nameCheck = (name) => {
    const nameRegExp = /^[가-힣a-zA-Z]{2,30}$/;
@@ -132,8 +133,7 @@ export const discountCheck = (discount) => {
       throw createError(422, '할인율 입력오류');
 };
 export const statusCheck = (status) => {
-   const statusArr = ['RR', 'CI', 'HC', 'CO', 'CX'];
-   const result = statusArr.includes(status);
+   const result = RSVN_STATUS.includes(status);
    if (!result) throw createError(422, '존재하지 않는 예약상태');
 };
 

@@ -13,6 +13,11 @@ export const Reservation = (sequelize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.STRING(10),
          },
+         reservationStatus: {
+            type: DataTypes.STRING(3),
+            allowNull: false,
+            comment: '예약상태',
+         },
          arrivalDate: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -86,11 +91,6 @@ export const Reservation = (sequelize, DataTypes) => {
       Reservation.belongsTo(models.Staff, {
          foreignKey: { name: 'createStaffId', allowNull: false },
          targetKey: 'staffId',
-         onDelete: 'NO ACTION',
-      });
-      Reservation.belongsTo(models.ReservationStatus, {
-         foreignKey: { name: 'statusCode', allowNull: false },
-         targetKey: 'statusCode',
          onDelete: 'NO ACTION',
       });
       Reservation.belongsTo(models.RateType, {
