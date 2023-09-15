@@ -3,14 +3,9 @@ import { createError } from '../source/js/function/commonFn.js';
 
 const Membership = db.Membership;
 
-export const createMembershipDAO = async () => {
+export const createMembershipDAO = async (createData) => {
    try {
-      return await Membership.create({
-         membershipGrade: membershipGrade,
-         membershipName: membershipName,
-         discount: discount,
-         reference: reference,
-      }).catch(() => {
+      return await Membership.create(createData).catch(() => {
          throw createError(500, '멤버십 생성 중 DB에서 오류발생');
       });
    } catch (err) {

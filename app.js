@@ -20,7 +20,6 @@ import memberRoutes from './src/routes/memberRouter.js';
 import groupRoutes from './src/routes/groupRouter.js';
 import dailyRateRoutes from './src/routes/dailyRateRouter.js';
 import memoRoutes from './src/routes/memoRouter.js';
-import reservationStatusRoutes from './src/routes/reservationStatusRouter.js';
 import floorRoutes from './src/routes/floorRouter.js';
 import db from './src/models/index.js';
 import cookieParser from 'cookie-parser';
@@ -32,8 +31,8 @@ const sequelize = db.sequelize;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 async function syncDataBase(sequelize) {
    await sequelize.sync({ alter: process.env.NODE_ENV !== 'production' });
@@ -64,7 +63,6 @@ app.use('/membership', membershipRoutes);
 app.use('/member', memberRoutes);
 app.use('/group', groupRoutes);
 app.use('/daily-rate', dailyRateRoutes);
-app.use('/rsvn-status', reservationStatusRoutes);
 app.use('/memo', memoRoutes);
 app.use('/floor', floorRoutes);
 

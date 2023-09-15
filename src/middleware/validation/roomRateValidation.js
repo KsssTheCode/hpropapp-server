@@ -5,11 +5,11 @@ export const initializeRoomRatesValidation = (req, res, next) => {
    try {
       const { rateTypeCode, roomTypeCode, startDate, endDate } = req.body;
 
-      rateTypeCode.split(',').forEach((code) => {
+      rateTypeCode.forEach((code) => {
          validation.rateTypeCodeCheck(code);
       });
 
-      roomTypeCode.split(',').forEach((code) => {
+      roomTypeCode.forEach((code) => {
          validation.roomTypeCodeCheck(code);
       });
 

@@ -1,6 +1,6 @@
 import * as deptDAO from '../data-access/departmentDAO.js';
 
-export const createDeptService = async () => {
+export const createDeptService = async (bodyData) => {
    try {
       const { deptCode, deptName } = bodyData;
       return await deptDAO.createDeptDAO(deptCode, deptName);

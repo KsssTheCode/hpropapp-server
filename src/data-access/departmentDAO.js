@@ -6,7 +6,7 @@ const Dept = db.Department;
 
 export const createDeptDAO = async (deptCode, deptName) => {
    try {
-      return await Department.create({
+      return await Dept.create({
          deptCode,
          deptName,
       }).catch(() => {
@@ -31,7 +31,7 @@ export const getDeptsDataForFilterSelectionDAO = async () => {
 
 export const getSelectedDeptDataDAO = async (deptCode) => {
    try {
-      return await Department.findByPk(deptCode).catch(() => {
+      return await Dept.findByPk(deptCode).catch(() => {
          throw createError(500, '부서 조회 중 DB에서 오류발생');
       });
    } catch (err) {
@@ -41,7 +41,7 @@ export const getSelectedDeptDataDAO = async (deptCode) => {
 
 export const editDeptDAO = async (deptCode, newDeptName, newDeptCode) => {
    try {
-      return await Department.update(
+      return await Dept.update(
          { deptName: newDeptName, deptCode: newDeptCode },
 
          { where: { deptCode: deptCode } }
@@ -55,7 +55,7 @@ export const editDeptDAO = async (deptCode, newDeptName, newDeptCode) => {
 
 export const deleteDeptDAO = async (deptCode) => {
    try {
-      return await Department.destroy({
+      return await Dept.destroy({
          where: { deptCode: deptCode },
       }).catch(() => {
          throw createError(500, '부서 삭제 중 DB에서 오류발생');

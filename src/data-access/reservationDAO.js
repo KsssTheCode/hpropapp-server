@@ -98,6 +98,8 @@ export const getRsvnsInFilterOptionsDAO = async (searchOptions) => {
          createStartDate,
          createEndDate,
       } = searchOptions;
+
+      console.log(statusCodes);
       return await Rsvn.findAll({
          where: {
             ...(keyword && {

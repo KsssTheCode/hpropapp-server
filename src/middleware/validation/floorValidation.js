@@ -4,7 +4,7 @@ export const createFloorsValidation = (req, res, next) => {
    try {
       const { floors } = req.body;
 
-      floors.split(',').forEach((floor) => {
+      floors.forEach((floor) => {
          validation.numberCheck(floor, '층');
       });
 

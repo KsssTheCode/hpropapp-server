@@ -1,3 +1,4 @@
+import { RSVN_STATUS } from '../constants/constants.js';
 import {
    afterDestroyHook,
    beforeRestoreHook,
@@ -13,9 +14,10 @@ export const Reservation = (sequelize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.STRING(10),
          },
-         reservationStatus: {
+         statusCode: {
             type: DataTypes.STRING(3),
             allowNull: false,
+            defaultValue: RSVN_STATUS.RESERVED,
             comment: '예약상태',
          },
          arrivalDate: {
