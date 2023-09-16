@@ -1,4 +1,5 @@
 import * as rsvnDAO from '../data-access/reservationDAO.js';
+import db from '../models/index.js';
 import { createId } from '../source/js/function/commonFn.js';
 
 export const getSelectedRsvnService = async (id) => {

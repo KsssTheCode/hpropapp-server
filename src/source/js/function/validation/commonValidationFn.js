@@ -133,7 +133,7 @@ export const discountCheck = (discount) => {
       throw createError(422, '할인율 입력오류');
 };
 export const statusCheck = (status) => {
-   const result = RSVN_STATUS.includes(status);
+   const result = Object.values(RSVN_STATUS).includes(status);
    if (!result) throw createError(422, '존재하지 않는 예약상태');
 };
 
