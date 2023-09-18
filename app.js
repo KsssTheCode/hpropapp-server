@@ -9,6 +9,7 @@ import { systemClosing } from './src/middleware/systemClosing.js';
 import db from './src/models/index.js';
 import cookieParser from 'cookie-parser';
 import mainRouter from './src/routes/mainRouter.js';
+import socketIO from './socket.js';
 
 const app = express();
 const port = 3302;
@@ -17,14 +18,14 @@ const sequelize = db.sequelize;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan('dev'));
 // app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(morgan('dev'));
 
 async function syncDataBase(sequelize) {
    await sequelize.sync({ alter: process.env.NODE_ENV !== 'production' });
 }
-syncDataBase(sequelize);
+// syncDataBase(sequelize);
 
 schedule.scheduleJob('01 00 00 * * *', systemClosing);
 
@@ -43,4 +44,7 @@ app.use(async (error, req, res, next) => {
 
 const server = app.listen(port);
 
-// webSocket(server);
+const io = socketIO.initIO(server);
+io.on('connection', (socket) => {
+   console.log('Client connected!');
+});

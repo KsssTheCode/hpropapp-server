@@ -69,7 +69,6 @@ export const createRsvnDAO = async (
       }).catch(() => {
          throw createError(500, '예약생성 중 DB에서 오류발생');
       });
-
       return response;
    } catch (err) {
       throw err;

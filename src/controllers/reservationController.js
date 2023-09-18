@@ -1,6 +1,7 @@
 import moment from 'moment';
 import randomName from 'korean-name-generator';
 import db from '../models/index.js';
+import socketIO from '../../socket.js';
 import { createId } from '../source/js/function/commonFn.js';
 
 import * as rsvnService from '../service/reservationService.js';
@@ -11,6 +12,10 @@ export const createRsvn = async (req, res, next) => {
    try {
       const staffId = req.cookies.staffId;
       const response = await rsvnService.createRsvnService(req.body, staffId);
+      socketIO
+         .getIO()
+         .emit('createRsvn', { action: 'createRsvn', rsvn: response });
+      console.log('생성합니다요~!');
       res.status(200).json(response);
    } catch (err) {
       next(err);
