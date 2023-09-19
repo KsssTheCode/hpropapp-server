@@ -49,12 +49,21 @@ export const checkAssignedRoom = async (roomNumber, arrDate, depDate) => {
 
 /** (취소된 예약 제외)존재하는 예약일 시, 해당 id를 가진 예약 객체를 return */
 export const checkExistingRsvn = async (id) => {
-   const isExistingRsvn = await db.Reservation.findByPk(id, {
-      where: { [Op.not]: 'CX' },
-      returning: true,
-   }).catch(() => {
-      throw createError(500, '예약조회 중 DB에서 오류발생');
-   });
+   let isExistingRsvn = null;
+   if (id.charAt(0) === 'R') {
+      isExistingRsvn = await db.Reservation.findByPk(id, {
+         where: { [Op.not]: 'CX' },
+         returning: true,
+      }).catch(() => {
+         throw createError(500, '예약조회 중 DB에서 오류발생');
+      });
+   } else if (id.charAt(0) === 'G') {
+      isExistingRsvn = await db.GroupReservation.findByPk(id, {
+         returning: true,
+      }).catch(() => {
+         throw createError(500, '단체예약 조회 중 DB에서 오류발생');
+      });
+   }
    return isExistingRsvn;
 };
 
@@ -220,15 +229,6 @@ export const checkExistingDailyRate = async (id) => {
       throw createError(500, '일별요금 호출 중 DB에서 오류발생');
    });
    return isExistingDailyRate;
-};
-
-export const checkExistingGroupRsvn = async (id) => {
-   const isExistingGroupRsvn = await db.GroupReservation.findByPk(id, {
-      returning: true,
-   }).catch(() => {
-      throw createError(500, '단체예약 조회 중 DB에서 오류발생');
-   });
-   return isExistingGroupRsvn;
 };
 
 export const checkExistingRsvnStatus = async () => {

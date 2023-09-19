@@ -8,10 +8,20 @@ import {
 } from '../source/js/function/commonFn.js';
 import randomName from 'korean-name-generator';
 import moment from 'moment';
+import socketIO from '../../socket.js';
 
 export const createGroupRsvn = async (req, res, next) => {
    try {
-      const response = groupRsvnService.createGroupRsvnService(req.body);
+      const staffId = req.cookies.staffId;
+      const response = await groupRsvnService.createGroupRsvnService(
+         req.body,
+         staffId
+      );
+
+      socketIO.getIO().emit('createRsvn', {
+         action: 'createRsvn',
+         rsvn: response,
+      });
 
       res.status(200).json(response);
    } catch (err) {
@@ -21,7 +31,16 @@ export const createGroupRsvn = async (req, res, next) => {
 
 export const createDetailRsvns = async (req, res, next) => {
    try {
-      const response = await groupRsvnService.createDetailRsvns(req.body);
+      const staffId = req.cookies.staffId;
+      const response = await groupRsvnService.createDetailRsvnsService(
+         req.body,
+         staffId
+      );
+
+      socketIO.getIO().emit('createRsvn', {
+         action: 'createRsvn',
+         rsvn: response,
+      });
 
       res.status(200).json(response);
    } catch (err) {
@@ -32,7 +51,7 @@ export const createDetailRsvns = async (req, res, next) => {
 export const getSelectedGroupRsvn = async (req, res, next) => {
    try {
       const response = await groupRsvnService.getSelectedGroupRsvnService(
-         req.body
+         req.query
       );
 
       res.status(200).json(response);

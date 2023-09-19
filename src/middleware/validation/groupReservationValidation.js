@@ -13,6 +13,7 @@ export const createGroupRsvnValidation = (req, res, next) => {
          leaderTel,
          companyName,
          companyTel,
+         groupId,
       } = req.body;
 
       validation.groupNameCheck(groupName);
@@ -63,6 +64,7 @@ export const createDetailRsvnsValidation = (req, res, next) => {
          : () => {
               throw createError(422, '세부예약건 입력오류(Not an array)');
            };
+      next();
    } catch (err) {
       next(err);
    }

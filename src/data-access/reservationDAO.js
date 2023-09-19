@@ -10,7 +10,6 @@ const Rsvn = db.Reservation;
  */
 export const getSelectedRsvnDAO = async (id) => {
    try {
-      console.log(id);
       const rsvnData = await Rsvn.findByPk(id, {
          include: [
             { model: db.Staff, attributes: ['name'] },
@@ -97,7 +96,6 @@ export const getRsvnsInFilterOptionsDAO = async (searchOptions) => {
          createEndDate,
       } = searchOptions;
 
-      console.log(statusCodes);
       return await Rsvn.findAll({
          where: {
             ...(keyword && {
@@ -291,6 +289,16 @@ export const releaseAssignedRoomFromRsvnDAO = async (
          }
       ).catch(() => {
          throw createError(500, '객실 배정 중 DB에서 오류발생');
+      });
+   } catch (err) {
+      throw err;
+   }
+};
+
+export const getRsvnDailyRates = async (id) => {
+   try {
+      return await db.DailyRate.findAll({ where: { rsvnId: id } }).catch(() => {
+         throw createError(500, '예약 객실상세요금 조회 중 DB에서 오류발생');
       });
    } catch (err) {
       throw err;

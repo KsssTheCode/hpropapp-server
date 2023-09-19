@@ -2,8 +2,9 @@ import moment from 'moment';
 import db from '../models/index.js';
 import * as groupRsvnDAO from '../data-access/groupReservationDAO.js';
 import { createId } from '../source/js/function/commonFn.js';
+import { getRsvnDailyRates } from '../data-access/reservationDAO.js';
 
-export const createGroupRsvnService = async (bodyData) => {
+export const createGroupRsvnService = async (bodyData, staffId) => {
    try {
       const {
          arrivalDate,
@@ -32,7 +33,7 @@ export const createGroupRsvnService = async (bodyData) => {
          companyName: companyName,
          companyTel: companyTel,
          companyAddress: companyAddress,
-         createStaffId: req.cookies.staffId,
+         createStaffId: staffId,
          callerName: caller,
          callerTel: callerTel,
       };
@@ -42,29 +43,31 @@ export const createGroupRsvnService = async (bodyData) => {
       throw err;
    }
 };
-export const createDetailRsvnsService = async (bodyData) => {
+
+export const createDetailRsvnsService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
-      const { groupRsvnId, detailReservationsData } = bodyData;
+      const { groupRsvnId, detailRsvnsData } = bodyData;
       const groupRsvn = await groupRsvnDAO.getGroupRsvnByIdDAO(groupRsvnId);
 
       let rsvnId = await createId('reservation');
       const rsvnsData = [];
       const dailyRatesData = [];
       const foliosData = [];
-      for (let i = 0; i < detailReservationsData.rooms; i++) {
+
+      for (let i = 0; i < detailRsvnsData.rooms; i++) {
          rsvnsData.push({
             rsvnId: 'R' + rsvnId,
             statusCode: 'RR',
             guestName: groupRsvn.groupName,
-            arrivalDate: +detailReservationsData.arrivalDate,
-            departureDate: +detailReservationsData.departureDate,
-            roomTypeCode: detailReservationsData.roomTypeCode,
+            arrivalDate: +detailRsvnsData.arrivalDate,
+            departureDate: +detailRsvnsData.departureDate,
+            roomTypeCode: detailRsvnsData.roomTypeCode,
             rateTypeCode: 'OWN',
-            numberOfGuests: detailReservationsData.numberOfGuests,
+            numberOfGuests: detailRsvnsData.numberOfGuests,
             groupRsvnId: groupRsvn.groupRsvnId,
             ...(groupRsvn.reference && { reference: groupRsvn.reference }),
-            createStaffId: req.cookies.staffId,
+            createStaffId: staffId,
             folioId: 'F' + rsvnId,
             reservatorName: groupRsvn.caller,
             reservatorTel: groupRsvn.callerTel,
@@ -75,7 +78,7 @@ export const createDetailRsvnsService = async (bodyData) => {
             rsvnId: 'R' + rsvnId,
          });
 
-         detailReservationsData.dailyRatesData.forEach((data, j) => {
+         detailRsvnsData.dailyRatesData.forEach((data, j) => {
             let number = String(j + 1).padStart(3, '0');
             const dailyRatesDataPerRsvn = {
                ...data,
@@ -88,7 +91,7 @@ export const createDetailRsvnsService = async (bodyData) => {
          rsvnId += 1;
       }
 
-      const createdRsvns = await groupRsvnDAO.createGroupDetailRsvnsDAO(
+      const response = await groupRsvnDAO.createGroupDetailRsvnsDAO(
          rsvnsData,
          transaction
       );
@@ -104,20 +107,34 @@ export const createDetailRsvnsService = async (bodyData) => {
       );
 
       await transaction.commit();
-      return createdRsvns;
+
+      if (response.length > 1) {
+      }
+
+      for await (const rsvn of response) {
+         console.log(rsvn);
+         const dailyRatesData = await getRsvnDailyRates(rsvn.rsvnId);
+         rsvn.dataValues.DailyRates = dailyRatesData;
+      }
+
+      console.log(response);
+
+      return response;
    } catch (err) {
       await transaction.rollback();
       throw err;
    }
 };
-export const getSelectedGroupRsvnService = async (bodyData) => {
+
+export const getSelectedGroupRsvnService = async (queryData) => {
    try {
-      const { id } = bodyData;
+      const { id } = queryData;
       return await groupRsvnDAO.getSelectedGroupRsvnDAO(id);
    } catch (err) {
       throw err;
    }
 };
+
 export const getGroupRsvnsInFilterOptionsService = async (queryData) => {
    try {
       const { createStartDate, createEndDate } = queryData;

@@ -6,15 +6,17 @@ const GroupRsvn = db.GroupReservation;
 
 export const createGroupRsvnDAO = async (createData) => {
    try {
-      return await await GroupRsvn.create(createData, {
+      const response = await GroupRsvn.create(createData, {
          returning: true,
       }).catch((err) => {
          throw createError(500, '단체마스터예약 생성 중 DB에서 오류발생');
       });
+      return response;
    } catch (err) {
       throw err;
    }
 };
+
 export const getGroupRsvnByIdDAO = async (groupRsvnId) => {
    try {
       return await GroupRsvn.findByPk(groupRsvnId).catch(() => {
@@ -24,6 +26,7 @@ export const getGroupRsvnByIdDAO = async (groupRsvnId) => {
       throw err;
    }
 };
+
 export const createGroupDetailRsvnsDAO = async (rsvnsData, transaction) => {
    try {
       return await db.Reservation.bulkCreate(rsvnsData, {
@@ -37,6 +40,7 @@ export const createGroupDetailRsvnsDAO = async (rsvnsData, transaction) => {
       throw err;
    }
 };
+
 export const createGroupDetailRsvnsDailyRatesDataDAO = async (
    dailyRatesData,
    transaction
@@ -52,24 +56,29 @@ export const createGroupDetailRsvnsDailyRatesDataDAO = async (
       throw err;
    }
 };
+
 export const createGroupDetailRsvnsFolioDAO = async (
    foliosData,
    transaction
 ) => {
    try {
-      await db.Folio.bulkCreate(foliosData, {
+      const response = await db.Folio.bulkCreate(foliosData, {
          transaction: transaction,
          hooks: false,
+         returning: true,
       }).catch(() => {
          throw createError(
             500,
             '데이터베이스에서 Folio 생성 중 오류가 발생했습니다'
          );
       });
+
+      return response;
    } catch (err) {
       throw err;
    }
 };
+
 export const getSelectedGroupRsvnDAO = async (id) => {
    try {
       return await GroupRsvn.findByPk(id, {
@@ -89,6 +98,7 @@ export const getSelectedGroupRsvnDAO = async (id) => {
       throw err;
    }
 };
+
 export const getGroupRsvnsInFilterOptionsDAO = async ({
    keyword,
    arrivalStartDate,
@@ -200,6 +210,7 @@ export const getGroupRsvnsInFilterOptionsDAO = async ({
       throw err;
    }
 };
+
 export const editGroupRsvnDAO = async (
    groupRsvnId,
    updateData,

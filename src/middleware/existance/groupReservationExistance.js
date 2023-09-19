@@ -1,10 +1,11 @@
+import { createError } from '../../source/js/function/commonFn.js';
 import * as existance from '../../source/js/function/existance/existanceFn.js';
 
 export const createDetailRsvnsExistance = async (req, res, next) => {
    try {
       const { groupRsvnId, detailRsvnsData } = req.body;
 
-      const isExistingGroupRsvn = existance.checkExistingGroupRsvn(groupRsvnId);
+      const isExistingGroupRsvn = existance.checkExistingRsvn(groupRsvnId);
       if (!isExistingGroupRsvn)
          throw createError(404, '존재하지 않는 단체예약');
 
@@ -97,19 +98,10 @@ export const editGroupRsvnExistance = async (req, res, next) => {
 
 export const checkGroupRsvnExistanceOnly = async (req, res, next) => {
    try {
-      let groupRsvnIds;
-      if (Object.keys(req.body).length > 0) ({ groupRsvnIds } = req.body);
-      if (Object.keys(req.query).length > 0) {
-         ({ groupRsvnIds } = req.query);
-         groupRsvnIds = groupRsvnIds.split(',');
-      }
-
-      for await (let id of groupRsvnIds) {
-         const isExistingGroupRsvn = await existance.checkExistingRsvn(id);
-         if (!isExistingGroupRsvn)
-            throw createError(404, '존재하지 않는 단체예약');
-      }
-
+      const { id } = req.query;
+      const isExistingGroupRsvn = await existance.checkExistingRsvn(id);
+      if (!isExistingGroupRsvn)
+         throw createError(404, '존재하지 않는 단체예약');
       next();
    } catch (err) {
       next(err);

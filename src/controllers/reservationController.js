@@ -13,6 +13,8 @@ export const createRsvn = async (req, res, next) => {
       const staffId = req.cookies.staffId;
       const response = await rsvnService.createRsvnService(req.body, staffId);
 
+      console.log(response);
+
       socketIO.getIO().emit('createRsvn', {
          action: 'createRsvn',
          rsvn: response.rsvnData,
