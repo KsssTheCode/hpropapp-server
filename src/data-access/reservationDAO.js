@@ -10,6 +10,7 @@ const Rsvn = db.Reservation;
  */
 export const getSelectedRsvnDAO = async (id) => {
    try {
+      console.log(id);
       const rsvnData = await Rsvn.findByPk(id, {
          include: [
             { model: db.Staff, attributes: ['name'] },
@@ -62,14 +63,12 @@ export const createRsvnDAO = async (
    transaction
 ) => {
    try {
-      const response = await Rsvn.create(newRsvnObject, {
+      await Rsvn.create(newRsvnObject, {
          transaction,
          dailyRatesData,
-         returning: true,
       }).catch(() => {
          throw createError(500, '예약생성 중 DB에서 오류발생');
       });
-      return response;
    } catch (err) {
       throw err;
    }

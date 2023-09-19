@@ -57,13 +57,12 @@ export const createRsvnService = async (bodyData, staffId) => {
          createStaffId: staffId,
       };
 
-      const response = await rsvnDAO.createRsvnDAO(
-         newRsvnObject,
-         dailyRatesData,
-         transaction
-      );
+      await rsvnDAO.createRsvnDAO(newRsvnObject, dailyRatesData, transaction);
 
       await transaction.commit();
+
+      const response = await rsvnDAO.getSelectedRsvnDAO('R' + rsvnId);
+
       return response;
    } catch (err) {
       await transaction.rollback();

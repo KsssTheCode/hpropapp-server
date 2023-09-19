@@ -12,10 +12,12 @@ export const createRsvn = async (req, res, next) => {
    try {
       const staffId = req.cookies.staffId;
       const response = await rsvnService.createRsvnService(req.body, staffId);
-      socketIO
-         .getIO()
-         .emit('createRsvn', { action: 'createRsvn', rsvn: response });
-      console.log('생성합니다요~!');
+
+      socketIO.getIO().emit('createRsvn', {
+         action: 'createRsvn',
+         rsvn: response.rsvnData,
+      });
+
       res.status(200).json(response);
    } catch (err) {
       next(err);
