@@ -45,18 +45,24 @@ export const getAllRoomRatesOfCurrentMonthService = async () => {
    }
 };
 
-export const getRoomRatesInOptionsService = async (bodyData) => {
+export const getRoomRatesInOptionsService = async (queryData) => {
    try {
       //startDate, endDate : "YYYYMMDD"형식의 문자열
       //roomTypeCode, rateTypeCdoe : 배열 (선택값 없을 시, 전체로 선택)
-      const { startDate, endDate, rateTypeCode, roomTypeCode } = bodyData;
+      const { startDate, endDate, rateTypeCode, roomTypeCode } = queryData;
 
-      return await roomRateDAO.getRoomRatesInOptionsDAO(
+      const searchOptions = {
          startDate,
          endDate,
-         roomTypeCode,
-         rateTypeCode
-      );
+         rateTypeCode: rateTypeCode.includes(',')
+            ? rateTypeCode.split(',')
+            : [rateTypeCode],
+         roomTypeCode: roomTypeCode.includes(',')
+            ? roomTypeCode.split(',')
+            : [roomTypeCode],
+      };
+
+      return await roomRateDAO.getRoomRatesInOptionsDAO(searchOptions);
    } catch (err) {
       throw err;
    }

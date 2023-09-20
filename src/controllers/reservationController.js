@@ -15,10 +15,7 @@ export const createRsvn = async (req, res, next) => {
 
       console.log(response);
 
-      socketIO.getIO().emit('createRsvn', {
-         action: 'createRsvn',
-         rsvn: response.rsvnData,
-      });
+      socketIO.getIO().emit('createRsvn', { rsvn: response });
 
       res.status(200).json(response);
    } catch (err) {
@@ -52,7 +49,10 @@ export const editRsvn = async (req, res, next) => {
    try {
       const staffId = req.cookies.staffId;
       const response = await rsvnService.editRsvnService(req.body, staffId);
-      res.status(200).json(response[1]);
+
+      socketIO.getIO().emit('editRsvn', { rsvn: response });
+
+      res.status(200).json(response);
    } catch (err) {
       next(err);
    }
@@ -65,6 +65,8 @@ export const assignRoomToRsvn = async (req, res, next) => {
          req.body,
          staffId
       );
+
+      socketIO.getIO().emit('editRsvn', { rsvn: response });
 
       res.status(200).json(response.groupRsvnId);
    } catch (err) {
@@ -79,6 +81,10 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
          req.body,
          staffId
       );
+
+      socketIO.getIO().emit('editRsvn', {
+         rsvn: response,
+      });
 
       res.status(200).json(response);
    } catch (err) {

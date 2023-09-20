@@ -94,10 +94,13 @@ export const Reservation = (sequelize, DataTypes) => {
          foreignKey: { name: 'createStaffId', allowNull: false },
          targetKey: 'staffId',
          onDelete: 'NO ACTION',
+         onUpdate: 'NO ACTION',
       });
       Reservation.belongsTo(models.RateType, {
          foreignKey: { name: 'rateTypeCode', allowNull: false },
          targetKey: 'rateTypeCode',
+         onDelete: 'NO ACTION',
+         onUpdate: 'NO ACTION',
       });
       Reservation.belongsTo(models.Member, {
          foreignKey: { name: 'memberId', allowNull: true },
@@ -114,14 +117,20 @@ export const Reservation = (sequelize, DataTypes) => {
       Reservation.hasOne(models.Folio, {
          foreignKey: { name: 'rsvnId', allowNull: true },
          sourceKey: 'rsvnId',
+         onDelete: 'CASCADE',
+         onUpdate: 'CASCADE',
       });
       Reservation.hasMany(models.DailyRate, {
          foreignKey: { name: 'rsvnId', allowNull: false },
          sourceKey: 'rsvnId',
+         onDelete: 'CASCADE',
+         onUpdate: 'CASCADE',
       });
       Reservation.hasMany(models.Memo, {
          foreignKey: { name: 'rsvnId', allowNull: true },
          sourceKey: 'rsvnId',
+         onDelete: 'CASCADE',
+         onUpdate: 'CASCADE',
       });
       Reservation.hasMany(models.ReservationChangeHistory, {
          foreignKey: { name: 'rsvnId', allowNull: true },

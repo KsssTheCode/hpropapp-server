@@ -18,10 +18,9 @@ export const createGroupRsvn = async (req, res, next) => {
          staffId
       );
 
-      socketIO.getIO().emit('createRsvn', {
-         action: 'createRsvn',
-         rsvn: response,
-      });
+      console.log(response);
+
+      socketIO.getIO().emit('createRsvn', { rsvn: response });
 
       res.status(200).json(response);
    } catch (err) {
@@ -37,10 +36,9 @@ export const createDetailRsvns = async (req, res, next) => {
          staffId
       );
 
-      socketIO.getIO().emit('createRsvn', {
-         action: 'createRsvn',
-         rsvn: response,
-      });
+      console.log(response);
+
+      socketIO.getIO().emit('createRsvn', { rsvn: response });
 
       res.status(200).json(response);
    } catch (err) {

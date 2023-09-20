@@ -1,17 +1,30 @@
+import { getRoomRatesInOptions } from '../controllers/roomRateController.js';
 import * as rsvnDAO from '../data-access/reservationDAO.js';
+import { getRoomRatesInOptionsDAO } from '../data-access/roomRateDAO.js';
 import db from '../models/index.js';
 import { createId } from '../source/js/function/commonFn.js';
 
 export const getSelectedRsvnService = async (id) => {
    try {
-      const { rsvnData, roomRatesData } = await rsvnDAO.getSelectedRsvnDAO(id);
+      const rsvnData = await rsvnDAO.getSelectedRsvnDAO(id);
 
-      const convertedResponse = {
-         ...rsvnData.get(),
-         RoomRates: roomRatesData.map((roomRate) => roomRate.get()),
+      const { arrivalDate, departureDate, roomTypeCode, rateTypeCode } =
+         rsvnData;
+
+      const roomRatesSearchOptions = {
+         startDate: arrivalDate,
+         endDate: departureDate,
+         roomTypeCode: [roomTypeCode],
+         rateTypeCode: [rateTypeCode],
       };
 
-      return convertedResponse;
+      const roomRatesData = await getRoomRatesInOptionsDAO(
+         roomRatesSearchOptions
+      );
+
+      const response = { rsvn: rsvnData, roomRatesData };
+
+      return response;
    } catch (err) {
       throw err;
    }

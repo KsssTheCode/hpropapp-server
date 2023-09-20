@@ -6,15 +6,12 @@ import schedule from 'node-schedule';
 import { authentication } from './src/middleware/is-auth.js';
 import { systemClosing } from './src/middleware/systemClosing.js';
 
-import db from './src/models/index.js';
 import cookieParser from 'cookie-parser';
 import mainRouter from './src/routes/mainRouter.js';
 import socketIO from './socket.js';
 
 const app = express();
 const port = 3302;
-
-const sequelize = db.sequelize;
 
 app.use(express.json());
 app.use(cookieParser());

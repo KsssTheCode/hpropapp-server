@@ -66,7 +66,8 @@ export const createGroupDetailRsvnsFolioDAO = async (
          transaction: transaction,
          hooks: false,
          returning: true,
-      }).catch(() => {
+      }).catch((err) => {
+         console.log(err);
          throw createError(
             500,
             '데이터베이스에서 Folio 생성 중 오류가 발생했습니다'

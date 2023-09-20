@@ -10,7 +10,7 @@ const Rsvn = db.Reservation;
  */
 export const getSelectedRsvnDAO = async (id) => {
    try {
-      const rsvnData = await Rsvn.findByPk(id, {
+      const response = await Rsvn.findByPk(id, {
          include: [
             { model: db.Staff, attributes: ['name'] },
             {
@@ -31,20 +31,7 @@ export const getSelectedRsvnDAO = async (id) => {
          throw createError(500, '에약조회 중 DB에서 오류발생');
       });
 
-      const roomRatesData = await db.RoomRate.findAll({
-         attributes: ['date', 'price'],
-         where: {
-            date: {
-               [Op.between]: [rsvnData.arrivalDate, rsvnData.departureDate],
-            },
-            roomTypeCode: rsvnData.roomTypeCode,
-            rateTypeCode: rsvnData.rateTypeCode,
-         },
-      }).catch(() => {
-         throw createError(500, '객실가격 중 DB에서 오류발생');
-      });
-
-      return { rsvnData, roomRatesData };
+      return response;
    } catch (err) {
       throw err;
    }
@@ -229,7 +216,7 @@ export const editRsvnDAO = async (
    transaction
 ) => {
    try {
-      return await Rsvn.update(updateData, {
+      const [updatedCount, updatedObject] = await Rsvn.update(updateData, {
          where: { rsvnId },
          ...(!!dailyRatesData && { dailyRatesData }),
          staffId,
@@ -238,6 +225,8 @@ export const editRsvnDAO = async (
       }).catch(() => {
          throw createError(500, '예약수정 중 DB에서 오류발생');
       });
+
+      return updatedObject[0];
    } catch (err) {
       throw err;
    }
@@ -250,7 +239,7 @@ export const assignRoomToRsvnDAO = async (
    transaction
 ) => {
    try {
-      await Rsvn.update(
+      const [updatedCount, updatedObject] = await Rsvn.update(
          { roomNumber: roomNumber },
          {
             where: { rsvnId: id, statusCode: 'RR' },
@@ -263,11 +252,13 @@ export const assignRoomToRsvnDAO = async (
          throw createError(500, '객실 배정 중 DB에서 오류발생');
       });
 
-      return await Rsvn.findByPk(id, {
-         attributes: ['groupRsvnId'],
-      }).catch(() => {
-         throw createError('수정된 예약 정보 조회 중 DB에서 오류발생');
-      });
+      // return await Rsvn.findByPk(id, {
+      //    attributes: ['groupRsvnId'],
+      // }).catch(() => {
+      //    throw createError('수정된 예약 정보 조회 중 DB에서 오류발생');
+      // });
+
+      return updatedObject[0];
    } catch (err) {
       throw err;
    }
@@ -279,7 +270,7 @@ export const releaseAssignedRoomFromRsvnDAO = async (
    transaction
 ) => {
    try {
-      return await Rsvn.update(
+      const [updatedCount, updatedObject] = await Rsvn.update(
          { roomNumber: null },
          {
             where: { rsvnId: id, statusCode: 'RR' },
@@ -290,6 +281,8 @@ export const releaseAssignedRoomFromRsvnDAO = async (
       ).catch(() => {
          throw createError(500, '객실 배정 중 DB에서 오류발생');
       });
+
+      return updatedObject[0];
    } catch (err) {
       throw err;
    }

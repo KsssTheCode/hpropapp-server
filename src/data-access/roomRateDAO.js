@@ -36,13 +36,10 @@ export const getAllRoomRatesOfCurrentMonthDAO = async (
    }
 };
 
-export const getRoomRatesInOptionsDAO = async (
-   startDate,
-   endDate,
-   roomTypeCode,
-   rateTypeCode
-) => {
+export const getRoomRatesInOptionsDAO = async (searchOptions) => {
    try {
+      const { startDate, endDate, roomTypeCode, rateTypeCode } = searchOptions;
+
       return await RoomRate.findAll({
          attributes: ['price', 'rateTypeCode', 'roomTypeCode', 'date'],
          where: {
@@ -50,7 +47,7 @@ export const getRoomRatesInOptionsDAO = async (
             roomTypeCode: { [Op.in]: roomTypeCode },
             rateTypeCode: { [Op.in]: rateTypeCode },
          },
-      }).catch((err) => {
+      }).catch(() => {
          throw createError(500, '객실료 조회 중 DB에서 오류발생');
       });
    } catch (err) {

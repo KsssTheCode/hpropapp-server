@@ -82,6 +82,8 @@ export const GroupReservation = (sequelize, DataTypes) => {
       GroupReservation.hasMany(models.Reservation, {
          foreignKey: { name: 'groupRsvnId', allowNull: true },
          sourceKey: 'groupRsvnId',
+         onDelete: 'CASCADE',
+         onUpate: 'CASCADE',
       });
       GroupReservation.hasMany(models.Memo, {
          foreignKey: { name: 'groupRsvnId', allowNull: true },
@@ -90,6 +92,8 @@ export const GroupReservation = (sequelize, DataTypes) => {
       GroupReservation.hasOne(models.Folio, {
          foreignKey: { name: 'groupRsvnId', allowNull: true },
          sourceKey: 'groupRsvnId',
+         onDelete: 'CASCADE',
+         onUpate: 'CASCADE',
       });
       GroupReservation.belongsTo(models.Group, {
          foreignKey: { name: 'groupId', allowNull: true },
@@ -101,6 +105,7 @@ export const GroupReservation = (sequelize, DataTypes) => {
          foreignKey: { name: 'createStaffId', allowNull: false },
          targetKey: 'staffId',
          onDelete: 'NO ACTION',
+         onUpdate: 'NO ACTION',
       });
       GroupReservation.hasMany(models.ReservationChangeHistory, {
          foreignKey: { name: 'groupRsvnId', allowNull: true },

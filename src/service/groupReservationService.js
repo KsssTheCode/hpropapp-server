@@ -112,12 +112,9 @@ export const createDetailRsvnsService = async (bodyData, staffId) => {
       }
 
       for await (const rsvn of response) {
-         console.log(rsvn);
          const dailyRatesData = await getRsvnDailyRates(rsvn.rsvnId);
          rsvn.dataValues.DailyRates = dailyRatesData;
       }
-
-      console.log(response);
 
       return response;
    } catch (err) {
