@@ -193,7 +193,7 @@ export const createTestRsvns = async (req, res, next) => {
          if (i % 2 === 0 || i % 7 === 0 || i % 11 === 0) {
             rsvn.guestName = randomName.generate(true);
             rsvn.departureDate = moment().add(1, 'day').format('YYYYMMDD');
-            rsvn.createStaffId = '230915002';
+            rsvn.createStaffId = '230730001';
             i % 7 === 0
                ? (rsvn.roomTypeCode = 'ODP')
                : i % 11 === 0
@@ -230,7 +230,7 @@ export const createTestRsvns = async (req, res, next) => {
          } else {
             rsvn.guestName = randomName.generate(false);
             rsvn.departureDate = moment().add(2, 'day').format('YYYYMMDD');
-            rsvn.createStaffId = '230915001';
+            rsvn.createStaffId = '230730001';
 
             i % 13 === 0
                ? (rsvn.roomTypeCode = 'RPV')
