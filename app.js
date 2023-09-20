@@ -22,7 +22,7 @@ app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
 async function syncDataBase(sequelize) {
    await sequelize.sync({ alter: process.env.NODE_ENV !== 'production' });
 }
-// syncDataBase(sequelize);
+syncDataBase(sequelize);
 
 schedule.scheduleJob('01 00 00 * * *', systemClosing);
 
