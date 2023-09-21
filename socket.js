@@ -8,6 +8,7 @@ const socketIO = {
       io = new Server(server, {
          cors: {
             origin: process.env.ALLOW_ORIGIN,
+            // origin: 'http://localhost:3000',
             methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
             credentials: true,
          },

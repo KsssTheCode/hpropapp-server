@@ -9,9 +9,10 @@ import { systemClosing } from './src/middleware/systemClosing.js';
 import cookieParser from 'cookie-parser';
 import mainRouter from './src/routes/mainRouter.js';
 import socketIO from './socket.js';
+import db from './src/models/index.js';
 
 const app = express();
-const port = 3302;
+const sequelize = db.sequelize;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -39,7 +40,7 @@ app.use(async (error, req, res, next) => {
    res.status(error.status).json(error);
 });
 
-const server = app.listen(port);
+const server = app.listen(process.env.PORT);
 
 const io = socketIO.initIO(server);
 io.on('connection', (socket) => {
