@@ -5,8 +5,6 @@ export const login = async (req, res, next) => {
    try {
       const { staffId, password } = req.body;
 
-      console.log(req.body);
-
       const response = await authService.logInService(staffId, password);
 
       const token = jwt.sign(
