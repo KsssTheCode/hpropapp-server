@@ -19,12 +19,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(cors({ origin: process.env.ALLOW_ORIGIN, credentials: true }));
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 async function syncDataBase(sequelize) {
    await sequelize.sync({ alter: process.env.NODE_ENV !== 'production' });
 }
-syncDataBase(sequelize);
+// syncDataBase(sequelize);
 
 schedule.scheduleJob('01 00 00 * * *', systemClosing);
 
@@ -43,9 +42,9 @@ app.use(async (error, req, res, next) => {
 
 const server = createServer(app);
 
-// const io = socketIO.initIO(server);
-// io.on('connection', (socket) => {
-//    console.log('Client connected!');
-// });
+const io = socketIO.initIO(server);
+io.on('connection', (socket) => {
+   console.log('Client connected!');
+});
 
 server.listen(process.env.PORT);
