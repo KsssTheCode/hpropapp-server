@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import schedule from 'node-schedule';
-import server from 'http';
+import { createServer } from 'http';
 
 import { authentication } from './src/middleware/is-auth.js';
 import { systemClosing } from './src/middleware/systemClosing.js';
@@ -41,9 +41,11 @@ app.use(async (error, req, res, next) => {
    res.status(error.status).json(error);
 });
 
-const server = app.listen(process.env.PORT);
+const server = createServer(app);
 
 const io = socketIO.initIO(server);
 io.on('connection', (socket) => {
    console.log('Client connected!');
 });
+
+server.listen(process.env.PORT);
