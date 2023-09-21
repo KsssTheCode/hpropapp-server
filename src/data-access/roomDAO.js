@@ -136,6 +136,17 @@ export const getRoomsDataInOptionsForAssignDAO = async (
    }
 };
 
+export const getRoomsDataByRoomNumberDAO = async (roomNumbers) => {
+   try {
+      return await Room.findAll({
+         where: { roomNumber: { [Op.in]: roomNumbers } },
+      }).catch((err) => {
+         console.log(err);
+         throw createError(500, '객실 조회 중 DB에서 오류발생');
+      });
+   } catch (err) {}
+};
+
 export const editRoomTypeOfRoomsDAO = async (roomTypeCode, isExistingRooms) => {
    try {
       return await Room.update(

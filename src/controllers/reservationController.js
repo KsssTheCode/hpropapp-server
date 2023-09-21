@@ -50,7 +50,12 @@ export const editRsvn = async (req, res, next) => {
       const staffId = req.cookies.staffId;
       const response = await rsvnService.editRsvnService(req.body, staffId);
 
-      socketIO.getIO().emit('editRsvn', { rsvn: response });
+      socketIO
+         .getIO()
+         .emit('editRsvn', {
+            action: 'editRsvnBasicInfo',
+            returnData: response,
+         });
 
       res.status(200).json(response);
    } catch (err) {
@@ -66,7 +71,12 @@ export const assignRoomToRsvn = async (req, res, next) => {
          staffId
       );
 
-      socketIO.getIO().emit('editRsvn', { rsvn: response });
+      socketIO
+         .getIO()
+         .emit('editRsvn', {
+            action: 'assignRoomToRsvn',
+            returnData: response,
+         });
 
       res.status(200).json(response.groupRsvnId);
    } catch (err) {
@@ -83,7 +93,8 @@ export const releaseAssignedRoomFromRsvn = async (req, res, next) => {
       );
 
       socketIO.getIO().emit('editRsvn', {
-         rsvn: response,
+         action: 'releaseAssignedRoomFromRsvn',
+         returnData: response,
       });
 
       res.status(200).json(response);
@@ -193,7 +204,7 @@ export const createTestRsvns = async (req, res, next) => {
          if (i % 2 === 0 || i % 7 === 0 || i % 11 === 0) {
             rsvn.guestName = randomName.generate(true);
             rsvn.departureDate = moment().add(1, 'day').format('YYYYMMDD');
-            rsvn.createStaffId = '230730001';
+            rsvn.createStaffId = '230921001';
             i % 7 === 0
                ? (rsvn.roomTypeCode = 'ODP')
                : i % 11 === 0
@@ -230,7 +241,7 @@ export const createTestRsvns = async (req, res, next) => {
          } else {
             rsvn.guestName = randomName.generate(false);
             rsvn.departureDate = moment().add(2, 'day').format('YYYYMMDD');
-            rsvn.createStaffId = '230730001';
+            rsvn.createStaffId = '230921001';
 
             i % 13 === 0
                ? (rsvn.roomTypeCode = 'RPV')

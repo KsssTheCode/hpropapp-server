@@ -122,7 +122,7 @@ export const createTestRsvns = async (req, res, next) => {
             arrivalDate: moment().format('YYYYMMDD'),
             leaderTel: '010' + randomNumber(),
             statusCode: 'RR',
-            createStaffId: '230730001',
+            createStaffId: '230921001',
          };
 
          if (i % 2 === 0) {

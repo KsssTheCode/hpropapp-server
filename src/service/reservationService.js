@@ -1,5 +1,6 @@
 import { getRoomRatesInOptions } from '../controllers/roomRateController.js';
 import * as rsvnDAO from '../data-access/reservationDAO.js';
+import { getRoomsDataByRoomNumberDAO } from '../data-access/roomDAO.js';
 import { getRoomRatesInOptionsDAO } from '../data-access/roomRateDAO.js';
 import db from '../models/index.js';
 import { createId } from '../source/js/function/commonFn.js';
@@ -177,14 +178,15 @@ export const assignRoomToRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
       const { id, roomNumber } = bodyData.idAndRoomPairs[0];
-      const response = await rsvnDAO.assignRoomToRsvnDAO(
+      const updatedRsvnData = await rsvnDAO.assignRoomToRsvnDAO(
          id,
          roomNumber,
          staffId,
          transaction
       );
       await transaction.commit();
-      return response;
+
+      return { updatedRsvnData, roomData: roomNumber };
    } catch (err) {
       await transaction.rollback();
       throw err;
@@ -195,13 +197,20 @@ export const releaseAssignedRoomFromRsvnService = async (bodyData, staffId) => {
    const transaction = await db.sequelize.transaction();
    try {
       const rsvnId = bodyData.id[0];
-      const response = await rsvnDAO.releaseAssignedRoomFromRsvnDAO(
+
+      const updatedRsvnData = await rsvnDAO.releaseAssignedRoomFromRsvnDAO(
          rsvnId,
          staffId,
          transaction
       );
+
+      const releasedRoomData = await getRoomsDataByRoomNumberDAO([
+         updatedRsvnData.previous().roomNumber,
+      ]);
+
       await transaction.commit();
-      return response;
+
+      return { updatedRsvnData, roomData: releasedRoomData };
    } catch (err) {
       await transaction.rollback();
       throw err;

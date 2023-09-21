@@ -48,4 +48,4 @@ io.on('connection', (socket) => {
    console.log('Client connected!');
 });
 
-server.listen(process.env.PORT);
+server.listen(3302);
