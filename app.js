@@ -43,9 +43,9 @@ app.use(async (error, req, res, next) => {
 
 const server = createServer(app);
 
-const io = socketIO.initIO(server);
-io.on('connection', (socket) => {
-   console.log('Client connected!');
-});
+// const io = socketIO.initIO(server);
+// io.on('connection', (socket) => {
+//    console.log('Client connected!');
+// });
 
 server.listen(process.env.PORT);
