@@ -51,6 +51,7 @@ Visit [Hpropapp](https://hpropapp.com) <br>
 | 예약 수정 | \* 예약, 취소, 입실, 퇴실, 퇴실보류 상태로 나누어 관리<br><br>\* 예약이 수정될 시, 관련한 데이터 즉시 업데이트(새로고침 X) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
 | 예약 변경기록 | \* 예약건에 대한 모든 수정을 기록(변경자, 변경 전후 내용, 변경일시) | <img src="https://cdn-icons-png.flaticon.com/128/6459/6459980.png" width=30px; height=30px;/> | - |
 | 폴리오 생성 | \* 예약건에 대한 폴리오 자동생성 및 관리 | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
+| 실시간 반영 | \* 생성, 변경된 예약건을 다른 사용자 화면에 동시에 반영  | <img src="https://cdn-icons-png.flaticon.com/128/248/248960.png" width=30px; height=30px;/> | - |
 
 <br><br>
 
